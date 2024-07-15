@@ -1,0 +1,36 @@
+# version: '3'
+# services:
+#   auth:
+#     environment:
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_DB=auth
+#     volumes:
+#       - ./docker-utils:/docker-entrypoint-initdb.d
+#       - auth:/data/postgres
+#     ports:
+#       - 5431:5432
+#   users:
+#     environment:
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_DB=users
+#     volumes:
+#       - ./docker-utils:/docker-entrypoint-initdb.d
+#       - users:/data/postgres
+#     ports:
+#       - 5433:5432
+#   routes:
+#     environment:
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_DB=routes
+#     volumes:
+#       - ./docker-utils:/docker-entrypoint-initdb.d
+#       - routes:/data/postgres
+#     ports:
+#       - 5434:5432
+# volumes:
+#   auth: {}
+#   users: {}
+#   routes: {}
