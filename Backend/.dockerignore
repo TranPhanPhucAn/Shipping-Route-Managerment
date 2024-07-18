@@ -1,3 +1,12 @@
-dist
+# dist
 node_modules
+
 .git
+.gitignore
+.dockerignore
+
+*.env
+
+.eslintrc.js
+.prettierrc
+README.md

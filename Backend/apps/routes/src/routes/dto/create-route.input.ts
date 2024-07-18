@@ -1,7 +1,19 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
 export class CreateRouteInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  // @Field(() => ID)
+  // id: string;
+
+  @Field()
+  departure: string;
+
+  @Field()
+  destination: string;
+
+  @Field()
+  transportation: string;
+
+  @Field()
+  duration: string;
 }

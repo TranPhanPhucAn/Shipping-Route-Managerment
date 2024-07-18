@@ -5,4 +5,4 @@ import { RoutesResolver } from './routes.resolver';
 @Module({
   providers: [RoutesResolver, RoutesService],
 })
-export class RoutesModule {}
+export class RouteModule {}

@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 services:
   db:
     container_name: db
@@ -13,5 +13,78 @@ services:
     ports:
       - 5432:${POSTGRES_PORT}
     restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+  gateway:
+    container_name: gateway
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_PATH: gateway
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 5002:5002
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+      auth:
+        condition: service_healthy
+        restart: true
+      routes:
+        condition: service_healthy
+        restart: true
+  auth:
+    container_name: auth
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_PATH: auth
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 5000:5000
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    healthcheck:
+      test: wget --quiet --tries=1 --spider http://auth:5000/health || exit 1z
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  routes:
+    container_name: routes
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_PATH: routes
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 5001:5001
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    healthcheck:
+      test: wget --quiet --tries=1 --spider http://routes:5001/health || exit 1z
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
 volumes:
   db: {}
