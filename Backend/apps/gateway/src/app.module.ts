@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
 import { IntrospectAndCompose } from '@apollo/gateway';
+import * as dotenv from 'dotenv';
+dotenv.config();
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloGatewayDriverConfig>({
@@ -13,11 +15,11 @@ import { IntrospectAndCompose } from '@apollo/gateway';
           subgraphs: [
             {
               name: 'auth',
-              url: 'http://auth:5000/graphql',
+              url: `http://localhost:${process.env.AUTH_PORT}/graphql`,
             },
             {
               name: 'routes',
-              url: 'http://routes:5001/graphql',
+              url: `http://localhost:${process.env.ROUTES_PORT}/graphql`,
             },
           ],
         }),

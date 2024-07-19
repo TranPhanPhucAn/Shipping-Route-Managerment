@@ -20,9 +20,9 @@ import { HealthModule } from './health/health.module';
       },
     }),
     TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'db',
-      port: 5432,
+      type: process.env.TYPE_DB as 'postgres',
+      host: process.env.HOST,
+      port: parseInt(process.env.POSTGRES_PORT, 10),
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,

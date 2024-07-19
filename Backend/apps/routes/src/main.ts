@@ -3,6 +3,6 @@ import { RoutesModule } from './routes.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(RoutesModule);
-  await app.listen(5001);
+  await app.listen(process.env.ROUTES_PORT);
 }
 bootstrap();
