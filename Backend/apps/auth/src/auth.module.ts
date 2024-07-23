@@ -5,10 +5,12 @@ import {
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/entities/user.entity';
+// import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { HealthModule } from './health/health.module';
+// import { join } from 'path';
+import { AuthenModule } from './auth/authen.module';
 
 @Module({
   imports: [
@@ -26,11 +28,14 @@ import { HealthModule } from './health/health.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [User],
+      // entities: [User],
+      // entities: [join(__dirname, '/**/**.entity{.ts,.js}')],
+      autoLoadEntities: true,
       synchronize: true,
     }),
     UsersModule,
     HealthModule,
+    AuthenModule,
   ],
   providers: [],
 })

@@ -1,0 +1,23 @@
+import { PassportStrategy } from '@nestjs/passport';
+import { AuthService } from '../auth.service';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { JWTPayload } from '../interfaces/jwtPayLoad.interface';
+import { AuthenticationError } from 'apollo-server-express';
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class JWTStrategy extends PassportStrategy(Strategy) {
+  constructor(private authService: AuthService) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: process.env.SECRET,
+    });
+  }
+
+  async validate(payload: JWTPayload) {
+    const user = await this.authService.validateJWTPayLoad(payload);
+    if (!user) {
+      throw new AuthenticationError(`Please login first`);
+    }
+  }
+}

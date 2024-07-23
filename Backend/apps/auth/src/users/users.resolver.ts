@@ -1,16 +1,31 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { CreateUserInput } from './dto/create-user.input';
+import { CreateUserInput, UserRegister } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { validate } from 'class-validator';
+import { BadRequestException } from '@nestjs/common';
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    return this.usersService.create(createUserInput);
+  async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+    const { username, email, password, address } = createUserInput;
+    const userRegister = new UserRegister();
+    userRegister.username = username;
+    userRegister.email = email;
+    userRegister.password = password;
+    userRegister.address = address;
+    const errors = await validate(userRegister);
+    if (errors.length > 0) {
+      const errorsResponse: any = errors.map((val: any) => {
+        return Object.values(val.constraints)[0] as string;
+      });
+      throw new BadRequestException(errorsResponse.join(','));
+    }
+    return await this.usersService.create(createUserInput);
   }
 
   @Query(() => [User], { name: 'users' })
@@ -20,7 +35,12 @@ export class UsersResolver {
 
   @Query(() => User, { name: 'user' })
   findOne(@Args('id') id: string) {
-    return this.usersService.findOne(id);
+    return this.usersService.findOneById(id);
+  }
+
+  @Query(() => User, { name: 'userByEmail' })
+  findOneByEmail(@Args('id') id: string) {
+    return this.usersService.findOneById(id);
   }
 
   @Mutation(() => User)
@@ -31,5 +51,10 @@ export class UsersResolver {
   @Mutation(() => User)
   removeUser(@Args('id', { type: () => Int }) id: number) {
     return this.usersService.delete(id);
+  }
+
+  @Query(() => User, { name: 'forgotPassword' })
+  forgotPassword(@Args('email') email: string) {
+    return this.usersService.forgotPassword(email);
   }
 }
