@@ -4,7 +4,7 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  // UpdateDateColumn,
 } from 'typeorm';
 @Entity()
 @ObjectType()
@@ -22,7 +22,6 @@ export class User {
   username: string;
 
   @Column()
-  @Field()
   password: string;
 
   @Column()
@@ -32,10 +31,10 @@ export class User {
   @Column({ type: 'jsonb', default: null })
   public passwordReset!: any;
 
-  @UpdateDateColumn({
-    type: 'timestamptz',
-    default: () => 'CURRENT_TIMESTAMP',
-    select: true,
-  })
-  public updated_at!: Date;
+  // @UpdateDateColumn({
+  //   type: 'timestamptz',
+  //   default: () => 'CURRENT_TIMESTAMP',
+  //   select: true,
+  // })
+  // public updated_at!: Date;
 }

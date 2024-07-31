@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsDefined, IsString } from 'class-validator';
+import { IsDefined, IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
 export class CreateUserInput {
@@ -21,18 +21,33 @@ export class CreateUserInput {
 
 export class UserRegister {
   @IsDefined()
+  @IsNotEmpty()
   @IsString()
+  @IsEmail()
   public email: string;
 
   @IsDefined()
+  @IsNotEmpty()
   @IsString()
   public password: string;
 
   @IsDefined()
+  @IsNotEmpty()
   @IsString()
   public username: string;
 
   @IsDefined()
   @IsString()
   public address: string;
+}
+
+@InputType()
+export class ActivationDto {
+  @Field()
+  @IsNotEmpty({ message: 'Activation token is required' })
+  activationToken: string;
+
+  @Field()
+  @IsNotEmpty({ message: 'Activation code is required' })
+  activationCode: string;
 }

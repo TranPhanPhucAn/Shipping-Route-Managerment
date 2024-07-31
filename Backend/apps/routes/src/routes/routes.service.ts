@@ -1,19 +1,32 @@
 import { Injectable } from '@nestjs/common';
-// import { CreateRouteInput } from './dto/create-route.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Route } from './entities/route.entity';
+import { Repository } from 'typeorm';
+import { CreateRouteInput } from './dto/create-route.input';
 // import { UpdateRouteInput } from './dto/update-route.input';
 
 @Injectable()
 export class RoutesService {
-  // create(createRouteInput: CreateRouteInput) {
-  //   return 'This action adds a new route';
-  // }
+  constructor(
+    @InjectRepository(Route)
+    private routesRepository: Repository<Route>,
+  ) {}
 
+  create = async (createRouteInput: CreateRouteInput): Promise<Route> => {
+    const routeEntity = this.routesRepository.create();
+    const newRoute = {
+      ...routeEntity,
+      ...createRouteInput,
+    };
+    const route: Route | undefined = await this.routesRepository.save(newRoute);
+    return route;
+  };
   findAll() {
     return `This action returns all routes`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} route`;
+  async findOne(id: string): Promise<Route> {
+    return await this.routesRepository.findOne({ where: { id: id } });
   }
 
   // update(id: number, updateRouteInput: UpdateRouteInput) {

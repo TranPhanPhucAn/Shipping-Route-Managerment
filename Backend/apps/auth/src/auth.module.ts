@@ -11,6 +11,7 @@ import { ConfigModule } from '@nestjs/config';
 import { HealthModule } from './health/health.module';
 // import { join } from 'path';
 import { AuthenModule } from './auth/authen.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AuthenModule } from './auth/authen.module';
     UsersModule,
     HealthModule,
     AuthenModule,
+    EmailModule,
   ],
   providers: [],
 })

@@ -1,39 +1,85 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserInput } from './dto/create-user.input';
+import { ActivationDto, CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { randomBytes } from 'crypto';
 import * as bycypt from 'bcrypt';
+import { EmailService } from '../email/email.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private readonly usersRepository: Repository<User>,
+    private readonly emailService: EmailService,
+    private readonly jwtService: JwtService,
   ) {}
-  async create(createUserInput: CreateUserInput): Promise<User> {
-    const userEntity = this.usersRepository.create();
+
+  async create(createUserInput: CreateUserInput) {
+    // const userEntity = this.usersRepository.create();
     const password = await this.hassPassword(createUserInput.password);
-    const newUser = {
-      ...userEntity,
-      ...createUserInput,
-      password: password,
-    };
-    let user: User | undefined;
+    // const newUser = {
+    //   ...userEntity,
+    //   ...createUserInput,
+    //   password: password,
+    // };
+    createUserInput = { ...createUserInput, password: password };
+    // let user: User | undefined;
     try {
       const existUser = await this.findOneByEmail(createUserInput.email);
       if (existUser) {
         throw new BadRequestException(`Email existed`);
       }
-      user = await this.usersRepository.save(newUser);
+      const { token, activationCode } =
+        await this.createActivationToken(createUserInput);
+      await this.emailService.sendMail({
+        email: createUserInput.email,
+        subject: 'Activate your accout',
+        name: createUserInput.username,
+        activationCode: activationCode,
+        template: './activation-mail',
+      });
+      return token;
+      // user = await this.usersRepository.save(newUser);
     } catch (error) {
       console.log('error: ', error);
     }
-    return user;
   }
 
+  async createActivationToken(user: CreateUserInput) {
+    const activationCode = Math.floor(1000 + Math.random() * 9000).toString();
+    const token = this.jwtService.sign(
+      {
+        user,
+        activationCode,
+      },
+      {
+        secret: process.env.ACTIVATION_SECRET,
+        expiresIn: '5m',
+      },
+    );
+    return { token, activationCode };
+  }
+  async activateUser(activationDto: ActivationDto) {
+    const { activationToken, activationCode } = activationDto;
+    const newUser: { user: CreateUserInput; activationCode: string } =
+      this.jwtService.verify(activationToken, {
+        secret: process.env.ACTIVATION_SECRET,
+      });
+    if (newUser.activationCode !== activationCode) {
+      throw new BadRequestException('Invalid activation code');
+    }
+    const userEntity = this.usersRepository.create();
+    const createUser = {
+      ...userEntity,
+      ...newUser.user,
+    };
+    const user: User | undefined = await this.usersRepository.save(createUser);
+    return user;
+  }
   private async hassPassword(password: string) {
     return bycypt.hash(password, 10);
   }
@@ -73,7 +119,7 @@ export class UsersService {
       token,
       expiration,
     };
-    user.updated_at = new Date();
+    // user.updated_at = new Date();
     await this.usersRepository.save(user);
     return true;
   }

@@ -18,6 +18,18 @@ export class LoginResponse {
   @Field({ nullable: true })
   accessToken?: string;
 
+  @Field({ nullable: true })
+  refreshToken?: string;
+
+  @Field(() => ErrorType, { nullable: true })
+  error?: ErrorType;
+}
+
+@ObjectType()
+export class RegisterResponse {
+  @Field()
+  activation_token: string;
+
   @Field(() => ErrorType, { nullable: true })
   error?: ErrorType;
 }

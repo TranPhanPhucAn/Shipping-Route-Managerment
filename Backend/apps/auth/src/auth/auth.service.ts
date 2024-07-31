@@ -33,12 +33,12 @@ export class AuthService {
     }
     if (isMatch) {
       const token = this.createToken(user).token;
+      const refreshToken = this.createRefreshToken(user).token;
       return {
         user,
         accessToken: token,
+        refreshToken: refreshToken,
       };
-    } else {
-      throw new AuthenticationError(`Please provide exist email and password`);
     }
     return null;
   };
@@ -62,6 +62,18 @@ export class AuthService {
       token: jwt,
     };
   }
+  createRefreshToken(user: User): { data: JWTPayload; token: string } {
+    const data: JWTPayload = {
+      userId: user.id,
+      email: user.email,
+      username: user.username,
+    };
+    const jwt = this.jwtService.sign(data, { expiresIn: '1d' });
+    return {
+      data,
+      token: jwt,
+    };
+  }
   private async comparePassword(enteredPassword, dbPassword) {
     return await bycypt.compare(enteredPassword, dbPassword);
   }
@@ -70,7 +82,7 @@ export class AuthService {
     const user = await this.userService.findOneByEmail(payload.email);
 
     if (user) {
-      user.updated_at = new Date();
+      // user.updated_at = new Date();
       return user;
     }
     return undefined;
