@@ -26,6 +26,12 @@ export class LoginResponse {
 }
 
 @ObjectType()
+export class LogoutResponse {
+  @Field()
+  message?: string;
+}
+
+@ObjectType()
 export class RegisterResponse {
   @Field()
   activation_token: string;

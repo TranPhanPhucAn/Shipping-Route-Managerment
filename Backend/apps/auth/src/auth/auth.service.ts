@@ -1,10 +1,4 @@
-import {
-  forwardRef,
-  Injectable,
-  Inject,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { forwardRef, Injectable, Inject } from '@nestjs/common';
 import { User } from '../users/entities/user.entity';
 import { LoginInput } from './dto/auth.dto';
 import { LoginResponse } from '../types/auth.types';
@@ -57,7 +51,7 @@ export class AuthService {
   };
 
   logoutUser = async (req: any) => {
-    req.userid = null;
+    req.user = null;
     req.refreshtoken = null;
     req.accesstoken = null;
     return { message: 'Logout out successfull' };

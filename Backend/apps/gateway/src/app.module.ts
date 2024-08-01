@@ -56,7 +56,6 @@ const handleAuth = ({ req }) => {
     if (req.headers.accesstoken) {
       const token = getToken(req.headers.accesstoken);
       const decoded = decodedToken(token);
-      console.log('decoded: ', decoded);
       userId = decoded.userId;
       email = decoded.email;
       isLogin = 'true';
