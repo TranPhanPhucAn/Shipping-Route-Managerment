@@ -19,15 +19,8 @@ export class UsersService {
   ) {}
 
   async create(createUserInput: CreateUserInput) {
-    // const userEntity = this.usersRepository.create();
     const password = await this.hassPassword(createUserInput.password);
-    // const newUser = {
-    //   ...userEntity,
-    //   ...createUserInput,
-    //   password: password,
-    // };
     createUserInput = { ...createUserInput, password: password };
-    // let user: User | undefined;
     try {
       const existUser = await this.findOneByEmail(createUserInput.email);
       if (existUser) {
@@ -43,7 +36,6 @@ export class UsersService {
         template: './activation-mail',
       });
       return token;
-      // user = await this.usersRepository.save(newUser);
     } catch (error) {
       console.log('error: ', error);
     }
@@ -119,7 +111,6 @@ export class UsersService {
       token,
       expiration,
     };
-    // user.updated_at = new Date();
     await this.usersRepository.save(user);
     return true;
   }

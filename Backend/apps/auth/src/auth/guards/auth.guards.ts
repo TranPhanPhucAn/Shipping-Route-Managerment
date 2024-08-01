@@ -11,8 +11,9 @@ export class AuthUserGuard implements CanActivate {
     const ctx = GqlExecutionContext.create(context);
     const { req } = ctx.getContext();
     // console.log('check request', req);
-    console.log('check user: ', req.user);
-    if (req.user) {
+    // console.log('check user: ', req.headers);
+    const { islogin } = req.headers;
+    if (islogin) {
       return true;
     }
     throw new AuthenticationError(

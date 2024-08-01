@@ -33,3 +33,15 @@ export class RegisterResponse {
   @Field(() => ErrorType, { nullable: true })
   error?: ErrorType;
 }
+
+@ObjectType()
+export class RefreshTokenResponse {
+  @Field()
+  accessToken: string;
+
+  @Field()
+  refreshToken: string;
+
+  @Field(() => ErrorType, { nullable: true })
+  error?: ErrorType;
+}

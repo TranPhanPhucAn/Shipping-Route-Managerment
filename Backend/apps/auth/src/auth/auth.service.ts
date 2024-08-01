@@ -1,4 +1,10 @@
-import { forwardRef, Injectable, Inject } from '@nestjs/common';
+import {
+  forwardRef,
+  Injectable,
+  Inject,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { User } from '../users/entities/user.entity';
 import { LoginInput } from './dto/auth.dto';
 import { LoginResponse } from '../types/auth.types';
@@ -32,7 +38,7 @@ export class AuthService {
       console.log(err);
     }
     if (isMatch) {
-      const token = this.createToken(user).token;
+      const token = this.createAccessToken(user).token;
       const refreshToken = this.createRefreshToken(user).token;
       return {
         user,
@@ -40,21 +46,29 @@ export class AuthService {
         refreshToken: refreshToken,
       };
     }
-    return null;
+    return {
+      user: null,
+      accessToken: null,
+      refreshToken: null,
+      error: {
+        message: 'Invalid email or password',
+      },
+    };
   };
-  createToken(user: User): { data: JWTPayload; token: string } {
-    // const expiresIn = process.env.EXPIRES_IN;
-    // let expiration: Date | undefined;
-    // if (expiresIn) {
-    //   expiration = new Date();
-    //   expiration.setTime(expiration.getTime() + (+expiresIn) * 1000);
-    // }
+
+  logoutUser = async (req: any) => {
+    req.userid = null;
+    req.refreshtoken = null;
+    req.accesstoken = null;
+    return { message: 'Logout out successfull' };
+  };
+
+  createAccessToken(user: User): { data: JWTPayload; token: string } {
     const data: JWTPayload = {
       userId: user.id,
       email: user.email,
       username: user.username,
       // permission: user.permission,
-      // expiration
     };
     const jwt = this.jwtService.sign(data);
     return {
@@ -68,7 +82,10 @@ export class AuthService {
       email: user.email,
       username: user.username,
     };
-    const jwt = this.jwtService.sign(data, { expiresIn: '1d' });
+    const jwt = this.jwtService.sign(data, {
+      secret: process.env.REFRESH_SECRET,
+      expiresIn: process.env.EXPIRES_IN_REFRESH,
+    });
     return {
       data,
       token: jwt,
@@ -87,4 +104,18 @@ export class AuthService {
     }
     return undefined;
   }
+
+  refreshToken = async (user: any) => {
+    const payload = {
+      id: user.userid,
+      email: user.email,
+      username: user.username,
+    };
+    const accessToken = await this.jwtService.signAsync(payload);
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      secret: process.env.REFRESH_SECRET,
+      expiresIn: process.env.EXPIRES_IN_REFRESH,
+    });
+    return { accessToken: accessToken, refreshToken: refreshToken };
+  };
 }

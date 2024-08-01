@@ -8,8 +8,9 @@ import {
 } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { validate } from 'class-validator';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, UseGuards } from '@nestjs/common';
 import { RegisterResponse } from '../types/auth.types';
+import { AuthUserGuard } from '../auth/guards/auth.guards';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -39,31 +40,37 @@ export class UsersResolver {
     return await this.usersService.activateUser(activationDto);
   }
 
+  @UseGuards(AuthUserGuard)
   @Query(() => [User], { name: 'users' })
   findAll() {
     return this.usersService.findAll();
   }
 
+  @UseGuards(AuthUserGuard)
   @Query(() => User, { name: 'user' })
   findOne(@Args('id') id: string) {
     return this.usersService.findOneById(id);
   }
 
+  @UseGuards(AuthUserGuard)
   @Query(() => User, { name: 'userByEmail' })
   findOneByEmail(@Args('id') id: string) {
     return this.usersService.findOneById(id);
   }
 
+  @UseGuards(AuthUserGuard)
   @Mutation(() => User)
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
     return this.usersService.update(updateUserInput.id, updateUserInput);
   }
 
+  @UseGuards(AuthUserGuard)
   @Mutation(() => User)
   removeUser(@Args('id', { type: () => Int }) id: number) {
     return this.usersService.delete(id);
   }
 
+  @UseGuards(AuthUserGuard)
   @Query(() => User, { name: 'forgotPassword' })
   forgotPassword(@Args('email') email: string) {
     return this.usersService.forgotPassword(email);

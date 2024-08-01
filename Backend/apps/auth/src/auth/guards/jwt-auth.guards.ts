@@ -1,20 +1,49 @@
-import { Injectable, ExecutionContext } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import {
+  Injectable,
+  ExecutionContext,
+  CanActivate,
+  UnauthorizedException,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { AuthenticationError } from '@nestjs/apollo';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
-  getRequest(context: ExecutionContext) {
+export class JwtAuthGuard implements CanActivate {
+  constructor(private jwtService: JwtService) {}
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
-    const request = ctx.getContext().req;
-    console.log('check headers: ', request.headers);
-    return request;
-  }
-  handleRequest(err: any, user: any) {
-    if (err || !user) {
-      throw err || new AuthenticationError('Could not authenticate with token');
+    const { req } = ctx.getContext();
+    // console.log('check request', req);
+    // console.log('check user: ', req.headers);
+    const { refreshtoken } = req.headers;
+    const token = this.getToken(refreshtoken);
+    if (!token) {
+      throw new UnauthorizedException('Not have refresh token, please login');
     }
-    return user;
+    try {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: process.env.REFRESH_SECRET,
+      });
+      req['user'] = payload;
+    } catch (err) {
+      throw new UnauthorizedException('Please login again');
+    }
+
+    return true;
   }
+  private getToken = (authToken: string): string => {
+    const match = authToken.match(/^Bearer (.*)$/);
+    if (!match || match.length < 2) {
+      throw new HttpException(
+        {
+          message:
+            'Invalid Authorization token - Token does not match Bearer .*',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    return match[1];
+  };
 }

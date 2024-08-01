@@ -12,11 +12,12 @@ export class JWTStrategy extends PassportStrategy(Strategy) {
   constructor(private authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.ACCESS_SECRET,
+      secretOrKey: process.env.REFRESH_SECRET,
     });
   }
 
   async validate(payload: JWTPayload) {
+    console.log('check layload: ', payload);
     const user = await this.authService.validateJWTPayLoad(payload);
     if (!user) {
       throw new AuthenticationError(`Please login first`);

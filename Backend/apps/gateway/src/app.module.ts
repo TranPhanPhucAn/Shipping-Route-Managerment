@@ -27,7 +27,16 @@ const getToken = (authToken: string): string => {
 };
 
 const decodedToken = (authToken: string) => {
-  const decoded = verify(authToken, process.env.ACCESS_SECRET);
+  const decoded = verify(authToken, process.env.ACCESS_SECRET, {
+    ignoreExpiration: true,
+  });
+  const expirationTime = decoded?.exp;
+  if (expirationTime * 1000 < Date.now()) {
+    throw new HttpException(
+      { message: 'Access token expired' },
+      HttpStatus.UNAUTHORIZED,
+    );
+  }
   if (!decoded) {
     throw new HttpException(
       { message: 'Invalid Auth Token' },
@@ -39,18 +48,30 @@ const decodedToken = (authToken: string) => {
 
 const handleAuth = ({ req }) => {
   try {
-    if (req.headers.authorization) {
-      const token = getToken(req.headers.authorization);
+    let isLogin: string = '';
+    let userId: string = '';
+    let email: string = '';
+    let accessToken: string = '';
+    const refreshToken: string = req.headers.refreshtoken;
+    if (req.headers.accesstoken) {
+      const token = getToken(req.headers.accesstoken);
       const decoded = decodedToken(token);
-      console.log(`userId:${req.headers.authorization}`);
-      return {
-        userId: decoded.userId,
-        authorization: `${req.headers.authorization}`,
-      };
+      console.log('decoded: ', decoded);
+      userId = decoded.userId;
+      email = decoded.email;
+      isLogin = 'true';
+      accessToken = req.headers.accesstoken;
     }
+    return {
+      userid: userId,
+      email: email,
+      islogin: isLogin,
+      accesstoken: accessToken,
+      refreshtoken: refreshToken,
+    };
   } catch (err) {
     throw new UnauthorizedException(
-      'User unauthorized with invalid authorization headers',
+      'User unauthorized with invalid accessToken headers',
     );
   }
 };
@@ -62,12 +83,14 @@ const handleAuth = ({ req }) => {
       },
       driver: ApolloGatewayDriver,
       gateway: {
-        buildService: ({ name, url }) => {
+        buildService: ({ url }) => {
           return new RemoteGraphQLDataSource({
             url,
             willSendRequest({ request, context }: any) {
-              request.http.headers.set('userId', context.userId);
-              request.http.headers.set('authorization', context.authorization);
+              request.http.headers.set('userid', context.userid);
+              request.http.headers.set('accesstoken', context.accesstoken);
+              request.http.headers.set('islogin', context.islogin);
+              request.http.headers.set('refreshtoken', context.refreshtoken);
             },
           });
         },
