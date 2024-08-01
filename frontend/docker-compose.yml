@@ -1,8 +1,9 @@
 version: "3.8"
+
 services:
-  web:
+  app:
     build: .
     ports:
-      - "3000:${USER_UI_PORT}"
+      - "3000:${UI_PORT}"
     environment:
       - NODE_ENV=production
