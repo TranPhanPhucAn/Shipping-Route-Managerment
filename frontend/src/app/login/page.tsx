@@ -1,7 +1,8 @@
+"use client";
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { LOGIN_USER } from "../../graphql/mutations/LoginUser";
-import { useRouter } from "next/router";
+import { LOGIN_USER } from "../../graphql/mutations/Auth";
+import { useRouter } from "next/navigation";
 import { Input, Button, message } from "antd";
 import { LoginInput } from "../../graphql/types";
 
@@ -23,7 +24,7 @@ const Login = () => {
       });
       if (data?.login) {
         message.success("Login successful!");
-        router.push("/dashboard");
+        router.push("/");
       }
     } catch (err) {
       message.error(`Login failed: ${error?.message}`);

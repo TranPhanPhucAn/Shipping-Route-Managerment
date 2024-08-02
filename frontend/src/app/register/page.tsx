@@ -1,6 +1,6 @@
 "use client";
 import { useMutation } from "@apollo/client";
-import { REGISTER_USER } from "../../graphql/mutations/RegisterUser";
+import { REGISTER_USER } from "../../graphql/mutations/Auth";
 
 const Register = () => {
   const [registerUser, { data, loading, error }] = useMutation(REGISTER_USER);
@@ -10,10 +10,10 @@ const Register = () => {
       const response = await registerUser({
         variables: {
           createUserInput: {
-            email: "example@example.com",
-            username: "exampleUser",
-            password: "examplePassword",
-            address: "123 Example St",
+            email: "hothithuhoa2001@gmail.com",
+            username: "Hoa",
+            password: "securepassword",
+            address: "123 Main St",
           },
         },
       });

@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import { Menu } from "antd";
 import type { MenuProps } from "antd";
@@ -37,14 +36,16 @@ const Header: React.FC = () => {
   };
 
   return (
-    <Menu
-      onClick={onClick}
-      style={{ width: "100%" }}
-      selectedKeys={[current]}
-      mode="horizontal"
-      theme="dark"
-      items={items}
-    />
+    <>
+      <Menu
+        onClick={onClick}
+        style={{ width: "100%" }}
+        selectedKeys={[current]}
+        mode="horizontal"
+        theme="dark"
+        items={items}
+      />
+    </>
   );
 };
 
