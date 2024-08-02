@@ -4,10 +4,10 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import { randomBytes } from 'crypto';
 import * as bycypt from 'bcrypt';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
+import { ForgotPasswordDto, ResetPasswordDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -101,17 +101,55 @@ export class UsersService {
     await this.usersRepository.delete(id);
   }
 
-  async forgotPassword(email): Promise<boolean> {
+  async generateForgotPasswordLink(user: User) {
+    const forgotPasswordToken = this.jwtService.sign(
+      {
+        user,
+      },
+      {
+        secret: process.env.FORGOT_PASSWORD_SECRET,
+        expiresIn: '5m',
+      },
+    );
+    return forgotPasswordToken;
+  }
+  async forgotPassword(forgotPassword: ForgotPasswordDto) {
+    const { email } = forgotPassword;
     const user = await this.findOneByEmail(email);
-    if (!user) false;
+    if (!user) {
+      throw new BadRequestException('User not found with this email!');
+    }
+    const forgotPasswordToken = await this.generateForgotPasswordLink(user);
+    const resetPasswordUrl = `${process.env.CLIENT_URL}/reset-password?verify=${forgotPasswordToken}`;
+    await this.emailService.sendMail({
+      email,
+      subject: 'Reset your password',
+      template: './forgot-password-mail',
+      name: user.username,
+      activationCode: resetPasswordUrl,
+    });
+    return { message: 'Your reset password request successfull!' };
+  }
 
-    const expiration = new Date(Date().valueOf() + 24 * 60 * 60 * 1000);
-    const token = randomBytes(32).toString('hex');
-    user.passwordReset = {
-      token,
-      expiration,
-    };
-    await this.usersRepository.save(user);
-    return true;
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const { password, forgotPasswordToken } = resetPasswordDto;
+    const decoded = this.jwtService.verify(forgotPasswordToken, {
+      secret: process.env.FORGOT_PASSWORD_SECRET,
+    });
+    if (!decoded) {
+      throw new BadRequestException('Invalid token');
+    }
+    const hassPassword = this.hassPassword(password);
+    const user = await this.findOneById(decoded.user.id);
+    if (user) {
+      // const updateUser = await this.usersRepository.update(decoded.user.id, {
+      //   password: hassPassword,
+      // });
+      const updateUser = {
+        ...user,
+        password: hassPassword,
+      };
+      const updateUser = await this.usersRepository.save(updateUser);
+    }
   }
 }

@@ -9,8 +9,13 @@ import {
 import { UpdateUserInput } from './dto/update-user.input';
 import { validate } from 'class-validator';
 import { BadRequestException, UseGuards } from '@nestjs/common';
-import { RegisterResponse } from '../types/auth.types';
+import {
+  ForgotPasswordResponse,
+  RegisterResponse,
+  ResetPasswordResponse,
+} from '../types/auth.types';
 import { AuthUserGuard } from '../auth/guards/auth.guards';
+import { ForgotPasswordDto, ResetPasswordDto } from './dto/user.dto';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -70,9 +75,13 @@ export class UsersResolver {
     return this.usersService.delete(id);
   }
 
-  @UseGuards(AuthUserGuard)
-  @Query(() => User, { name: 'forgotPassword' })
-  forgotPassword(@Args('email') email: string) {
-    return this.usersService.forgotPassword(email);
+  @Query(() => ForgotPasswordResponse, { name: 'forgotPassword' })
+  forgotPassword(@Args('forgotPassword') forgotPassword: ForgotPasswordDto) {
+    return this.usersService.forgotPassword(forgotPassword);
+  }
+
+  @Query(() => ResetPasswordResponse, { name: 'resetPassword' })
+  resetPassword(@Args('resetPassword') resetPassword: ResetPasswordDto) {
+    return this.usersService.resetPassword(resetPassword);
   }
 }
