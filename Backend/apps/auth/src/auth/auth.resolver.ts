@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Context } from '@nestjs/graphql';
+import { Resolver, Query, Args, Context, Mutation } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { Auth } from './entities/auth.entity';
 import { LoginInput } from './dto/auth.dto';
@@ -19,7 +19,7 @@ import { AuthUserGuard } from './guards/auth.guards';
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @Query(() => LoginResponse, { name: 'login' })
+  @Mutation(() => LoginResponse)
   async login(
     @Args('loginInput') loginInput: LoginInput,
   ): Promise<LoginResponse> {
@@ -42,7 +42,7 @@ export class AuthResolver {
     }
   }
 
-  @Query(() => LogoutResponse, { name: 'logout' })
+  @Mutation(() => LogoutResponse)
   @UseGuards(AuthUserGuard)
   async logout(@Context() context: { req: Request }) {
     return await this.authService.logoutUser(context.req);

@@ -108,7 +108,7 @@ export class UsersService {
       },
       {
         secret: process.env.FORGOT_PASSWORD_SECRET,
-        expiresIn: '5m',
+        expiresIn: process.env.EXPIRES_IN_FORGOT_PASS,
       },
     );
     return forgotPasswordToken;
@@ -139,17 +139,13 @@ export class UsersService {
     if (!decoded) {
       throw new BadRequestException('Invalid token');
     }
-    const hassPassword = this.hassPassword(password);
+    const hassPassword = await this.hassPassword(password);
     const user = await this.findOneById(decoded.user.id);
     if (user) {
-      // const updateUser = await this.usersRepository.update(decoded.user.id, {
-      //   password: hassPassword,
-      // });
-      const updateUser = {
-        ...user,
+      await this.usersRepository.update(decoded.user.id, {
         password: hassPassword,
-      };
-      const updateUser = await this.usersRepository.save(updateUser);
+      });
+      return { message: 'Reset password successfull!' };
     }
   }
 }
