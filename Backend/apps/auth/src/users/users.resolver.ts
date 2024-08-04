@@ -1,14 +1,9 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import {
-  ActivationDto,
-  CreateUserInput,
-  UserRegister,
-} from './dto/create-user.input';
+import { ActivationDto, CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { validate } from 'class-validator';
-import { BadRequestException, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import {
   ChangePasswordResponse,
   ForgotPasswordResponse,
@@ -28,19 +23,6 @@ export class UsersResolver {
 
   @Mutation(() => RegisterResponse)
   async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    const { username, email, password, address } = createUserInput;
-    const userRegister = new UserRegister();
-    userRegister.username = username;
-    userRegister.email = email;
-    userRegister.password = password;
-    userRegister.address = address;
-    const errors = await validate(userRegister);
-    if (errors.length > 0) {
-      const errorsResponse: any = errors.map((val: any) => {
-        return Object.values(val.constraints)[0] as string;
-      });
-      throw new BadRequestException(errorsResponse.join(','));
-    }
     const token = await this.usersService.create(createUserInput);
     return { activation_token: token };
   }
