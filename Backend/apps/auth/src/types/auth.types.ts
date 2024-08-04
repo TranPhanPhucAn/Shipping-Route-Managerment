@@ -69,3 +69,12 @@ export class ResetPasswordResponse {
   @Field(() => ErrorType, { nullable: true })
   error?: ErrorType;
 }
+
+@ObjectType()
+export class ChangePasswordResponse {
+  @Field()
+  message?: string;
+
+  @Field(() => ErrorType, { nullable: true })
+  error?: ErrorType;
+}

@@ -7,7 +7,11 @@ import { User } from './entities/user.entity';
 import * as bycypt from 'bcrypt';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
-import { ForgotPasswordDto, ResetPasswordDto } from './dto/user.dto';
+import {
+  ChangePasswordDto,
+  ForgotPasswordDto,
+  ResetPasswordDto,
+} from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -146,6 +150,21 @@ export class UsersService {
         password: hassPassword,
       });
       return { message: 'Reset password successfull!' };
+    }
+  }
+  async changePassword(changePassword: ChangePasswordDto) {
+    const { userId, oldPassword, newPassword } = changePassword;
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    let isMatch: boolean = false;
+    isMatch = bycypt.compare(oldPassword, user.password);
+    if (isMatch) {
+      const newPasswordHass = await this.hassPassword(newPassword);
+      await this.usersRepository.update(userId, {
+        password: newPasswordHass,
+      });
+      return { message: 'Change password succeed!' };
+    } else {
+      return { message: 'You enter wrong current password' };
     }
   }
 }

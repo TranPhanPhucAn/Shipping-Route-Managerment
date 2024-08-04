@@ -19,3 +19,18 @@ export class ResetPasswordDto {
   @IsNotEmpty({ message: 'Forgot password token is required' })
   forgotPasswordToken: string;
 }
+
+@InputType()
+export class ChangePasswordDto {
+  @Field()
+  @IsNotEmpty({ message: 'UserId is required' })
+  userId: string;
+
+  @Field()
+  @IsNotEmpty({ message: 'Password is required' })
+  oldPassword: string;
+
+  @Field()
+  @IsNotEmpty({ message: 'New password is required' })
+  newPassword: string;
+}
