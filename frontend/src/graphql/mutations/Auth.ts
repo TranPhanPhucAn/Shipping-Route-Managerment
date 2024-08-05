@@ -25,3 +25,13 @@ export const REGISTER_USER = gql`
     }
   }
 `;
+
+export const ACTIVATE_ACCOUNT = gql`
+  mutation ActivateUser($activationDto: ActivationDto!) {
+    activateUser(activationDto: $activationDto) {
+      id
+      email
+      isActive
+    }
+  }
+`;

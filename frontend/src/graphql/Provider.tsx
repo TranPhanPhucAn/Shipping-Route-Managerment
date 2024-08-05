@@ -4,7 +4,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 const Provider = ({ children }: { children: ReactNode }) => {
   const client = new ApolloClient({
-    uri: "http://localhost:5000/graphql",
+    uri: process.env.NEXT_PUBLIC_SERVER_URI,
     cache: new InMemoryCache(),
   });
   return <ApolloProvider client={client}>{children}</ApolloProvider>;

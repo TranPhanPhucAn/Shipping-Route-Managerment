@@ -1,35 +1,81 @@
 "use client";
 import { useMutation } from "@apollo/client";
 import { REGISTER_USER } from "../../graphql/mutations/Auth";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Input, Button, message } from "antd";
+import { createUserInput } from "../../graphql/types";
 
 const Register = () => {
-  const [registerUser, { data, loading, error }] = useMutation(REGISTER_USER);
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [address, setAddress] = useState("");
+  const [registerUser, { loading, error }] = useMutation(REGISTER_USER);
+  const router = useRouter();
 
   const handleRegister = async () => {
     try {
-      const response = await registerUser({
+      const { data } = await registerUser({
         variables: {
           createUserInput: {
-            email: "hothithuhoa2001@gmail.com",
-            username: "Hoa",
-            password: "securepassword",
-            address: "123 Main St",
+            email,
+            username,
+            password,
+            address,
           },
         },
       });
-      console.log(response.data);
+      if (data?.createUser?.activation_token) {
+        message.success(
+          "Registration successful! Please check your email for the activation code."
+        );
+        router.push("/activation"); 
+      } else if (data?.createUser?.error) {
+        message.error(`Registration failed: ${data.createUser.error.message}`);
+      }
     } catch (err) {
-      console.error(err);
+      message.error(`Registration failed: ${error?.message}`);
     }
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
-
   return (
-    <div>
-      <button onClick={handleRegister}>Register</button>
-      {data && <p>{data.createUser.activation_token}</p>}
+    <div style={{ maxWidth: 400, margin: "0 auto", padding: "1rem" }}>
+      <h2>Register</h2>
+      <Input
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        style={{ marginBottom: "1rem" }}
+      />
+      <Input
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        style={{ marginBottom: "1rem" }}
+      />
+      <Input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        style={{ marginBottom: "1rem" }}
+      />
+      <Input
+        placeholder="Address"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        style={{ marginBottom: "1rem" }}
+      />
+      <Button
+        type="primary"
+        loading={loading}
+        onClick={handleRegister}
+        style={{ width: "100%" }}
+      >
+        Register
+      </Button>
+      {error && <p style={{ color: "red" }}>{error.message}</p>}
     </div>
   );
 };
