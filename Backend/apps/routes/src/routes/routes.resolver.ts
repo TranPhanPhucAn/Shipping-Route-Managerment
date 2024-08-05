@@ -13,7 +13,7 @@ import { Route } from './entities/route.entity';
 import { CreateRouteInput } from './dto/create-route.input';
 // import { UpdateRouteInput } from './dto/update-route.input';
 
-@Resolver(() => Route)
+@Resolver((of) => Route)
 export class RoutesResolver {
   constructor(private readonly routesService: RoutesService) {}
 

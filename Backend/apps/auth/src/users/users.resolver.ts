@@ -24,7 +24,7 @@ import {
   ResetPasswordDto,
 } from './dto/user.dto';
 
-@Resolver(() => User)
+@Resolver((of) => User)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
@@ -85,7 +85,7 @@ export class UsersResolver {
   }
 
   @ResolveReference()
-  resolveReferRoute(ref: { __typename: string; id: string }) {
+  async resolveReferRoute(ref: { __typename: string; id: string }) {
     return this.usersService.findOneById(ref.id);
   }
 }
