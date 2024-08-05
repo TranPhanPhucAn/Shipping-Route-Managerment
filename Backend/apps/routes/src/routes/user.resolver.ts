@@ -7,7 +7,7 @@ import { Route } from './entities/route.entity';
 export class UsersResolver {
   constructor(private readonly routesService: RoutesService) {}
 
-  @ResolveField()
+  @ResolveField((of) => [Route])
   routes(@Parent() user: User): Promise<Route[]> {
     return this.routesService.forUser(user.id);
   }

@@ -16,4 +16,7 @@ export class CreateRouteInput {
 
   @Field()
   duration: string;
+
+  @Field()
+  userId: string;
 }
