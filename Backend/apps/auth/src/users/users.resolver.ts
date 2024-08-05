@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ResolveReference,
+} from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { ActivationDto, CreateUserInput } from './dto/create-user.input';
@@ -75,5 +82,10 @@ export class UsersResolver {
   @Mutation(() => ChangePasswordResponse)
   changePassword(@Args('changePassword') changePassword: ChangePasswordDto) {
     return this.usersService.changePassword(changePassword);
+  }
+
+  @ResolveReference()
+  resolveReferRoute(ref: { __typename: string; id: string }) {
+    return this.usersService.findOneById(ref.id);
   }
 }

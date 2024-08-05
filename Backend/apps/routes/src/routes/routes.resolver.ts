@@ -5,6 +5,8 @@ import {
   Args,
   Int,
   ResolveReference,
+  ResolveField,
+  Parent,
 } from '@nestjs/graphql';
 import { RoutesService } from './routes.service';
 import { Route } from './entities/route.entity';
@@ -38,8 +40,13 @@ export class RoutesResolver {
     return this.routesService.remove(id);
   }
 
-  @ResolveReference()
-  resolveReferUser(ref: { __typename: string; id: string }) {
-    return this.routesService.findOne(ref.id);
+  // @ResolveReference()
+  // resolveReferUser(ref: { __typename: string; id: string }) {
+  //   return this.routesService.findOne(ref.id);
+  // }
+
+  @ResolveField()
+  user(@Parent() route: Route) {
+    return { __typename: 'User', id: route.userId };
   }
 }
