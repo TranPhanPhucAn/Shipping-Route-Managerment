@@ -1,4 +1,3 @@
-import Register from "../app/register/page";
 export interface LoginInput {
   email: string;
   password: string;
@@ -22,5 +21,3 @@ export interface ActivationDto {
   activationCode: string;
   activationToken: string;
 }
-
-
