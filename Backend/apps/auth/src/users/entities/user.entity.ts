@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, Directive } from '@nestjs/graphql';
 import {
   Entity,
   Column,
@@ -8,9 +8,10 @@ import {
 } from 'typeorm';
 @Entity()
 @ObjectType()
+@Directive('@key(fields: "id")')
 export class User {
   @PrimaryGeneratedColumn()
-  @Field(() => ID)
+  @Field((type) => ID)
   id: string;
 
   @Column()
@@ -27,14 +28,4 @@ export class User {
   @Column()
   @Field()
   address: string;
-
-  @Column({ type: 'jsonb', default: null })
-  public passwordReset!: any;
-
-  // @UpdateDateColumn({
-  //   type: 'timestamptz',
-  //   default: () => 'CURRENT_TIMESTAMP',
-  //   select: true,
-  // })
-  // public updated_at!: Date;
 }
