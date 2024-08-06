@@ -1,9 +1,8 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Menu } from "antd";
 import type { MenuProps } from "antd";
 import Link from "next/link";
-import { useState } from "react";
 import {
   HomeOutlined,
   AppstoreOutlined,
@@ -26,7 +25,6 @@ const items: MenuItem[] = [
     label: <Link href={"/routes"}>Manage Routes</Link>,
     key: "routes",
     icon: <AppstoreOutlined />,
-    // disabled: true,
   },
 ];
 const Header: React.FC = () => {
@@ -38,14 +36,16 @@ const Header: React.FC = () => {
   };
 
   return (
-    <Menu
-      onClick={onClick}
-      style={{ width: "100%" }}
-      selectedKeys={["current"]}
-      mode="horizontal"
-      theme="dark"
-      items={items}
-    />
+    <>
+      <Menu
+        onClick={onClick}
+        style={{ width: "100%" }}
+        selectedKeys={[current]}
+        mode="horizontal"
+        theme="dark"
+        items={items}
+      />
+    </>
   );
 };
 

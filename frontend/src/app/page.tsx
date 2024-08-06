@@ -1,12 +1,15 @@
+"use client";
 import React from "react";
 import Header from "../components/layout/Header";
 
-const page = () => {
+
+const HomePage: React.FC = () => {
   return (
-    <div>
-      <Header></Header>
-    </div>
+   <> 
+      <Header />
+      <h1>Welcome to the Shipping Route Management System</h1>
+    </>
   );
 };
 
-export default page;
+export default HomePage;
