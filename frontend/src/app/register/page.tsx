@@ -30,7 +30,7 @@ const Register = () => {
         message.success(
           "Registration successful! Please check your email for the activation code."
         );
-        router.push("/activation"); 
+        router.push("/activation");
       } else if (data?.createUser?.error) {
         message.error(`Registration failed: ${data.createUser.error.message}`);
       }

@@ -15,8 +15,10 @@ export interface createUserInput {
   password: string;
   address: string;
 }
+export interface RegisterResponse {
+  activation_token: string;
+}
 export interface ActivationDto {
-  email: string;
   activationCode: string;
 }
 
