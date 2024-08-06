@@ -21,8 +21,8 @@ export class RoutesService {
     const route: Route | undefined = await this.routesRepository.save(newRoute);
     return route;
   };
-  findAll() {
-    return `This action returns all routes`;
+  async findAll(): Promise<Route[]> {
+    return await this.routesRepository.find();
   }
 
   async findOne(id: string): Promise<Route> {
@@ -36,4 +36,8 @@ export class RoutesService {
   remove(id: number) {
     return `This action removes a #${id} route`;
   }
+
+  // async forUser(id: string) {
+  //   return await this.routesRepository.find({ where: { userId: id } });
+  // }
 }

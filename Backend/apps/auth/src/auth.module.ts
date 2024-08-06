@@ -12,6 +12,7 @@ import { HealthModule } from './health/health.module';
 // import { join } from 'path';
 import { AuthenModule } from './auth/authen.module';
 import { EmailModule } from './email/email.module';
+import { UserServiceController } from './users/users.controller';
 
 @Module({
   imports: [
@@ -40,5 +41,6 @@ import { EmailModule } from './email/email.module';
     EmailModule,
   ],
   providers: [],
+  controllers: [UserServiceController],
 })
 export class AuthModule {}
