@@ -1,30 +1,37 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { ACTIVATE_ACCOUNT } from "../../graphql/mutations/Auth";
 import { Input, Button, message } from "antd";
 import { useRouter } from "next/navigation";
-import { ActivationDto } from "@/src/graphql/types";
 
 const Activate = () => {
+  const [activationToken, setActivationToken] = useState("");
   const [activationCode, setActivationCode] = useState("");
   const [activateUser, { loading, error }] = useMutation(ACTIVATE_ACCOUNT);
   const router = useRouter();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    if (token) {
+      setActivationToken(token);
+    }
+  }, []);
 
   const handleActivation = async () => {
     try {
       const { data } = await activateUser({
         variables: {
-          ActivationDto: {
+          activationDto: {
+            activationToken,
             activationCode,
           },
         },
       });
-      if (data?.createUser?.activation_token) {
-        message.success("Registration successful!.");
+      if (data?.activateUser) {
+        message.success("Activate successful!.");
         router.push("/login");
-      } else if (data?.createUser?.error) {
-        message.error(`Registration failed: ${data.createUser.error.message}`);
       }
     } catch (err) {
       message.error(`Registration failed: ${error?.message}`);

@@ -20,10 +20,7 @@ export interface RegisterResponse {
 }
 export interface ActivationDto {
   activationCode: string;
+  activationToken: string;
 }
 
-export interface ActivationResponse {
-  id: string;
-  email: string;
-  isActive: boolean;
-}
+
