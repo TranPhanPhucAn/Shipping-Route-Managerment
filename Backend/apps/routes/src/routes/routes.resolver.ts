@@ -4,7 +4,6 @@ import {
   Mutation,
   Args,
   Int,
-  ResolveReference,
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
@@ -21,6 +20,7 @@ export class RoutesResolver {
   createRoute(@Args('createRouteInput') createRouteInput: CreateRouteInput) {
     return this.routesService.create(createRouteInput);
   }
+
   @Query(() => [Route], { name: 'routes' })
   findAll() {
     return this.routesService.findAll();
@@ -39,11 +39,6 @@ export class RoutesResolver {
   removeRoute(@Args('id', { type: () => Int }) id: number) {
     return this.routesService.remove(id);
   }
-
-  // @ResolveReference()
-  // resolveReferUser(ref: { __typename: string; id: string }) {
-  //   return this.routesService.findOne(ref.id);
-  // }
 
   @ResolveField()
   user(@Parent() route: Route) {

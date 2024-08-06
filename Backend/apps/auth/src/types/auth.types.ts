@@ -78,3 +78,15 @@ export class ChangePasswordResponse {
   @Field(() => ErrorType, { nullable: true })
   error?: ErrorType;
 }
+
+@ObjectType()
+export class PaginationUserResponse {
+  @Field(() => [User], { nullable: true })
+  users?: User[];
+
+  @Field()
+  totalCount?: number;
+
+  @Field(() => ErrorType, { nullable: true })
+  error?: ErrorType;
+}

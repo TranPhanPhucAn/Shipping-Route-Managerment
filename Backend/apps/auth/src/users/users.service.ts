@@ -10,6 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 import {
   ChangePasswordDto,
   ForgotPasswordDto,
+  PaginationUserDto,
   ResetPasswordDto,
 } from './dto/user.dto';
 
@@ -152,6 +153,22 @@ export class UsersService {
       return { message: 'Reset password successfull!' };
     }
   }
+
+  async paginationUser(paginationUser: PaginationUserDto) {
+    const { limit, offset } = paginationUser;
+    const skip = limit * offset;
+    const [result, total] = await this.usersRepository.findAndCount({
+      take: limit,
+      skip: skip,
+    });
+    const totalCount = Math.ceil(total / limit);
+
+    return {
+      users: result,
+      totalCount: totalCount,
+    };
+  }
+
   async changePassword(changePassword: ChangePasswordDto) {
     const { userId, oldPassword, newPassword } = changePassword;
     const user = await this.usersRepository.findOne({ where: { id: userId } });

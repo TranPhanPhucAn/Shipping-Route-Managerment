@@ -34,3 +34,14 @@ export class ChangePasswordDto {
   @IsNotEmpty({ message: 'New password is required' })
   newPassword: string;
 }
+
+@InputType()
+export class PaginationUserDto {
+  @Field()
+  @IsNotEmpty({ message: 'Limit is required' })
+  limit: number;
+
+  @Field()
+  @IsNotEmpty({ message: 'Offset is required' })
+  offset: number;
+}

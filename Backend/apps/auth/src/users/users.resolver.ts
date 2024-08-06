@@ -14,6 +14,7 @@ import { UseGuards } from '@nestjs/common';
 import {
   ChangePasswordResponse,
   ForgotPasswordResponse,
+  PaginationUserResponse,
   RegisterResponse,
   ResetPasswordResponse,
 } from '../types/auth.types';
@@ -21,6 +22,7 @@ import { AuthUserGuard } from '../auth/guards/auth.guards';
 import {
   ChangePasswordDto,
   ForgotPasswordDto,
+  PaginationUserDto,
   ResetPasswordDto,
 } from './dto/user.dto';
 
@@ -79,13 +81,20 @@ export class UsersResolver {
     return this.usersService.resetPassword(resetPassword);
   }
 
+  @UseGuards(AuthUserGuard)
   @Mutation(() => ChangePasswordResponse)
   changePassword(@Args('changePassword') changePassword: ChangePasswordDto) {
     return this.usersService.changePassword(changePassword);
   }
 
+  // @UseGuards(AuthUserGuard)
+  @Query(() => PaginationUserResponse, { name: 'paginationUser' })
+  paginationUser(@Args('paginationUser') paginationUser: PaginationUserDto) {
+    return this.usersService.paginationUser(paginationUser);
+  }
+
   @ResolveReference()
-  async resolveReferRoute(ref: { __typename: string; id: string }) {
+  resolveReferRoute(ref: { __typename: string; id: string }) {
     return this.usersService.findOneById(ref.id);
   }
 }
