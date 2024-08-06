@@ -26,11 +26,12 @@ const Register = () => {
           },
         },
       });
-      if (data?.createUser?.activation_token) {
+      const activationToken = data?.createUser?.activation_token;
+      if (activationToken) {
         message.success(
           "Registration successful! Please check your email for the activation code."
         );
-        router.push("/activation"); 
+        router.push(`/activation?token=${activationToken}`);
       } else if (data?.createUser?.error) {
         message.error(`Registration failed: ${data.createUser.error.message}`);
       }

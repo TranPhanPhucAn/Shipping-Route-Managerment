@@ -31,7 +31,8 @@ export const ACTIVATE_ACCOUNT = gql`
     activateUser(activationDto: $activationDto) {
       id
       email
-      isActive
+      username
+      address
     }
   }
 `;
