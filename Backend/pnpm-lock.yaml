@@ -95,6 +95,9 @@ importers:
       pg:
         specifier: ^8.12.0
         version: 8.12.0
+      protoc-gen-ts:
+        specifier: ^0.8.7
+        version: 0.8.7
       reflect-metadata:
         specifier: ^0.2.0
         version: 0.2.2
@@ -3958,6 +3961,10 @@ packages:
   protobufjs@7.3.2:
     resolution: {integrity: sha512-RXyHaACeqXeqAKGLDl68rQKbmObRsTIn4TYVUUug1KfS47YWCo5MacGITEryugIgZqORCvJWEk4l449POg5Txg==}
     engines: {node: '>=12.0.0'}
+
+  protoc-gen-ts@0.8.7:
+    resolution: {integrity: sha512-jr4VJey2J9LVYCV7EVyVe53g1VMw28cCmYJhBe5e3YX5wiyiDwgxWxeDf9oTqAe4P1bN/YGAkW2jhlH8LohwiQ==}
+    hasBin: true
 
   proxy-addr@2.0.7:
     resolution: {integrity: sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==}
@@ -9664,6 +9671,8 @@ snapshots:
       '@protobufjs/utf8': 1.1.0
       '@types/node': 20.14.10
       long: 5.2.3
+
+  protoc-gen-ts@0.8.7: {}
 
   proxy-addr@2.0.7:
     dependencies:
