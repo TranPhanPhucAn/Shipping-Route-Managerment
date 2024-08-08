@@ -37,7 +37,7 @@ export class RoutesService {
     return `This action removes a #${id} route`;
   }
 
-  // async forUser(id: string) {
-  //   return await this.routesRepository.find({ where: { userId: id } });
-  // }
+  async forUser(id: string) {
+    return await this.routesRepository.find({ where: { userId: id } });
+  }
 }

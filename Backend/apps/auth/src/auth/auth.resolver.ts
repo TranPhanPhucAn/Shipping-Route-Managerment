@@ -8,8 +8,6 @@ import {
   RefreshTokenResponse,
 } from '../types/auth.types';
 import { AuthenticationError } from '@nestjs/apollo';
-import { UserAuth } from './dto/auth.dto';
-import { validate } from 'class-validator';
 import { UseGuards } from '@nestjs/common';
 // import { JWTGuard } from './guards/auth.guards';
 import { JwtAuthGuard } from './guards/jwt-auth.guards';
@@ -24,16 +22,6 @@ export class AuthResolver {
     @Args('loginInput') loginInput: LoginInput,
   ): Promise<LoginResponse> {
     try {
-      const userAuth = new UserAuth();
-      userAuth.email = loginInput.email;
-      userAuth.password = loginInput.password;
-      validate(userAuth).then((errors) => {
-        if (errors.length > 0) {
-          console.log('Validation failed. errors: ', errors);
-        } else {
-          console.log('Validation succeed');
-        }
-      });
       const result = await this.authService.loginUserByPassword(loginInput);
       if (result) return result;
       throw new AuthenticationError('Could not login with provided data');

@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { RouteModule } from './routes/routes.module';
 import { HealthModule } from './health/health.module';
+import { User } from './routes/entities/user.entity';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -17,6 +18,7 @@ import { HealthModule } from './health/health.module';
       autoSchemaFile: {
         federation: 2,
       },
+      buildSchemaOptions: { orphanedTypes: [User] },
     }),
     TypeOrmModule.forRoot({
       type: process.env.TYPE_DB as 'postgres',

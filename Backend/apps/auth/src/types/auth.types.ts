@@ -51,3 +51,42 @@ export class RefreshTokenResponse {
   @Field(() => ErrorType, { nullable: true })
   error?: ErrorType;
 }
+
+@ObjectType()
+export class ForgotPasswordResponse {
+  @Field()
+  message?: string;
+
+  @Field(() => ErrorType, { nullable: true })
+  error?: ErrorType;
+}
+
+@ObjectType()
+export class ResetPasswordResponse {
+  @Field()
+  message?: string;
+
+  @Field(() => ErrorType, { nullable: true })
+  error?: ErrorType;
+}
+
+@ObjectType()
+export class ChangePasswordResponse {
+  @Field()
+  message?: string;
+
+  @Field(() => ErrorType, { nullable: true })
+  error?: ErrorType;
+}
+
+@ObjectType()
+export class PaginationUserResponse {
+  @Field(() => [User], { nullable: true })
+  users?: User[];
+
+  @Field()
+  totalCount?: number;
+
+  @Field(() => ErrorType, { nullable: true })
+  error?: ErrorType;
+}
