@@ -12,14 +12,14 @@ import { Route } from './entities/route.entity';
 import { CreateRouteInput } from './dto/create-route.input';
 import { firstValueFrom } from 'rxjs';
 import { RouteUserResponse } from '../types/route.types';
-import { UserServiceGrpcClient } from './users.services';
+// import { UserServiceGrpcClient } from './users.services';
 // import { UpdateRouteInput } from './dto/update-route.input';
 
 @Resolver((of) => Route)
 export class RoutesResolver {
   constructor(
     private readonly routesService: RoutesService,
-    private readonly userServiceClient: UserServiceGrpcClient,
+    // private readonly userServiceClient: UserServiceGrpcClient,
   ) {}
 
   @Mutation(() => Route)
@@ -53,7 +53,7 @@ export class RoutesResolver {
 
   @Query(() => RouteUserResponse, { name: 'routeUser' })
   async routeUser(@Args('userId') userId: string) {
-    const userObservable = this.userServiceClient.getUser(userId);
+    const userObservable = this.routesService.getUser(userId);
     const user = await firstValueFrom(userObservable);
     return {
       id: user.id,

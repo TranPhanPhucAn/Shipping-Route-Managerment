@@ -1,17 +1,13 @@
 import { Module } from '@nestjs/common';
-import { RoutesService } from './routes.service';
-import { RoutesResolver } from './routes.resolver';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Route } from './entities/route.entity';
+import { AuthService } from './auth.service';
+import { AuthResolver } from './auth.resolver';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
-// import { UserServiceGrpcClient } from './users.services';
 import { join } from 'path';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Route])],
   providers: [
-    RoutesResolver,
-    RoutesService,
+    AuthResolver,
+    AuthService,
     {
       provide: 'USER_SERVICE',
       useFactory: () => {
@@ -21,12 +17,12 @@ import { join } from 'path';
             url: 'localhost:50052', // URL where UserService is running
             package: 'user',
             // protoPath: 'apps/routes/src/routes/_proto/user.proto',
-            protoPath: join(__dirname, './routes/_proto/user.proto'),
+            protoPath: join(__dirname, './_proto/user.proto'),
           },
         });
       },
     },
-    // UserServiceGrpcClient,
   ],
+  exports: [AuthService],
 })
-export class RouteModule {}
+export class AuthModule {}
