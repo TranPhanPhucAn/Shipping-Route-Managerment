@@ -30,6 +30,9 @@ const Login = () => {
       message.error(`Login failed: ${error?.message}`);
     }
   };
+  const handleForgotPassword = () => {
+    router.push("/forgotpassword");
+  };
 
   return (
     <div style={{ maxWidth: 400, margin: "0 auto", padding: "1rem" }}>
@@ -54,6 +57,15 @@ const Login = () => {
         style={{ width: "100%" }}
       >
         Login
+      </Button>
+
+      <Button
+        type="primary"
+        loading={loading}
+        onClick={handleForgotPassword}
+        style={{ width: "100%" }}
+      >
+        ForgotPassword
       </Button>
       {error && <p style={{ color: "red" }}>{error.message}</p>}
     </div>
