@@ -6,6 +6,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from '../users/users.module';
 import * as dotenv from 'dotenv';
 import { JWTStrategy } from './strategies/auth.strategy';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from '../users/entities/user.entity';
 dotenv.config();
 @Module({
   imports: [
@@ -15,6 +17,7 @@ dotenv.config();
       signOptions: { expiresIn: process.env.EXPIRES_IN },
     }),
     forwardRef(() => UsersModule),
+    TypeOrmModule.forFeature([User]),
   ],
   providers: [AuthResolver, AuthService, JWTStrategy],
   exports: [AuthService],

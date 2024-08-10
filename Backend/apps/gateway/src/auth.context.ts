@@ -5,8 +5,6 @@ import {
 } from '@nestjs/common';
 import { verify } from 'jsonwebtoken';
 import { AuthService } from './auth/auth.service';
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 const getToken = (authToken: string): string => {
   const match = authToken.match(/^Bearer (.*)$/);
   if (!match || match.length < 2) {
@@ -41,9 +39,6 @@ const decodedToken = (authToken: string) => {
 };
 
 export const handleAuth = async ({ req }, authService: AuthService) => {
-  //   const app = await NestFactory.createApplicationContext(AppModule);
-  //   const authService = app.get(AuthService);
-
   try {
     let isLogin: string = '';
     let userId: string = '';
@@ -55,10 +50,9 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
       userId = decoded.userId;
       email = decoded.email;
       isLogin = 'true';
-      console.log('abc');
-      console.log(await authService.getUser(userId));
+      // console.log('abc');
+      // console.log(await authService.getUser(userId));
     }
-    // await app.close();
     return {
       userid: userId,
       email: email,

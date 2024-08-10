@@ -8,10 +8,17 @@ import {
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../../users/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+  ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
     const { req } = ctx.getContext();
@@ -26,6 +33,13 @@ export class JwtAuthGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: process.env.REFRESH_SECRET,
       });
+      const user = await this.usersRepository.findOne({
+        where: { id: payload.userId },
+      });
+
+      if (user.refreshToken !== token) {
+        throw new UnauthorizedException('Please login again');
+      }
       req['user'] = payload;
     } catch (err) {
       throw new UnauthorizedException('Please login again');

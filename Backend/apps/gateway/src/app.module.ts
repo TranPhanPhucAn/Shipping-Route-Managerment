@@ -47,36 +47,6 @@ dotenv.config();
         },
       }),
       inject: [AuthService],
-
-      // server: {
-      //   context: handleAuth,
-      // },
-      // driver: ApolloGatewayDriver,
-      // gateway: {
-      //   buildService: ({ url }) => {
-      //     return new RemoteGraphQLDataSource({
-      //       url,
-      //       willSendRequest({ request, context }: any) {
-      //         request.http.headers.set('userid', context.userid);
-      //         request.http.headers.set('accesstoken', context.accesstoken);
-      //         request.http.headers.set('islogin', context.islogin);
-      //         request.http.headers.set('refreshtoken', context.refreshtoken);
-      //       },
-      //     });
-      //   },
-      //   supergraphSdl: new IntrospectAndCompose({
-      //     subgraphs: [
-      //       {
-      //         name: 'auth',
-      //         url: `http://localhost:${process.env.AUTH_PORT}/graphql`,
-      //       },
-      //       {
-      //         name: 'routes',
-      //         url: `http://localhost:${process.env.ROUTES_PORT}/graphql`,
-      //       },
-      //     ],
-      //   }),
-      // },
     }),
   ],
   controllers: [AppController],

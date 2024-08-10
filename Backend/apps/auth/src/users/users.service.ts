@@ -74,6 +74,7 @@ export class UsersService {
     const createUser = {
       ...userEntity,
       ...newUser.user,
+      refreshToken: '',
     };
     const user: User | undefined = await this.usersRepository.save(createUser);
     return user;

@@ -28,4 +28,7 @@ export class User {
   @Column()
   @Field()
   address: string;
+
+  @Column()
+  refreshToken: string;
 }
