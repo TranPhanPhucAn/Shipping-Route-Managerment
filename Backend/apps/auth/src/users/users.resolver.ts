@@ -71,12 +71,12 @@ export class UsersResolver {
     return this.usersService.delete(id);
   }
 
-  @Query(() => ForgotPasswordResponse, { name: 'forgotPassword' })
+  @Mutation(() => ForgotPasswordResponse, { name: 'forgotPassword' })
   forgotPassword(@Args('forgotPassword') forgotPassword: ForgotPasswordDto) {
     return this.usersService.forgotPassword(forgotPassword);
   }
 
-  @Query(() => ResetPasswordResponse, { name: 'resetPassword' })
+  @Mutation(() => ResetPasswordResponse, { name: 'resetPassword' })
   resetPassword(@Args('resetPassword') resetPassword: ResetPasswordDto) {
     return this.usersService.resetPassword(resetPassword);
   }

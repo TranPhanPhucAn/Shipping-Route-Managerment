@@ -23,8 +23,6 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'email-templates'));
   app.setViewEngine('ejs');
-  await app.listen(process.env.AUTH_PORT, () =>
-    console.log('UserService is running on port 3000'),
-  );
+  await app.listen(process.env.AUTH_PORT);
 }
 bootstrap();

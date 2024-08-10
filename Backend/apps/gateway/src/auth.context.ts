@@ -40,9 +40,9 @@ const decodedToken = (authToken: string) => {
   return decoded;
 };
 
-export const handleAuth = async ({ req }) => {
-  const app = await NestFactory.createApplicationContext(AppModule);
-  const authService = app.get(AuthService);
+export const handleAuth = async ({ req }, authService: AuthService) => {
+  //   const app = await NestFactory.createApplicationContext(AppModule);
+  //   const authService = app.get(AuthService);
 
   try {
     let isLogin: string = '';
@@ -58,7 +58,7 @@ export const handleAuth = async ({ req }) => {
       console.log('abc');
       console.log(await authService.getUser(userId));
     }
-    await app.close();
+    // await app.close();
     return {
       userid: userId,
       email: email,
