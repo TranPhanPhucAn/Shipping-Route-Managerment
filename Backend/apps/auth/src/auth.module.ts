@@ -7,12 +7,16 @@ import {
 import { TypeOrmModule } from '@nestjs/typeorm';
 // import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HealthModule } from './health/health.module';
 // import { join } from 'path';
 import { AuthenModule } from './auth/authen.module';
 import { EmailModule } from './email/email.module';
 import { UserGrpcServiceController } from './users/users.controller';
+import { CacheModule } from '@nestjs/cache-manager';
+// import { redisStore } from 'cache-manager-redis-store';
+import * as redisStore from 'cache-manager-redis-store';
+// import { redisStore } from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -39,6 +43,17 @@ import { UserGrpcServiceController } from './users/users.controller';
     HealthModule,
     AuthenModule,
     EmailModule,
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        store: redisStore,
+        host: configService.get<string>('REDIS_HOST'),
+        port: configService.get<number>('REDIS_PORT'),
+        username: configService.get<string>('REDIS_USER'),
+        password: configService.get<string>('REDIS_PASSWORD'),
+      }),
+    }),
   ],
   providers: [],
   controllers: [UserGrpcServiceController],
