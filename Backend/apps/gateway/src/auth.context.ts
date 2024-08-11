@@ -50,8 +50,8 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
       userId = decoded.userId;
       email = decoded.email;
       isLogin = 'true';
-      // console.log('abc');
-      // console.log(await authService.getUser(userId));
+      console.log('abc');
+      console.log(await authService.getUser(userId));
     }
     return {
       userid: userId,
