@@ -9,7 +9,9 @@ import { AuthModule } from './auth/auth.module';
 import { handleAuth } from './auth.context';
 import { AuthService } from './auth/auth.service';
 dotenv.config();
-
+// import { CacheModule } from '@nestjs/cache-manager';
+// import { ConfigModule, ConfigService } from '@nestjs/config';
+// import * as redisStore from 'cache-manager-redis-store';
 @Module({
   imports: [
     AuthModule,
@@ -27,8 +29,11 @@ dotenv.config();
               willSendRequest({ request, context }: any) {
                 request.http.headers.set('userid', context.userid);
                 request.http.headers.set('accesstoken', context.accesstoken);
-                request.http.headers.set('islogin', context.islogin);
                 request.http.headers.set('refreshtoken', context.refreshtoken);
+                request.http.headers.set(
+                  'expirationtime',
+                  context.expirationtime,
+                );
               },
             });
           },
@@ -48,6 +53,18 @@ dotenv.config();
       }),
       inject: [AuthService],
     }),
+    // CacheModule.registerAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   useFactory: async (configService: ConfigService) => ({
+    //     store: redisStore,
+    //     host: configService.get<string>('REDIS_HOST'),
+    //     port: configService.get<number>('REDIS_PORT'),
+    //     username: configService.get<string>('REDIS_USER'),
+    //     password: configService.get<string>('REDIS_PASSWORD'),
+    //     ttl: 60,
+    //   }),
+    // }),
   ],
   controllers: [AppController],
   providers: [AppService, AuthService],

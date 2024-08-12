@@ -31,7 +31,7 @@ export class AuthResolver {
   }
 
   @Mutation(() => LogoutResponse)
-  @UseGuards(AuthUserGuard)
+  // @UseGuards(AuthUserGuard)
   async logout(@Context() context: { req: Request }) {
     return await this.authService.logoutUser(context.req.headers);
   }

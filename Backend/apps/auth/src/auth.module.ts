@@ -51,7 +51,7 @@ import * as redisStore from 'cache-manager-redis-store';
         port: configService.get<number>('REDIS_PORT'),
         username: configService.get<string>('REDIS_USER'),
         password: configService.get<string>('REDIS_PASSWORD'),
-        ttl: 10 * 1000,
+        ttl: 60,
       }),
     }),
   ],

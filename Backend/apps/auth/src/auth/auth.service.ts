@@ -9,6 +9,8 @@ import * as bycypt from 'bcrypt';
 import { JWTPayload } from './interfaces/jwtPayLoad.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Cache } from 'cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 @Injectable()
 export class AuthService {
   constructor(
@@ -17,6 +19,7 @@ export class AuthService {
     private jwtService: JwtService,
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   loginUserByPassword = async (
@@ -56,10 +59,12 @@ export class AuthService {
   };
 
   logoutUser = async (req: any) => {
-    // req.user = null;
-    // req.refreshtoken = null;
-    // req.accesstoken = null;
+    const currentTime = Math.floor(Date.now() / 1000);
+    const ttlCache = +req.expirationtime - currentTime;
     await this.usersRepository.update(req.userid, { refreshToken: '' });
+    await this.cacheManager.set(req.accesstoken, 'true', {
+      ttl: ttlCache,
+    });
     return { message: 'Logout out successfull' };
   };
 

@@ -1,15 +1,15 @@
-import { Controller, Inject, UseInterceptors } from '@nestjs/common';
+import { Controller, Inject } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { UsersService } from './users.service';
 import {
   GetUserRequest,
-  GetUserResponse,
+  // GetUserResponse,
   UserServiceControllerMethods,
 } from 'proto/user';
 import { UserServiceController } from 'proto/user';
-import { Observable } from 'rxjs';
+// import { Observable } from 'rxjs';
 import { Cache } from 'cache-manager';
-import { CACHE_MANAGER, CacheInterceptor } from '@nestjs/cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 @Controller()
 @UserServiceControllerMethods()
 export class UserGrpcServiceController implements UserServiceController {
