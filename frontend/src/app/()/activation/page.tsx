@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { ACTIVATE_ACCOUNT } from "../../graphql/mutations/Auth";
+import { ACTIVATE_ACCOUNT } from "../../../graphql/mutations/Auth";
 import { Input, Button, message } from "antd";
 import { useRouter } from "next/navigation";
 

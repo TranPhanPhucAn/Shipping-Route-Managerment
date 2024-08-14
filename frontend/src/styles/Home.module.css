@@ -1,0 +1,171 @@
+.container {
+  background-color: white;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+  flex-wrap: wrap;
+}
+
+.loginBox,
+.registerBox {
+  padding: 1rem;
+  width: 400px;
+  height: 400px;
+  margin-bottom: 1rem;
+}
+
+.loginBox {
+  margin-right: 1rem;
+}
+
+.registerBox {
+  display: flex;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #334155;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #334155;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.input {
+  margin-bottom: 1rem !important;
+  padding: 10px;
+  border-radius: 8px;
+}
+/* .checkbox {
+  display: flex !important;
+  margin-right: 1rem;
+  color: #333;
+} */
+.forgotLink {
+  font-size: 1rem;
+  text-decoration: none;
+  display: block;
+  text-align: right;
+  margin-bottom: 1rem;
+  color: #333;
+}
+.forgotLink:hover {
+  text-decoration: underline !important;
+}
+.loginButton {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  border-radius: 8px;
+  background-color: #334155 !important;
+  color: white !important;
+  border: none;
+  cursor: pointer;
+}
+
+.socialLogin {
+  display: flex;
+  justify-content: space-between;
+}
+
+.socialButton {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0.2rem;
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.registerBox {
+  margin-left: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.registerButton {
+  width: 70%;
+  padding: 0.7rem 0;
+  font-size: 1rem;
+  border-radius: 1rem;
+  background-color: While !important;
+  color: #334155;
+  border: bold;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.illustration {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .loginBox,
+  .registerBox {
+    width: 100%;
+    max-width: 100%;
+    margin-right: 0;
+  }
+
+  .loginBox {
+    margin-bottom: 1rem;
+  }
+
+  .socialLogin {
+    flex-direction: column;
+  }
+
+  .socialButton {
+    margin: 10px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .input {
+    font-size: 1rem;
+  }
+
+  .loginButton,
+  .registerButton {
+    font-size: 1rem;
+  }
+
+  .socialButton {
+    font-size: 1rem;
+  }
+}

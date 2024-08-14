@@ -17,7 +17,7 @@ const items: MenuItem[] = [
     icon: <HomeOutlined />,
   },
   {
-    label: <Link href={"/users"}>Manage Users</Link>,
+    label: <Link href={"/login"}>Manage Users</Link>,
     key: "users",
     icon: <UserOutlined />,
   },
