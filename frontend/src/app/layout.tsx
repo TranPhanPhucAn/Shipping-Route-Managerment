@@ -4,6 +4,7 @@ import "./globals.css";
 import React from "react";
 import Provider from "../graphql/Provider";
 import StyledComponentsRegistry from "../lib/antd.registry";
+import Header from "../components/layout/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 

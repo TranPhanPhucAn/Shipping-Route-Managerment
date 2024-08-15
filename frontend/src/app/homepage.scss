@@ -1,0 +1,47 @@
+.home {
+  //   background-image: url("../../public/bg.jpg");
+  //   background-size: cover;
+  //   background-position: center;
+  //   background-repeat: no-repeat;
+  //   background-attachment: fixed;
+  height: 100vh;
+  margin-bottom: 30px;
+  .background-image {
+    width: 100vw;
+    z-index: -1;
+    opacity: 1;
+  }
+  .content-home {
+    width: 86vw;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+    margin-top: -6%;
+    color: white;
+    .title {
+      font-size: 50px;
+      font-weight: 700;
+      margin: 0;
+    }
+    p {
+      margin-top: 1.5%;
+      width: 40%;
+      font-size: 18px;
+    }
+  }
+}
+.content {
+  width: 86vw;
+  margin: 0 auto;
+  .logistics-home-heading {
+    width: 70%;
+    .header-logistics {
+      font-size: 40px;
+      font-weight: 300;
+    }
+  }
+}
