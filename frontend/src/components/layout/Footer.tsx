@@ -79,19 +79,19 @@ const FooterApp: React.FC = () => {
             Contact
           </div>
           <div>
-            <HomeOutlined style={{ marginRight: 2 }} />
+            <HomeOutlined style={{ marginRight: 7 }} />
             Scetpa building Tân Bình, Hồ Chí Minh
           </div>
           <div>
-            <MailOutlined style={{ marginRight: 2 }} />
+            <MailOutlined style={{ marginRight: 7 }} />
             sales@cyberlogitec.com
           </div>
           <div>
-            <PhoneOutlined style={{ marginRight: 2 }} />
+            <PhoneOutlined style={{ marginRight: 7 }} />
             +82-2-6350-2000
           </div>
           <div>
-            <PrinterOutlined style={{ marginRight: 2 }} />
+            <PrinterOutlined style={{ marginRight: 7 }} />
             +82-2-6350-2050
           </div>
         </div>

@@ -5,10 +5,12 @@ import FooterApp from "../components/layout/Footer";
 import "./(mainlayout)/layoutmain.scss";
 import "./homepage.scss";
 import Image from "next/image";
+import GridListView from "../components/GridListView/GridListView";
 const HomePage: React.FC = () => {
   return (
     <>
       <div className="layoutmain">
+        <Header />
         <div className="home">
           <Image
             src={"/bg3.jpg"}
@@ -18,7 +20,6 @@ const HomePage: React.FC = () => {
             quality={100}
             className="background-image"
           />
-          <Header />
           <div className="content-home">
             <div className="title">See how truly integrated</div>
             <div className="title">logistics delivers</div>
@@ -36,6 +37,9 @@ const HomePage: React.FC = () => {
               CLV is developing solutions that meet customer needs from one end
               of the supply chain to the other.
             </p>
+          </div>
+          <div className="page-section" style={{ marginBottom: 35 }}>
+            <GridListView />
           </div>
         </div>
 
