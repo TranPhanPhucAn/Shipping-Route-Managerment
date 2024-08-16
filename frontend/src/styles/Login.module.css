@@ -16,6 +16,9 @@
   width: 400px;
   height: 400px;
   margin-bottom: 1rem;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center;
 }
 
 .loginBox {
@@ -28,13 +31,11 @@
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  text-align: center;
 }
 
 .title {
-  font-size: 24px;
+  margin: 0 auto;
+  font-size: 2rem;
   font-weight: bold;
   color: #334155;
   text-align: center;
@@ -49,8 +50,8 @@
 
 .input {
   margin-bottom: 1rem !important;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 0.7rem;
+  border-radius: 0.5rem;
 }
 /* .checkbox {
   display: flex !important;
@@ -69,14 +70,17 @@
   text-decoration: underline !important;
 }
 .loginButton {
-  width: 100%;
-  padding: 10px 0;
-  font-size: 16px;
-  border-radius: 8px;
+  width: 90%;
+  padding: 0.6rem 0;
+  font-size: 1rem;
+  border-radius: 0.5rem;
   background-color: #334155 !important;
   color: white !important;
   border: none;
   cursor: pointer;
+}
+.loginButton:hover {
+  width: 100%;
 }
 
 .socialLogin {
@@ -109,14 +113,17 @@
   width: 70%;
   padding: 0.7rem 0;
   font-size: 1rem;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   background-color: While !important;
   color: #334155;
-  border: bold;
+  border: bold !important;
   font-weight: bold;
   cursor: pointer;
 }
-
+.registerButton:hover {
+  background-color: #334155 !important;
+  color: white !important;
+}
 .illustration {
   margin-bottom: 1rem;
 }

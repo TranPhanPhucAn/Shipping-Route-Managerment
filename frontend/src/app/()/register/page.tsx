@@ -4,7 +4,7 @@ import { REGISTER_USER } from "../../../graphql/mutations/Auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input, Button, message } from "antd";
-import styles from "../../../styles/home.module.css";
+import styles from "../../../styles/Login.module.css";
 
 const Register = () => {
   const [email, setEmail] = useState("");

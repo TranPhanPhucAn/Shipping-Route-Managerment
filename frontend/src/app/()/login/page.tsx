@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Input, Button, message, Divider, Row, Col } from "antd";
 import { GoogleOutlined, FacebookOutlined } from "@ant-design/icons";
 import { LoginInput } from "../../../graphql/types";
-import styles from "../../../styles/home.module.css";
+import styles from "../../../styles/Login.module.css";
 import LoginImage from "./login.png";
 import Image from "next/image";
 import Link from "next/link";
@@ -93,8 +93,22 @@ const Login = () => {
               alt="Illustration"
               className={styles.illustration}
             />
-            <p style={{ fontWeight: "bold" }}>Don't Have An Account?</p>
-            <a style={{ color: "gray", fontSize: "14px", marginBottom: "2px" }}>
+            <p
+              style={{
+                fontWeight: "bold",
+                fontSize: "1.2rem",
+                margin: "0 auto",
+              }}
+            >
+              Don't Have An Account?
+            </p>
+            <a
+              style={{
+                color: "gray",
+                fontSize: "0.8rem",
+                marginBottom: "0.7rem",
+              }}
+            >
               Get Started By Creating Your Account
             </a>
             <Button
