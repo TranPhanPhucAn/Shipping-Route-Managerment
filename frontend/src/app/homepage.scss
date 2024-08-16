@@ -10,6 +10,7 @@
     width: 100vw;
     z-index: -1;
     opacity: 1;
+    // object-fit: cover;
   }
   .content-home {
     width: 86vw;
@@ -40,12 +41,13 @@
   .logistics-home-heading {
     width: 70%;
     margin-bottom: 30px;
-    .header-logistics {
-      font-size: 40px;
-      font-weight: 300;
-    }
+
     .sub-header-logistics {
       font-size: 16px;
     }
+  }
+  .header-content {
+    font-size: 40px;
+    font-weight: 300;
   }
 }
