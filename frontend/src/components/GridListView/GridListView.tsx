@@ -10,9 +10,9 @@ const GridListView: React.FC = () => {
           xs={24}
           sm={24}
           md={12}
-          lg={24}
+          lg={8}
           xl={8}
-          style={{ padding: 0 }}
+          // style={{ padding: 0 }}
         >
           <GridCard
             image="/logishome/transport.jpg"
@@ -20,14 +20,30 @@ const GridListView: React.FC = () => {
             description="Learn how CLV offers small and large businesses the opportunity to grow."
           />
         </Col>
-        <Col className="gutter-row" xs={24} sm={24} md={12} lg={24} xl={8}>
+        <Col
+          className="gutter-row"
+          xs={24}
+          sm={24}
+          md={12}
+          lg={8}
+          xl={8}
+          // style={{ padding: 0 }}
+        >
           <GridCard
             image="/logishome/supplychain.jpg"
             title="Supply Chain and Logistics"
             description="We focus on solving your supply chain needs from end to end, taking the complexity out of container shipping for you."
           />
         </Col>
-        <Col className="gutter-row" xs={24} sm={24} md={12} lg={24} xl={8}>
+        <Col
+          className="gutter-row"
+          xs={24}
+          sm={24}
+          md={12}
+          lg={8}
+          xl={8}
+          // style={{ padding: 0 }}
+        >
           <GridCard
             image="/logishome/digital.jpg"
             title="Digital Solutions"

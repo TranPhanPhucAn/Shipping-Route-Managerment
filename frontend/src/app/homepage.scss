@@ -1,9 +1,4 @@
 .home {
-  //   background-image: url("../../public/bg.jpg");
-  //   background-size: cover;
-  //   background-position: center;
-  //   background-repeat: no-repeat;
-  //   background-attachment: fixed;
   height: calc(100vh - 86px);
   margin-bottom: 30px;
   .background-image {
@@ -11,9 +6,6 @@
     z-index: -1;
     opacity: 1;
     background-size: cover;
-    // object-fit: cover;
-    // background-position: 50% 50%;
-    // position: absolute;
   }
   .content-home {
     width: 86vw;
@@ -52,5 +44,49 @@
   .header-content {
     font-size: 40px;
     font-weight: 300;
+  }
+}
+
+@media (max-width: 768px) {
+  .home {
+    .content-home {
+      .title {
+        font-size: 38px;
+      }
+      p {
+        width: 80%;
+        margin-top: 8%;
+      }
+    }
+  }
+  .content {
+    .header-content {
+      font-size: 26px;
+    }
+  }
+}
+@media (max-width: 480px) {
+  .home {
+    .content-home {
+      .title {
+        font-size: 38px;
+      }
+      p {
+        width: 100%;
+        margin-top: 8%;
+      }
+    }
+  }
+  .content {
+    .header-content {
+      font-size: 26px;
+    }
+    .logistics-home-heading {
+      width: 100%;
+
+      .sub-header-logistics {
+        font-size: 14px;
+      }
+    }
   }
 }
