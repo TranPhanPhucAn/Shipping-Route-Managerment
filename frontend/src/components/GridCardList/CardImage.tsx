@@ -12,7 +12,6 @@ const CardImage: React.FC<Props> = (props) => {
         <Card
           hoverable
           style={{
-            width: "16.67vw",
             height: 170,
             display: "flex",
             justifyContent: "center",
@@ -37,8 +36,8 @@ const CardImage: React.FC<Props> = (props) => {
                 alt="picture"
                 style={{
                   objectFit: "cover",
-                  width: "100%",
-                  height: "100%",
+                  width: "70%",
+                  // height: "100%",
                   objectPosition: "center",
                 }}
               />

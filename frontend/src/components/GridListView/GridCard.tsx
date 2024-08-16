@@ -12,7 +12,7 @@ const GridCard: React.FC<Props> = (props) => {
       <Col>
         <Card
           hoverable
-          style={{ width: "27.79vw", height: 450 }}
+          style={{ height: 450 }}
           cover={
             <img
               src={props.image}

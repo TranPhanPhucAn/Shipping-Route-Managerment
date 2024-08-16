@@ -10,10 +10,10 @@ import GridCardList from "../components/GridCardList/GridCardList";
 const HomePage: React.FC = () => {
   const imageTech: string[] = [
     "/logotechno/nest.png",
-    "/logotechno/next.png",
+    "/logotechno/next2.png",
     "/logotechno/postgres.png",
     "/logotechno/graphql.png",
-    "/logotechno/docker.svg",
+    "/logotechno/docker.png",
   ];
   const refsTech: string[] = [
     "https://nestjs.com/",
