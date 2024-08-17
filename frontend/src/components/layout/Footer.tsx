@@ -25,13 +25,13 @@ const FooterApp: React.FC = () => {
   return (
     <div className="footerbound">
       <Footer className="footer">
-        <div>
+        <div className="logo-com-footer">
           <span className="logofooter" onClick={() => handleClick("/")}>
             <SvgComponent />
           </span>
           <span>© CLV 2024</span>
         </div>
-        <div>
+        <div className="list-logo">
           <a
             href="https://www.linkedin.com/company/cyberlogitec/?originalSubdomain=sg"
             className="logomedia"
