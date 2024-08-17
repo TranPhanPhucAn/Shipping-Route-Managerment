@@ -35,10 +35,16 @@
     }
   }
 }
+.content-home {
+  .title {
+    width: 50%;
+  }
+}
 .content-about {
   width: 86vw;
   margin: 0 auto;
   display: flex;
+
   .content-left {
     width: 60%;
     padding-right: 100px;
@@ -83,6 +89,33 @@
           font-weight: 700;
         }
       }
+    }
+  }
+}
+@media (max-width: 768px) {
+  .about {
+    .content-home {
+      .title {
+        font-size: 38px;
+        width: 100%;
+      }
+      p {
+        width: 80%;
+        margin-top: 8%;
+      }
+    }
+  }
+  .content-about {
+    display: block;
+    .content-left {
+      width: 100%;
+      padding-right: 0;
+    }
+    .content-right {
+      padding-top: 30px;
+      padding-left: 0;
+      width: 100%;
+      margin-bottom: 30px;
     }
   }
 }

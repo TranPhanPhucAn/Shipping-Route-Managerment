@@ -14,8 +14,9 @@ const About: React.FC = () => {
           className="background-image"
         />
         <div className="content-home">
-          <div className="title">Improving life for all</div>
-          <div className="title"> by integrating the world</div>
+          <div className="title">
+            Improving life for all by integrating the world
+          </div>
           <p>
             There’s a reason we strive to go all the way, every day, to deliver
             a more connected, agile and sustainable future for global logistics.
