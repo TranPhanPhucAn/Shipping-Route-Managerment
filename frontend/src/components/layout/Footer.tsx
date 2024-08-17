@@ -65,19 +65,7 @@ const FooterApp: React.FC = () => {
           </a>
         </div>
         <div>
-          <div
-            style={{
-              fontSize: 16,
-              fontWeight: 700,
-              marginBottom: 16,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            Contact
-          </div>
+          <div className="contact-infor-footer">Contact</div>
           <div>
             <HomeOutlined style={{ marginRight: 7 }} />
             Scetpa building Tân Bình, Hồ Chí Minh

@@ -15,6 +15,15 @@
     margin-left: auto;
     margin-right: auto;
   }
+  .contact-infor-footer {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 
   .logofooter {
     width: 80;
@@ -32,6 +41,25 @@
     :hover {
       color: #40a9ff;
       transition: 0.3s;
+    }
+  }
+}
+
+@media (max-width: 720px) {
+  .footerbound {
+    .footer {
+      padding: 20px 0;
+      flex-direction: column;
+    }
+    .logo-com-footer {
+      margin-right: 0;
+      margin-bottom: 15px;
+    }
+    .list-logo {
+      margin-bottom: 15px;
+    }
+    .contact-infor-footer {
+      margin-bottom: 5px;
     }
   }
 }
