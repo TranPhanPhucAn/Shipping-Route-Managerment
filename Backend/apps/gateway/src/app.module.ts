@@ -1,114 +1,72 @@
-import {
-  HttpException,
-  HttpStatus,
-  Module,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
 import { IntrospectAndCompose, RemoteGraphQLDataSource } from '@apollo/gateway';
 import * as dotenv from 'dotenv';
-import { verify } from 'jsonwebtoken';
+import { AuthModule } from './auth/auth.module';
+import { handleAuth } from './auth.context';
+import { AuthService } from './auth/auth.service';
 dotenv.config();
-
-const getToken = (authToken: string): string => {
-  const match = authToken.match(/^Bearer (.*)$/);
-  if (!match || match.length < 2) {
-    throw new HttpException(
-      {
-        message: 'Invalid Authorization token - Token does not match Bearer .*',
-      },
-      HttpStatus.UNAUTHORIZED,
-    );
-  }
-  return match[1];
-};
-
-const decodedToken = (authToken: string) => {
-  const decoded = verify(authToken, process.env.ACCESS_SECRET, {
-    ignoreExpiration: true,
-  });
-  const expirationTime = decoded?.exp;
-  if (expirationTime * 1000 < Date.now()) {
-    throw new HttpException(
-      { message: 'Access token expired' },
-      HttpStatus.UNAUTHORIZED,
-    );
-  }
-  if (!decoded) {
-    throw new HttpException(
-      { message: 'Invalid Auth Token' },
-      HttpStatus.UNAUTHORIZED,
-    );
-  }
-  return decoded;
-};
-
-const handleAuth = ({ req }) => {
-  try {
-    let isLogin: string = '';
-    let userId: string = '';
-    let email: string = '';
-    let accessToken: string = '';
-    const refreshToken: string = req.headers.refreshtoken;
-    if (req.headers.accesstoken) {
-      const token = getToken(req.headers.accesstoken);
-      const decoded = decodedToken(token);
-      userId = decoded.userId;
-      email = decoded.email;
-      isLogin = 'true';
-      accessToken = req.headers.accesstoken;
-    }
-    return {
-      userid: userId,
-      email: email,
-      islogin: isLogin,
-      accesstoken: accessToken,
-      refreshtoken: refreshToken,
-    };
-  } catch (err) {
-    throw new UnauthorizedException(
-      'User unauthorized with invalid accessToken headers',
-    );
-  }
-};
+// import { CacheModule } from '@nestjs/cache-manager';
+// import { ConfigModule, ConfigService } from '@nestjs/config';
+// import * as redisStore from 'cache-manager-redis-store';
 @Module({
   imports: [
-    GraphQLModule.forRoot<ApolloGatewayDriverConfig>({
-      server: {
-        context: handleAuth,
-      },
+    AuthModule,
+    GraphQLModule.forRootAsync<ApolloGatewayDriverConfig>({
       driver: ApolloGatewayDriver,
-      gateway: {
-        buildService: ({ url }) => {
-          return new RemoteGraphQLDataSource({
-            url,
-            willSendRequest({ request, context }: any) {
-              request.http.headers.set('userid', context.userid);
-              request.http.headers.set('accesstoken', context.accesstoken);
-              request.http.headers.set('islogin', context.islogin);
-              request.http.headers.set('refreshtoken', context.refreshtoken);
-            },
-          });
+      useFactory: (authService: AuthService) => ({
+        server: {
+          context: ({ req }) => handleAuth({ req }, authService),
         },
-        supergraphSdl: new IntrospectAndCompose({
-          subgraphs: [
-            {
-              name: 'auth',
-              url: `http://localhost:${process.env.AUTH_PORT}/graphql`,
-            },
-            {
-              name: 'routes',
-              url: `http://localhost:${process.env.ROUTES_PORT}/graphql`,
-            },
-          ],
-        }),
-      },
+        // driver: ApolloGatewayDriver,
+        gateway: {
+          buildService: ({ url }) => {
+            return new RemoteGraphQLDataSource({
+              url,
+              willSendRequest({ request, context }: any) {
+                request.http.headers.set('userid', context.userid);
+                request.http.headers.set('accesstoken', context.accesstoken);
+                request.http.headers.set('refreshtoken', context.refreshtoken);
+                request.http.headers.set(
+                  'expirationtime',
+                  context.expirationtime,
+                );
+              },
+            });
+          },
+          supergraphSdl: new IntrospectAndCompose({
+            subgraphs: [
+              {
+                name: 'auth',
+                url: `http://localhost:${process.env.AUTH_PORT}/graphql`,
+              },
+              {
+                name: 'routes',
+                url: `http://localhost:${process.env.ROUTES_PORT}/graphql`,
+              },
+            ],
+          }),
+        },
+      }),
+      inject: [AuthService],
     }),
+    // CacheModule.registerAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   useFactory: async (configService: ConfigService) => ({
+    //     store: redisStore,
+    //     host: configService.get<string>('REDIS_HOST'),
+    //     port: configService.get<number>('REDIS_PORT'),
+    //     username: configService.get<string>('REDIS_USER'),
+    //     password: configService.get<string>('REDIS_PASSWORD'),
+    //     ttl: 60,
+    //   }),
+    // }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AuthService],
 })
 export class AppModule {}

@@ -7,12 +7,19 @@ import { UsersService } from '../users/users.service';
 import { AuthenticationError } from 'apollo-server-express';
 import * as bycypt from 'bcrypt';
 import { JWTPayload } from './interfaces/jwtPayLoad.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Cache } from 'cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(forwardRef(() => UsersService))
     private userService: UsersService,
     private jwtService: JwtService,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   loginUserByPassword = async (
@@ -34,6 +41,7 @@ export class AuthService {
     if (isMatch) {
       const token = this.createAccessToken(user).token;
       const refreshToken = this.createRefreshToken(user).token;
+      this.usersRepository.update(user.id, { refreshToken: refreshToken });
       return {
         user,
         accessToken: token,
@@ -51,9 +59,12 @@ export class AuthService {
   };
 
   logoutUser = async (req: any) => {
-    req.user = null;
-    req.refreshtoken = null;
-    req.accesstoken = null;
+    const currentTime = Math.floor(Date.now() / 1000);
+    const ttlCache = +req.expirationtime - currentTime;
+    await this.usersRepository.update(req.userid, { refreshToken: '' });
+    await this.cacheManager.set(req.accesstoken, 'true', {
+      ttl: ttlCache,
+    });
     return { message: 'Logout out successfull' };
   };
 
@@ -101,7 +112,7 @@ export class AuthService {
 
   refreshToken = async (user: any) => {
     const payload = {
-      id: user.userid,
+      userId: user.userId,
       email: user.email,
       username: user.username,
     };
@@ -109,6 +120,10 @@ export class AuthService {
     const refreshToken = await this.jwtService.signAsync(payload, {
       secret: process.env.REFRESH_SECRET,
       expiresIn: process.env.EXPIRES_IN_REFRESH,
+    });
+
+    this.usersRepository.update(user.userId, {
+      refreshToken: refreshToken,
     });
     return { accessToken: accessToken, refreshToken: refreshToken };
   };

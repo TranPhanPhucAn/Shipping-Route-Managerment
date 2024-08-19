@@ -7,6 +7,7 @@ import { User } from './entities/user.entity';
 import * as bycypt from 'bcrypt';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
+import { GetUserResponse } from 'proto/user';
 import {
   ChangePasswordDto,
   ForgotPasswordDto,
@@ -73,6 +74,7 @@ export class UsersService {
     const createUser = {
       ...userEntity,
       ...newUser.user,
+      refreshToken: '',
     };
     const user: User | undefined = await this.usersRepository.save(createUser);
     return user;
@@ -87,6 +89,16 @@ export class UsersService {
 
   async findOneById(id: string): Promise<User> {
     return await this.usersRepository.findOne({ where: { id: id } });
+  }
+
+  async findOneByIdService(userId: string): Promise<GetUserResponse> {
+    const result = await this.findOneById(userId);
+    const { id, username, email } = result;
+    return {
+      id: id,
+      name: username,
+      email: email,
+    };
   }
 
   async findOneByEmail(email: string): Promise<User | null> {

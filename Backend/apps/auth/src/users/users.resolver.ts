@@ -41,53 +41,47 @@ export class UsersResolver {
     return await this.usersService.activateUser(activationDto);
   }
 
-  @UseGuards(AuthUserGuard)
   @Query(() => [User], { name: 'users' })
   findAll() {
     return this.usersService.findAll();
   }
 
-  @UseGuards(AuthUserGuard)
   @Query(() => User, { name: 'user' })
   findOne(@Args('id') id: string) {
     return this.usersService.findOneById(id);
   }
 
-  @UseGuards(AuthUserGuard)
   @Query(() => User, { name: 'userByEmail' })
   findOneByEmail(@Args('id') id: string) {
     return this.usersService.findOneById(id);
   }
 
-  @UseGuards(AuthUserGuard)
   @Mutation(() => User)
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
     return this.usersService.update(updateUserInput.id, updateUserInput);
   }
 
-  @UseGuards(AuthUserGuard)
   @Mutation(() => User)
   removeUser(@Args('id', { type: () => Int }) id: number) {
     return this.usersService.delete(id);
   }
 
-  @Query(() => ForgotPasswordResponse, { name: 'forgotPassword' })
+  @Mutation(() => ForgotPasswordResponse, { name: 'forgotPassword' })
   forgotPassword(@Args('forgotPassword') forgotPassword: ForgotPasswordDto) {
     return this.usersService.forgotPassword(forgotPassword);
   }
 
-  @Query(() => ResetPasswordResponse, { name: 'resetPassword' })
+  @Mutation(() => ResetPasswordResponse, { name: 'resetPassword' })
   resetPassword(@Args('resetPassword') resetPassword: ResetPasswordDto) {
     return this.usersService.resetPassword(resetPassword);
   }
 
-  @UseGuards(AuthUserGuard)
+  // @UseGuards(AuthUserGuard)
   @Mutation(() => ChangePasswordResponse)
   changePassword(@Args('changePassword') changePassword: ChangePasswordDto) {
     return this.usersService.changePassword(changePassword);
   }
 
-  // @UseGuards(AuthUserGuard)
   @Query(() => PaginationUserResponse, { name: 'paginationUser' })
   paginationUser(@Args('paginationUser') paginationUser: PaginationUserDto) {
     return this.usersService.paginationUser(paginationUser);

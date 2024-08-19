@@ -1,0 +1,17 @@
+.card-antd {
+  height: 450px;
+  .image-card {
+    height: 229px;
+    object-fit: cover;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-antd {
+    margin-bottom: 15px !important;
+    .image-card {
+      height: 229px;
+    }
+  }
+}

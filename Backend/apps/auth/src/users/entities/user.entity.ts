@@ -28,4 +28,10 @@ export class User {
   @Column()
   @Field()
   address: string;
+
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  refreshToken: string | null;
 }

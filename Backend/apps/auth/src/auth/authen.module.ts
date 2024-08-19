@@ -6,6 +6,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from '../users/users.module';
 import * as dotenv from 'dotenv';
 import { JWTStrategy } from './strategies/auth.strategy';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from '../users/entities/user.entity';
+import { CacheModule } from '@nestjs/cache-manager';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import * as redisStore from 'cache-manager-redis-store';
+
 dotenv.config();
 @Module({
   imports: [
@@ -15,6 +21,19 @@ dotenv.config();
       signOptions: { expiresIn: process.env.EXPIRES_IN },
     }),
     forwardRef(() => UsersModule),
+    TypeOrmModule.forFeature([User]),
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        store: redisStore,
+        host: configService.get<string>('REDIS_HOST'),
+        port: configService.get<number>('REDIS_PORT'),
+        username: configService.get<string>('REDIS_USER'),
+        password: configService.get<string>('REDIS_PASSWORD'),
+        ttl: 60,
+      }),
+    }),
   ],
   providers: [AuthResolver, AuthService, JWTStrategy],
   exports: [AuthService],
