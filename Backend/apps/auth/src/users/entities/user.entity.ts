@@ -29,6 +29,9 @@ export class User {
   @Field()
   address: string;
 
-  @Column()
-  refreshToken: string;
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  refreshToken: string | null;
 }
