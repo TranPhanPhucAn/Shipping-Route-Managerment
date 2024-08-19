@@ -2,8 +2,11 @@
 import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { ACTIVATE_ACCOUNT } from "../../../graphql/mutations/Auth";
-import { Input, Button, message } from "antd";
+import { Input, Button, message, Row, Col } from "antd";
 import { useRouter } from "next/navigation";
+import styles from "../../../styles/Auth.module.css";
+import VacationCodeImage from "./activateCode.jpg";
+import Image from "next/image";
 
 const Activate = () => {
   const [activationToken, setActivationToken] = useState("");
@@ -39,24 +42,40 @@ const Activate = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "0 auto", padding: "1rem" }}>
-      <h2>Activate Account</h2>
-      <Input
-        placeholder="Activation Code"
-        value={activationCode}
-        onChange={(e) => setActivationCode(e.target.value)}
-        style={{ marginBottom: "1rem" }}
-      />
-      <Button
-        type="primary"
-        loading={loading}
-        onClick={handleActivation}
-        style={{ width: "100%" }}
-      >
-        Activate
-      </Button>
-      {error && <p style={{ color: "red" }}>{error.message}</p>}
-    </div>
+    <Row className={styles.container}>
+      <Col className={styles.mainBox}>
+        <Image
+          src={VacationCodeImage}
+          alt="Illustration"
+          className={styles.illustration}
+          style={{ width: "400px", height: "300px" }}
+        />
+      </Col>
+      <Col className={styles.spBox} style={{ height: "300px" }}>
+        <h2 className={styles.title} style={{ paddingTop: "3rem" }}>
+          Activation Code
+        </h2>
+        <p className={styles.subTitle}>
+          We have sent the activation code to your email.
+        </p>
+        <Input
+          placeholder="Activation Code"
+          value={activationCode}
+          onChange={(e) => setActivationCode(e.target.value)}
+          className={styles.input}
+          style={{ width: "90%" }}
+        />
+        <Button
+          type="primary"
+          loading={loading}
+          onClick={handleActivation}
+          className={styles.mainButton}
+        >
+          Submit&Continue
+        </Button>
+        {error && <p style={{ color: "red" }}>{error.message}</p>}
+      </Col>
+    </Row>
   );
 };
 

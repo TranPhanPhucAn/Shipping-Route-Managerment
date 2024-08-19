@@ -54,17 +54,9 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             className={styles.input}
           />
-          {/* <div> */}
-          {/* <Checkbox
-            onChange={(e) => e.target.checked}
-            className={styles.checkbox}
-          >
-            Remember me!
-          </Checkbox> */}
           <Link href={"/resetpassword"} className={styles.forgotLink}>
             Forgot Password!
           </Link>
-          {/* </div> */}
           <Button
             loading={loading}
             className={styles.mainButton}
@@ -90,7 +82,7 @@ const Login = () => {
           </Row>
         </div>
       </Col>
-      <Col>
+      <Col style={{ height: "400px" }}>
         <div className={styles.spBox}>
           <Image
             src={RegisterImage}

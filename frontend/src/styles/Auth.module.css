@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   background-color: white;
   width: 100%;
   margin: 0 auto;
@@ -14,17 +14,18 @@
 
 .mainBox,
 .spBox {
-  margin: 0 10rem;
+  margin: 0 auto;
   width: 400px;
   max-width: 400px;
-  height: 400px;
+  min-height: 400px;
   align-items: center !important;
   justify-content: center !important;
+  text-align: center !important;
 }
 
 .spBox {
   background: white;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
 }
 
@@ -33,7 +34,7 @@
   padding: 0.7rem 0;
   font-size: 1rem;
   border-radius: 0.5rem;
-  background-color: While !important;
+  background-color: white !important;
   color: #334155;
   border: bold !important;
   font-weight: bold;
@@ -61,9 +62,9 @@
 }
 
 .input {
-  margin-bottom: 1rem !important;
+  margin-bottom: 1.5rem !important;
   padding: 0.7rem;
-  border-radius: 0.5rem;
+  border-radius: 0.2rem;
 }
 
 .forgotLink {
@@ -111,19 +112,20 @@
 .illustration {
   margin-bottom: 1rem;
 }
-
+.checkbox {
+  margin-bottom: 1rem !important;
+}
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
     align-items: stretch;
-    justify-content: center;
+    justify-content: space-evenly;
   }
 
   .mainBox,
   .spBox {
     width: 100%;
     max-width: 100%;
-    margin: 0 1rem;
   }
 
   .socialLogin {
