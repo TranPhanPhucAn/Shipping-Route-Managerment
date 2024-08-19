@@ -110,6 +110,7 @@ const Login = () => {
           <Button
             className={styles.spButton}
             onClick={() => router.push("/register")}
+            style={{ marginTop: "1rem" }}
           >
             Register
           </Button>

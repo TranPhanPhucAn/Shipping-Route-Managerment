@@ -23,14 +23,8 @@ const items: MenuItem[] = [
     // icon: <UserOutlined />,
   },
   {
-<<<<<<< HEAD
-    label: <Link href={"/login"}>Manage Users</Link>,
-    key: "users",
-    icon: <UserOutlined />,
-=======
     label: <Link href={"/contact"}>Contact Us</Link>,
     key: "/contact",
->>>>>>> 4d9c2619965fce1beb0865bdea2557a870f67abd
   },
 ];
 const itemsRight: MenuItem[] = [

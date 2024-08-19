@@ -1,16 +1,12 @@
 "use client";
 import React from "react";
 import Header from "../components/layout/Header";
-<<<<<<< HEAD
-
-=======
 import FooterApp from "../components/layout/Footer";
 import "./(mainlayout)/layoutmain.scss";
 import "./homepage.scss";
 import Image from "next/image";
 import GridListView from "../components/GridListView/GridListView";
 import GridCardList from "../components/GridCardList/GridCardList";
->>>>>>> 4d9c2619965fce1beb0865bdea2557a870f67abd
 const HomePage: React.FC = () => {
   const imageTech: string[] = [
     "/logotechno/nest.png",
@@ -42,9 +38,6 @@ const HomePage: React.FC = () => {
   ];
   return (
     <>
-<<<<<<< HEAD
-      <Header />
-=======
       <div className="layoutmain">
         <Header />
         <div className="home">
@@ -94,7 +87,6 @@ const HomePage: React.FC = () => {
         </div>
         <FooterApp />
       </div>
->>>>>>> 4d9c2619965fce1beb0865bdea2557a870f67abd
     </>
   );
 };
