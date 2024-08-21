@@ -18,7 +18,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const { data } = await loginUser({
+      const response = await loginUser({
         variables: {
           loginInput: {
             email,
@@ -26,11 +26,14 @@ const Login = () => {
           } as LoginInput,
         },
       });
+      console.log("check response: ", response);
+      const { data } = response;
       if (data?.login) {
         message.success("Login successful!");
         router.push("/");
       }
     } catch (err) {
+      console.log("err: ", error?.message);
       message.error(`Login failed: ${error?.message}`);
     }
   };

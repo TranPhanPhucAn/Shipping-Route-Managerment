@@ -10,6 +10,9 @@ export const LOGIN_USER = gql`
         id
         email
       }
+      error {
+        message
+      }
     }
   }
 `;

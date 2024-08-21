@@ -11,7 +11,7 @@ import { AuthenticationError } from '@nestjs/apollo';
 import { UseGuards } from '@nestjs/common';
 // import { JWTGuard } from './guards/auth.guards';
 import { JwtAuthGuard } from './guards/jwt-auth.guards';
-import { AuthUserGuard } from './guards/auth.guards';
+// import { AuthUserGuard } from './guards/auth.guards';
 
 @Resolver(() => Auth)
 export class AuthResolver {

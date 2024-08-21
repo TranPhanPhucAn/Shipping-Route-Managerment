@@ -22,8 +22,6 @@ export class JwtAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
     const { req } = ctx.getContext();
-    // console.log('check request', req);
-    // console.log('check user: ', req.headers);
     const { refreshtoken } = req.headers;
     const token = this.getToken(refreshtoken);
     if (!token) {

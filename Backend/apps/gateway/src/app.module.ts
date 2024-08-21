@@ -8,10 +8,14 @@ import * as dotenv from 'dotenv';
 import { AuthModule } from './auth/auth.module';
 import { handleAuth } from './auth.context';
 import { AuthService } from './auth/auth.service';
+import { Code } from 'typeorm';
 dotenv.config();
 // import { CacheModule } from '@nestjs/cache-manager';
 // import { ConfigModule, ConfigService } from '@nestjs/config';
 // import * as redisStore from 'cache-manager-redis-store';
+interface OriginalError {
+  message: string[];
+}
 @Module({
   imports: [
     AuthModule,
@@ -20,8 +24,14 @@ dotenv.config();
       useFactory: (authService: AuthService) => ({
         server: {
           context: ({ req }) => handleAuth({ req }, authService),
+          formatError: (error) => {
+            return {
+              message: error.message,
+              code: error.extensions?.code,
+              errCode: error.extensions?.errorCode,
+            };
+          },
         },
-        // driver: ApolloGatewayDriver,
         gateway: {
           buildService: ({ url }) => {
             return new RemoteGraphQLDataSource({
@@ -34,6 +44,25 @@ dotenv.config();
                   'expirationtime',
                   context.expirationtime,
                 );
+              },
+              didReceiveResponse({ response, request, context }) {
+                if (response.errors) {
+                  response.errors = response.errors.map((error) => {
+                    return {
+                      message: error.message,
+                      extensions: {
+                        code: error.extensions?.code || 'INTERNAL_SERVER_ERROR',
+                        errorCode: error.extensions?.errCode || 'UNKNOWN_ERROR',
+                        serviceName: error.extensions?.serviceName,
+                      },
+                    };
+                  });
+                  return {
+                    errors: response.errors,
+                    data: null, // Ensure data is null when there's an error
+                  };
+                }
+                return response;
               },
             });
           },
@@ -49,6 +78,24 @@ dotenv.config();
               },
             ],
           }),
+        },
+        formatError: (error) => {
+          console.log('absd\n\n\n');
+          const originalError = error.extensions
+            ?.originalError as OriginalError;
+          if (!originalError) {
+            return {
+              message: error.message,
+              code: error.extensions?.code,
+              errCode: error.extensions?.errorCode,
+            };
+          }
+
+          return {
+            message: originalError.message[0],
+            code: error.extensions?.code,
+            errCode: error.extensions?.errorCode,
+          };
         },
       }),
       inject: [AuthService],
