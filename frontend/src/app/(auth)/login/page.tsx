@@ -3,8 +3,23 @@ import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../../graphql/mutations/Auth";
 import { useRouter } from "next/navigation";
-import { Input, Button, message, Divider, Row, Col } from "antd";
-import { GoogleOutlined, FacebookOutlined } from "@ant-design/icons";
+import {
+  Input,
+  Button,
+  message,
+  Divider,
+  Row,
+  Col,
+  Form,
+  Checkbox,
+  Flex,
+} from "antd";
+import {
+  GoogleOutlined,
+  FacebookOutlined,
+  LockOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { LoginInput } from "../../../graphql/types";
 import styles from "../../../styles/Auth.module.css";
 import RegisterImage from "./Register.png";
@@ -38,49 +53,92 @@ const Login = () => {
   return (
     <Row className={styles.container}>
       <Col>
-        <div className={styles.mainBox}>
-          <h2 className={styles.title}>Welcome Back!</h2>
-          <p className={styles.subtitle}>We Are Happy To Have You Back</p>
-          <Input
-            className={styles.input}
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={styles.input}
-          />
-          <Link href={"/resetpassword"} className={styles.forgotLink}>
-            Forgot Password!
-          </Link>
-          <Button
-            loading={loading}
-            className={styles.mainButton}
-            onClick={handleLogin}
-          >
-            Login
-          </Button>
-          {error && <p className={styles.error}>{error.message}</p>}
-          <Divider style={{ borderColor: "#334155" }}>Or</Divider>
-          <Row className={styles.socialLogin}>
-            <Col>
-              <Button
-                icon={<GoogleOutlined />}
-                className={styles.socialButton}
+        <Form
+          name="login"
+          initialValues={{
+            remember: true,
+          }}
+         
+        >
+          <div className={styles.mainBox}>
+            <h2 className={styles.title}>Welcome Back!</h2>
+            <p className={styles.subtitle}>We Are Happy To Have You Back</p>
+            <Form.Item
+              name="Email"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your Email!",
+                },
+                {
+                  type: "email",
+                  message: "Email is not a valid email!",
+                },
+              ]}
+            >
+              <Input
+                prefix={<UserOutlined />}
+                placeholder="Email"
+                className={styles.input}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
-            </Col>
-            <Col>
-              <Button
-                icon={<FacebookOutlined />}
-                className={styles.socialButton}
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your Password!",
+                },
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={styles.input}
               />
-            </Col>
-          </Row>
-        </div>
+            </Form.Item>
+            <Form.Item>
+              <Flex justify="space-between" align="center">
+                <Form.Item name="remember" valuePropName="checked" noStyle>
+                  <Checkbox>Remember me</Checkbox>
+                </Form.Item>
+                <Link href={"/resetpassword"} className={styles.forgotLink}>
+                  Forgot Password!
+                </Link>
+              </Flex>
+            </Form.Item>
+            <Form.Item>
+              <Button
+                loading={loading}
+                className={styles.mainButton}
+                onClick={handleLogin}
+              >
+                Login
+              </Button>
+            </Form.Item>
+            {error && <p className={styles.error}>{error.message}</p>}
+            <Divider style={{ borderColor: "#334155" }}>Or</Divider>
+            <Row className={styles.socialLogin}>
+              <Col>
+                <Button
+                  icon={<GoogleOutlined />}
+                  className={styles.socialButton}
+                />
+              </Col>
+              <Col>
+                <Button
+                  icon={<FacebookOutlined />}
+                  className={styles.socialButton}
+                />
+              </Col>
+            </Row>
+          </div>
+        </Form>
       </Col>
       <Col style={{ height: "400px" }}>
         <div className={styles.spBox}>

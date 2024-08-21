@@ -3,8 +3,23 @@ import { useMutation } from "@apollo/client";
 import { REGISTER_USER } from "../../../graphql/mutations/Auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Input, Button, message, Row, Col, Checkbox, Divider } from "antd";
-import { GoogleOutlined, FacebookOutlined } from "@ant-design/icons";
+import {
+  Input,
+  Button,
+  message,
+  Row,
+  Col,
+  Checkbox,
+  Divider,
+  Form,
+} from "antd";
+import {
+  GoogleOutlined,
+  FacebookOutlined,
+  LockOutlined,
+  UserOutlined,
+  HomeOutlined
+} from "@ant-design/icons";
 import styles from "../../../styles/Auth.module.css";
 import LoginImage from "./Login.png";
 import Image from "next/image";
@@ -85,71 +100,131 @@ const Register = () => {
         </div>
       </Col>
       <Col>
-        <div className={styles.mainBox}>
-          <h2 className={styles.title}>Create Account</h2>
-          <p className={styles.subtitle}>
-            Get started by creating your new account
-          </p>
-          <Input
-            className={styles.input}
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ marginBottom: "1rem" }}
-          />
-          <Input
-            className={styles.input}
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            style={{ marginBottom: "1rem" }}
-          />
-          <Input
-            className={styles.input}
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ marginBottom: "1rem" }}
-          />
-          <Input
-            className={styles.input}
-            placeholder="Address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            style={{ marginBottom: "1rem" }}
-          />
-          <Checkbox
-            className={styles.checkbox}
-            checked={agreeToTerms}
-            onChange={(e) => setAgreeToTerms(e.target.checked)}
-          >
-            By clicking, you agree to the CLT's Terms and Conditions
-          </Checkbox>
-          <Button
-            className={styles.mainButton}
-            loading={loading}
-            onClick={handleRegister}
-          >
-            Register
-          </Button>
-          {error && <p style={{ color: "red" }}>{error.message}</p>}
-          <Divider style={{ borderColor: "#334155" }}>Or</Divider>
-          <Row className={styles.socialLogin}>
-            <Col>
-              <Button
-                icon={<GoogleOutlined />}
-                className={styles.socialButton}
+        <Form name="register">
+          <div className={styles.mainBox}>
+            <h2 className={styles.title}>Create Account</h2>
+            <p className={styles.subtitle}>
+              Get started by creating your new account
+            </p>
+            <Form.Item
+              name="email"
+              rules={[
+                {
+                  type: "email",
+                  message: "The input is not valid E-mail!",
+                },
+                {
+                  required: true,
+                  message: "Please input your E-mail!",
+                },
+              ]}
+            >
+              <Input
+                prefix={<GoogleOutlined />}
+                className={styles.input}
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
-            </Col>
-            <Col>
-              <Button
-                icon={<FacebookOutlined />}
-                className={styles.socialButton}
+            </Form.Item>
+            <Form.Item
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your E-mail!",
+                },
+              ]}
+            >
+              <Input
+                prefix={<UserOutlined />}
+                className={styles.input}
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
-            </Col>
-          </Row>
-        </div>
+            </Form.Item>
+            <Form.Item
+              name="address"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your Address",
+                },
+              ]}
+            >
+              <Input
+                prefix={<HomeOutlined />}
+                className={styles.input}
+                placeholder="Address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your Password!",
+                },
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                className={styles.input}
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="agreement"
+              valuePropName="checked"
+              rules={[
+                {
+                  validator: (_, value) =>
+                    value
+                      ? Promise.resolve()
+                      : Promise.reject(new Error("Should accept agreement")),
+                },
+              ]}
+            >
+              <Checkbox>
+                {" "}
+                By clicking, you agree to the{" "}
+                <a href="">CLT's Terms and Conditions</a>
+              </Checkbox>
+            </Form.Item>
+            <Form.Item>
+              <Button
+                className={styles.mainButton}
+                loading={loading}
+                onClick={handleRegister}
+              >
+                Register
+              </Button>
+            </Form.Item>
+            {error && <p style={{ color: "red" }}>{error.message}</p>}
+            <Divider style={{ borderColor: "#334155" }}>Or</Divider>
+            <Row className={styles.socialLogin}>
+              <Col>
+                <Button
+                  icon={<GoogleOutlined />}
+                  className={styles.socialButton}
+                />
+              </Col>
+              <Col>
+                <Button
+                  icon={<FacebookOutlined />}
+                  className={styles.socialButton}
+                />
+              </Col>
+            </Row>
+          </div>
+        </Form>
       </Col>
     </Row>
   );

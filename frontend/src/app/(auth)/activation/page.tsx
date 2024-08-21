@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { ACTIVATE_ACCOUNT } from "../../../graphql/mutations/Auth";
-import { Input, Button, message, Row, Col } from "antd";
+import { Input, Button, message, Row, Col, Form } from "antd";
 import { useRouter } from "next/navigation";
 import styles from "../../../styles/Auth.module.css";
 import VacationCodeImage from "./activateCode.jpg";
@@ -52,28 +52,41 @@ const Activate = () => {
         />
       </Col>
       <Col className={styles.spBox} style={{ height: "300px" }}>
-        <h2 className={styles.title} style={{ paddingTop: "3rem" }}>
-          Activation Code
-        </h2>
-        <p className={styles.subTitle}>
-          We have sent the activation code to your email.
-        </p>
-        <Input
-          placeholder="Activation Code"
-          value={activationCode}
-          onChange={(e) => setActivationCode(e.target.value)}
-          className={styles.input}
-          style={{ width: "90%" }}
-        />
-        <Button
-          type="primary"
-          loading={loading}
-          onClick={handleActivation}
-          className={styles.mainButton}
-        >
-          Submit&Continue
-        </Button>
-        {error && <p style={{ color: "red" }}>{error.message}</p>}
+        <Form>
+          <h2 className={styles.title} style={{ paddingTop: "3rem" }}>
+            Activation Code
+          </h2>
+          <p className={styles.subTitle}>
+            We have sent the activation code to your email.
+          </p>
+          <Form.Item
+            name="Activation Code"
+            rules={[
+              {
+                required: true,
+                message: "Please input your Activation Code you got!",
+              },
+            ]}
+          >
+            <Input
+              placeholder="Activation Code"
+              value={activationCode}
+              onChange={(e) => setActivationCode(e.target.value)}
+              className={styles.input}
+              style={{ width: "90%" }}
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              loading={loading}
+              onClick={handleActivation}
+              className={styles.mainButton}
+            >
+              Submit & Continue
+            </Button>
+          </Form.Item>
+          {error && <p style={{ color: "red" }}>{error.message}</p>}
+        </Form>
       </Col>
     </Row>
   );

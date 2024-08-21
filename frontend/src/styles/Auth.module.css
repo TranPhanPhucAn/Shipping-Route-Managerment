@@ -62,17 +62,15 @@
 }
 
 .input {
-  margin-bottom: 1.5rem !important;
+  margin-bottom: 1rem;
   padding: 0.7rem;
   border-radius: 0.2rem;
 }
 
 .forgotLink {
-  font-size: 1rem;
   text-decoration: none;
   display: block;
   text-align: right;
-  margin-bottom: 1rem;
   color: #333;
 }
 .forgotLink:hover {
@@ -112,9 +110,7 @@
 .illustration {
   margin-bottom: 1rem;
 }
-.checkbox {
-  margin-bottom: 1rem !important;
-}
+
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
