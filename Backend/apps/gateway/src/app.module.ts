@@ -8,7 +8,6 @@ import * as dotenv from 'dotenv';
 import { AuthModule } from './auth/auth.module';
 import { handleAuth } from './auth.context';
 import { AuthService } from './auth/auth.service';
-import { Code } from 'typeorm';
 dotenv.config();
 // import { CacheModule } from '@nestjs/cache-manager';
 // import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -80,7 +79,6 @@ interface OriginalError {
           }),
         },
         formatError: (error) => {
-          console.log('absd\n\n\n');
           const originalError = error.extensions
             ?.originalError as OriginalError;
           if (!originalError) {

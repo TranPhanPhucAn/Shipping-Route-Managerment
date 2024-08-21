@@ -1,16 +1,10 @@
-import {
-  Injectable,
-  ExecutionContext,
-  CanActivate,
-  UnauthorizedException,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Injectable, ExecutionContext, CanActivate } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Repository } from 'typeorm';
+import { GraphQLError } from 'graphql';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -25,7 +19,11 @@ export class JwtAuthGuard implements CanActivate {
     const { refreshtoken } = req.headers;
     const token = this.getToken(refreshtoken);
     if (!token) {
-      throw new UnauthorizedException('Not have refresh token, please login');
+      throw new GraphQLError('Please login again', {
+        extensions: {
+          errorCode: '5001-3',
+        },
+      });
     }
     try {
       const payload = await this.jwtService.verifyAsync(token, {
@@ -36,11 +34,15 @@ export class JwtAuthGuard implements CanActivate {
       });
 
       if (user.refreshToken !== token) {
-        throw new UnauthorizedException('Please login again');
+        throw new GraphQLError('Please login again', {
+          extensions: {
+            errorCode: '5001-3',
+          },
+        });
       }
       req['user'] = payload;
     } catch (err) {
-      throw new UnauthorizedException('Please login again');
+      throw err;
     }
 
     return true;
@@ -48,12 +50,13 @@ export class JwtAuthGuard implements CanActivate {
   private getToken = (authToken: string): string => {
     const match = authToken.match(/^Bearer (.*)$/);
     if (!match || match.length < 2) {
-      throw new HttpException(
+      throw new GraphQLError(
+        'Invalid Authorization token - Token does not match Bearer .*',
         {
-          message:
-            'Invalid Authorization token - Token does not match Bearer .*',
+          extensions: {
+            errorCode: '5001-4',
+          },
         },
-        HttpStatus.UNAUTHORIZED,
       );
     }
     return match[1];

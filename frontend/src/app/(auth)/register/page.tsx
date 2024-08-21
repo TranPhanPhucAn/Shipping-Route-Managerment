@@ -38,8 +38,8 @@ const Register = () => {
       } else if (data?.createUser?.error) {
         message.error(`Registration failed: ${data.createUser.error.message}`);
       }
-    } catch (err) {
-      message.error(`Registration failed: ${error?.message}`);
+    } catch (err: any) {
+      message.error(`Login failed: ${err?.graphQLErrors[0]?.message}`);
     }
     if (!agreeToTerms) {
       message.error("You must agree to the terms and conditions.");

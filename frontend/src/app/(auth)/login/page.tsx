@@ -10,7 +10,7 @@ import styles from "../../../styles/Auth.module.css";
 import RegisterImage from "./Register.png";
 import Image from "next/image";
 import Link from "next/link";
-const Login = () => {
+const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginUser, { loading, error }] = useMutation(LOGIN_USER);
@@ -32,9 +32,8 @@ const Login = () => {
         message.success("Login successful!");
         router.push("/");
       }
-    } catch (err) {
-      console.log("err: ", error?.message);
-      message.error(`Login failed: ${error?.message}`);
+    } catch (err: any) {
+      message.error(`Login failed: ${err?.graphQLErrors[0]?.message}`);
     }
   };
 
@@ -48,6 +47,7 @@ const Login = () => {
             className={styles.input}
             placeholder="Email"
             value={email}
+            type="email"
             onChange={(e) => setEmail(e.target.value)}
           />
           <Input

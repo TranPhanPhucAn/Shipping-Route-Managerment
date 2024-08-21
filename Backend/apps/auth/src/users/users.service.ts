@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ActivationDto, CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,6 +14,7 @@ import {
   PaginationUserDto,
   ResetPasswordDto,
 } from './dto/user.dto';
+import { GraphQLError } from 'graphql';
 
 @Injectable()
 export class UsersService {
@@ -30,7 +31,11 @@ export class UsersService {
     try {
       const existUser = await this.findOneByEmail(createUserInput.email);
       if (existUser) {
-        throw new BadRequestException(`Email existed`);
+        throw new GraphQLError('Email already exists', {
+          extensions: {
+            errorCode: '5001-5',
+          },
+        });
       }
       const { token, activationCode } =
         await this.createActivationToken(createUserInput);
@@ -68,7 +73,11 @@ export class UsersService {
         secret: process.env.ACTIVATION_SECRET,
       });
     if (newUser.activationCode !== activationCode) {
-      throw new BadRequestException('Invalid activation code');
+      throw new GraphQLError('Invalid activation code', {
+        extensions: {
+          errorCode: '5001-6',
+        },
+      });
     }
     const userEntity = this.usersRepository.create();
     const createUser = {
@@ -134,7 +143,11 @@ export class UsersService {
     const { email } = forgotPassword;
     const user = await this.findOneByEmail(email);
     if (!user) {
-      throw new BadRequestException('User not found with this email!');
+      throw new GraphQLError('User not found with this email!', {
+        extensions: {
+          errorCode: '5001-7',
+        },
+      });
     }
     const forgotPasswordToken = await this.generateForgotPasswordLink(user);
     const resetPasswordUrl = `${process.env.CLIENT_URL}/reset-password?verify=${forgotPasswordToken}`;
@@ -154,7 +167,11 @@ export class UsersService {
       secret: process.env.FORGOT_PASSWORD_SECRET,
     });
     if (!decoded) {
-      throw new BadRequestException('Invalid token');
+      throw new GraphQLError('Invalid token', {
+        extensions: {
+          errorCode: '5001-8',
+        },
+      });
     }
     const hassPassword = await this.hassPassword(password);
     const user = await this.findOneById(decoded.user.id);

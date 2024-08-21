@@ -7,10 +7,10 @@ import {
   LogoutResponse,
   RefreshTokenResponse,
 } from '../types/auth.types';
-import { AuthenticationError } from '@nestjs/apollo';
 import { UseGuards } from '@nestjs/common';
 // import { JWTGuard } from './guards/auth.guards';
 import { JwtAuthGuard } from './guards/jwt-auth.guards';
+import { GraphQLError } from 'graphql';
 // import { AuthUserGuard } from './guards/auth.guards';
 
 @Resolver(() => Auth)
@@ -24,7 +24,11 @@ export class AuthResolver {
     try {
       const result = await this.authService.loginUserByPassword(loginInput);
       if (result) return result;
-      throw new AuthenticationError('Could not login with provided data');
+      throw new GraphQLError('Could not login with provided data', {
+        extensions: {
+          errorCode: '5001-2',
+        },
+      });
     } catch (err) {
       throw err;
     }

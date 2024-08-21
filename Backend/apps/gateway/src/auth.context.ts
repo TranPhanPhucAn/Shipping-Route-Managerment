@@ -1,9 +1,3 @@
-import {
-  BadRequestException,
-  HttpException,
-  HttpStatus,
-  UnauthorizedException,
-} from '@nestjs/common';
 import { verify } from 'jsonwebtoken';
 import { AuthService } from './auth/auth.service';
 import {
@@ -11,16 +5,19 @@ import {
   DocumentNode,
   OperationDefinitionNode,
   FieldNode,
+  GraphQLError,
 } from 'graphql';
 
 const getToken = (authToken: string): string => {
   const match = authToken.match(/^Bearer (.*)$/);
   if (!match || match.length < 2) {
-    throw new HttpException(
+    throw new GraphQLError(
+      'Invalid Authorization token - Token does not match Bearer .*',
       {
-        message: 'Invalid Authorization token - Token does not match Bearer .*',
+        extensions: {
+          errorCode: '5000-1',
+        },
       },
-      HttpStatus.UNAUTHORIZED,
     );
   }
   return match[1];
@@ -32,16 +29,18 @@ const decodedToken = (authToken: string) => {
   });
   const expirationTime = decoded?.exp;
   if (expirationTime * 1000 < Date.now()) {
-    throw new HttpException(
-      { message: 'Access token expired' },
-      HttpStatus.UNAUTHORIZED,
-    );
+    throw new GraphQLError('Access token expired', {
+      extensions: {
+        errorCode: '5000-2',
+      },
+    });
   }
   if (!decoded) {
-    throw new HttpException(
-      { message: 'Invalid Auth Token' },
-      HttpStatus.UNAUTHORIZED,
-    );
+    throw new GraphQLError('Invalid Auth Token', {
+      extensions: {
+        errorCode: '5000-3',
+      },
+    });
   }
   return { decoded: decoded, expirationTime: expirationTime };
 };
@@ -76,15 +75,16 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
         const token = getToken(req.headers.accesstoken);
         const isExist = await cacheService.get(token);
         if (isExist) {
-          throw new UnauthorizedException(
-            'User unauthorized with invalid accessToken headers',
-          );
+          throw new GraphQLError('User already logout', {
+            extensions: {
+              errorCode: '5000-4',
+            },
+          });
         }
         const { decoded, expirationTime } = decodedToken(token);
         userId = decoded.userId;
         email = decoded.email;
         if (typeQuery === 'logout') {
-          console.log('alo');
           return {
             userid: userId,
             email: email,
@@ -99,11 +99,12 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
             refreshtoken: refreshToken,
           };
         }
-        // console.log(await authService.getUser(userId));
       } else {
-        throw new UnauthorizedException(
-          'User unauthorized with invalid accessToken headers',
-        );
+        throw new GraphQLError('Please login again', {
+          extensions: {
+            errorCode: '5000-5',
+          },
+        });
       }
     }
     return {
@@ -111,8 +112,6 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
       email: email,
     };
   } catch (err) {
-    throw new UnauthorizedException(
-      'User unauthorized with invalid accessToken headers',
-    );
+    throw err;
   }
 };

@@ -30,7 +30,6 @@ export class AuthService {
     if (loginInput.email) {
       user = await this.userService.findOneByEmail(loginInput.email);
       if (!user) {
-        // throw new AuthenticationError(`Email is not exist`);
         throw new GraphQLError('Invalid email or password', {
           extensions: {
             errorCode: '5001-1',
@@ -59,14 +58,6 @@ export class AuthService {
         errorCode: '5001-1',
       },
     });
-    // return {
-    //   user: null,
-    //   accessToken: null,
-    //   refreshToken: null,
-    //   error: {
-    //     message: 'Invalid email or password',
-    //   },
-    // };
   };
 
   logoutUser = async (req: any) => {
