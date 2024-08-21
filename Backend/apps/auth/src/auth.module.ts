@@ -31,26 +31,26 @@ interface OriginalError {
           autoSchemaFile: {
             federation: 2,
           },
-          formatError: (error) => {
-            const originalError = error.extensions
-              ?.originalError as OriginalError;
-            if (!originalError) {
-              return {
-                message: error.message,
-                extensions: {
-                  code: error.extensions?.code,
-                  errCode: error.extensions?.errorCode,
-                },
-              };
-            }
-            return {
-              message: originalError.message[0],
-              extensions: {
-                code: error.extensions?.code,
-                errCode: error.extensions?.errorCode,
-              },
-            };
-          },
+          // formatError: (error) => {
+          //   const originalError = error.extensions
+          //     ?.originalError as OriginalError;
+          //   if (!originalError) {
+          //     return {
+          //       message: error.message,
+          //       extensions: {
+          //         code: error.extensions?.code,
+          //         errorCode: error.extensions?.errorCode,
+          //       },
+          //     };
+          //   }
+          //   return {
+          //     message: originalError.message[0],
+          //     extensions: {
+          //       code: error.extensions?.code,
+          //       errorCode: error.extensions?.errorCode,
+          //     },
+          //   };
+          // },
         };
       },
     }),

@@ -45,25 +45,25 @@ interface OriginalError {
                   context.expirationtime,
                 );
               },
-              didReceiveResponse({ response, request, context }) {
-                if (response.errors) {
-                  response.errors = response.errors.map((error) => {
-                    return {
-                      message: error.message,
-                      extensions: {
-                        code: error.extensions?.code || 'INTERNAL_SERVER_ERROR',
-                        errorCode: error.extensions?.errCode || 'UNKNOWN_ERROR',
-                        serviceName: error.extensions?.serviceName,
-                      },
-                    };
-                  });
-                  return {
-                    errors: response.errors,
-                    data: null, // Ensure data is null when there's an error
-                  };
-                }
-                return response;
-              },
+              // didReceiveResponse({ response, request, context }) {
+              //   if (response.errors) {
+              //     response.errors = response.errors.map((error) => {
+              //       return {
+              //         message: error.message,
+              //         extensions: {
+              //           code: error.extensions?.code || 'INTERNAL_SERVER_ERROR',
+              //           errorCode: error.extensions?.errCode || 'UNKNOWN_ERROR',
+              //           serviceName: error.extensions?.serviceName,
+              //         },
+              //       };
+              //     });
+              //     return {
+              //       errors: response.errors,
+              //       data: null, // Ensure data is null when there's an error
+              //     };
+              //   }
+              //   return response;
+              // },
             });
           },
           supergraphSdl: new IntrospectAndCompose({
