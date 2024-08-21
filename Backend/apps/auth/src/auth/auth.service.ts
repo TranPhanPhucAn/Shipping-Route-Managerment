@@ -4,13 +4,14 @@ import { LoginInput } from './dto/auth.dto';
 import { LoginResponse } from '../types/auth.types';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
-import { AuthenticationError } from 'apollo-server-express';
+// import { AuthenticationError } from 'apollo-server-express';
 import * as bycypt from 'bcrypt';
 import { JWTPayload } from './interfaces/jwtPayLoad.interface';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { GraphQLError } from 'graphql';
 @Injectable()
 export class AuthService {
   constructor(
@@ -29,7 +30,11 @@ export class AuthService {
     if (loginInput.email) {
       user = await this.userService.findOneByEmail(loginInput.email);
       if (!user) {
-        throw new AuthenticationError(`Email is not exist`);
+        throw new GraphQLError('Invalid email or password', {
+          extensions: {
+            errorCode: '5001-1',
+          },
+        });
       }
     }
     let isMatch: boolean = false;
@@ -48,14 +53,11 @@ export class AuthService {
         refreshToken: refreshToken,
       };
     }
-    return {
-      user: null,
-      accessToken: null,
-      refreshToken: null,
-      error: {
-        message: 'Invalid email or password',
+    throw new GraphQLError('Invalid email or password', {
+      extensions: {
+        errorCode: '5001-1',
       },
-    };
+    });
   };
 
   logoutUser = async (req: any) => {

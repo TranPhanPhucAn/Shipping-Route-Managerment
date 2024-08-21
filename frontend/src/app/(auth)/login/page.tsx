@@ -25,7 +25,7 @@ import styles from "../../../styles/Auth.module.css";
 import RegisterImage from "./Register.png";
 import Image from "next/image";
 import Link from "next/link";
-const Login = () => {
+const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginUser, { loading, error }] = useMutation(LOGIN_USER);
@@ -33,7 +33,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const { data } = await loginUser({
+      const response = await loginUser({
         variables: {
           loginInput: {
             email,
@@ -41,12 +41,14 @@ const Login = () => {
           } as LoginInput,
         },
       });
+      console.log("check response: ", response);
+      const { data } = response;
       if (data?.login) {
         message.success("Login successful!");
         router.push("/");
       }
-    } catch (err) {
-      message.error(`Login failed: ${error?.message}`);
+    } catch (err: any) {
+      message.error(`Login failed: ${err?.graphQLErrors[0]?.message}`);
     }
   };
 
@@ -58,7 +60,6 @@ const Login = () => {
           initialValues={{
             remember: true,
           }}
-         
         >
           <div className={styles.mainBox}>
             <h2 className={styles.title}>Welcome Back!</h2>

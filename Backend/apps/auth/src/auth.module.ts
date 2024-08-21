@@ -16,14 +16,42 @@ import { UserGrpcServiceController } from './users/users.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 // import { redisStore } from 'cache-manager-redis-store';
 import * as redisStore from 'cache-manager-redis-store';
+// import { GraphQLError, GraphQLFormattedError } from 'graphql';
 
+interface OriginalError {
+  message: string[];
+}
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    GraphQLModule.forRoot<ApolloFederationDriverConfig>({
+    GraphQLModule.forRootAsync<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
-      autoSchemaFile: {
-        federation: 2,
+      useFactory: () => {
+        return {
+          autoSchemaFile: {
+            federation: 2,
+          },
+          formatError: (error) => {
+            const originalError = error.extensions
+              ?.originalError as OriginalError;
+            if (!originalError) {
+              return {
+                message: error.message,
+                extensions: {
+                  code: error.extensions?.code,
+                  errorCode: error.extensions?.errorCode,
+                },
+              };
+            }
+            return {
+              message: originalError.message[0],
+              extensions: {
+                code: error.extensions?.code,
+                errorCode: error.extensions?.errorCode,
+              },
+            };
+          },
+        };
       },
     }),
     TypeOrmModule.forRoot({
