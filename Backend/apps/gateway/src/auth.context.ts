@@ -47,9 +47,11 @@ const decodedToken = (authToken: string) => {
 
 export const handleAuth = async ({ req }, authService: AuthService) => {
   try {
+    // console.log('check cookies: ', req.cookies['access_token']);
+    const accesstoken = req.cookies['access_token'];
     let userId: string = '';
     let email: string = '';
-    const refreshToken: string = req.headers.refreshtoken;
+    // const refreshToken: string = req.headers.refreshtoken;
     const rawBody = req.body;
     let typeQuery: string;
     if (rawBody && rawBody.query) {
@@ -70,9 +72,9 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
     if (notCheckLogin.includes(typeQuery)) {
       return {};
     } else {
-      if (req.headers.accesstoken) {
+      if (accesstoken) {
         const cacheService = authService.getCacheService();
-        const token = getToken(req.headers.accesstoken);
+        const token = getToken(accesstoken);
         const isExist = await cacheService.get(token);
         if (isExist) {
           throw new GraphQLError('User already logout', {
@@ -92,13 +94,13 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
             expirationtime: expirationTime,
           };
         }
-        if (typeQuery === 'refreshToken') {
-          return {
-            userid: userId,
-            email: email,
-            refreshtoken: refreshToken,
-          };
-        }
+        // if (typeQuery === 'refreshToken') {
+        //   return {
+        //     userid: userId,
+        //     email: email,
+        //     refreshtoken: refreshToken,
+        //   };
+        // }
       } else {
         throw new GraphQLError('Please login again', {
           extensions: {

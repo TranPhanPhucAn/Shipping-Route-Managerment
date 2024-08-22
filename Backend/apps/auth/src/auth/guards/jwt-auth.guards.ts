@@ -16,7 +16,7 @@ export class JwtAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
     const { req } = ctx.getContext();
-    const { refreshtoken } = req.headers;
+    const refreshtoken = req.cookies['refresh_token'];
     const token = this.getToken(refreshtoken);
     if (!token) {
       throw new GraphQLError('Please login again', {

@@ -1,11 +1,4 @@
-import {
-  Resolver,
-  Query,
-  Args,
-  Context,
-  Mutation,
-  GraphQLExecutionContext,
-} from '@nestjs/graphql';
+import { Resolver, Query, Args, Context, Mutation } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { Auth } from './entities/auth.entity';
 import { LoginInput } from './dto/auth.dto';
@@ -48,7 +41,6 @@ export class AuthResolver {
           secure: true,
           expires,
         });
-
         return result;
       }
       throw new GraphQLError('Could not login with provided data', {
