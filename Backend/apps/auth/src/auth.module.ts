@@ -26,10 +26,16 @@ interface OriginalError {
     ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRootAsync<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
-      useFactory: () => {
+      useFactory: async () => {
         return {
           autoSchemaFile: {
             federation: 2,
+          },
+          context: ({ req, res }) => ({ req, res }),
+          playground: {
+            settings: {
+              'request.credentials': 'include', // Otherwise cookies won't be sent
+            },
           },
           formatError: (error) => {
             const originalError = error.extensions

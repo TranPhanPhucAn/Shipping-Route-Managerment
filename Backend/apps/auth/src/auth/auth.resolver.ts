@@ -1,4 +1,11 @@
-import { Resolver, Query, Args, Context, Mutation } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Args,
+  Context,
+  Mutation,
+  GraphQLExecutionContext,
+} from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { Auth } from './entities/auth.entity';
 import { LoginInput } from './dto/auth.dto';
@@ -20,10 +27,30 @@ export class AuthResolver {
   @Mutation(() => LoginResponse)
   async login(
     @Args('loginInput') loginInput: LoginInput,
+    @Context() context: any,
   ): Promise<LoginResponse> {
     try {
       const result = await this.authService.loginUserByPassword(loginInput);
-      if (result) return result;
+      if (result) {
+        const { accessToken, refreshToken } = result;
+        const expires = new Date(Date.now() + 1 * 60 * 60 * 1000);
+        context.res.cookie('access_token', 'Bearer ' + accessToken, {
+          httpOnly: true,
+          sameSite: 'none',
+          path: '/',
+          secure: true,
+          expires,
+        });
+        context.res.cookie('refresh_token', 'Bearer ' + refreshToken, {
+          httpOnly: true,
+          sameSite: 'none',
+          path: '/',
+          secure: true,
+          expires,
+        });
+
+        return result;
+      }
       throw new GraphQLError('Could not login with provided data', {
         extensions: {
           errorCode: '5001-2',

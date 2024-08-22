@@ -8,6 +8,7 @@ import * as dotenv from 'dotenv';
 import { AuthModule } from './auth/auth.module';
 import { handleAuth } from './auth.context';
 import { AuthService } from './auth/auth.service';
+import { GraphQLDataSource } from './graphql-datasource';
 dotenv.config();
 // import { CacheModule } from '@nestjs/cache-manager';
 // import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -23,6 +24,11 @@ interface OriginalError {
       useFactory: (authService: AuthService) => ({
         server: {
           context: ({ req }) => handleAuth({ req }, authService),
+          playground: {
+            settings: {
+              'request.credentials': 'include', // Otherwise cookies won't be sent
+            },
+          },
           formatError: (error) => {
             return {
               message: error.message,
@@ -32,39 +38,40 @@ interface OriginalError {
           },
         },
         gateway: {
-          buildService: ({ url }) => {
-            return new RemoteGraphQLDataSource({
-              url,
-              willSendRequest({ request, context }: any) {
-                request.http.headers.set('userid', context.userid);
-                request.http.headers.set('accesstoken', context.accesstoken);
-                request.http.headers.set('refreshtoken', context.refreshtoken);
-                request.http.headers.set(
-                  'expirationtime',
-                  context.expirationtime,
-                );
-              },
-              // didReceiveResponse({ response, request, context }) {
-              //   if (response.errors) {
-              //     response.errors = response.errors.map((error) => {
-              //       return {
-              //         message: error.message,
-              //         extensions: {
-              //           code: error.extensions?.code || 'INTERNAL_SERVER_ERROR',
-              //           errorCode: error.extensions?.errCode || 'UNKNOWN_ERROR',
-              //           serviceName: error.extensions?.serviceName,
-              //         },
-              //       };
-              //     });
-              //     return {
-              //       errors: response.errors,
-              //       data: null, // Ensure data is null when there's an error
-              //     };
-              //   }
-              //   return response;
-              // },
-            });
-          },
+          // buildService: ({ url }) => {
+          //   return new RemoteGraphQLDataSource({
+          //     url,
+          //     willSendRequest({ request, context }: any) {
+          //       request.http.headers.set('userid', context.userid);
+          //       request.http.headers.set('accesstoken', context.accesstoken);
+          //       request.http.headers.set('refreshtoken', context.refreshtoken);
+          //       request.http.headers.set(
+          //         'expirationtime',
+          //         context.expirationtime,
+          //       );
+          //     },
+          //     // didReceiveResponse({ response, request, context }) {
+          //     //   if (response.errors) {
+          //     //     response.errors = response.errors.map((error) => {
+          //     //       return {
+          //     //         message: error.message,
+          //     //         extensions: {
+          //     //           code: error.extensions?.code || 'INTERNAL_SERVER_ERROR',
+          //     //           errorCode: error.extensions?.errCode || 'UNKNOWN_ERROR',
+          //     //           serviceName: error.extensions?.serviceName,
+          //     //         },
+          //     //       };
+          //     //     });
+          //     //     return {
+          //     //       errors: response.errors,
+          //     //       data: null, // Ensure data is null when there's an error
+          //     //     };
+          //     //   }
+          //     //   return response;
+          //     // },
+          //   });
+          // },
+          buildService: ({ url }) => new GraphQLDataSource({ url }),
           supergraphSdl: new IntrospectAndCompose({
             subgraphs: [
               {

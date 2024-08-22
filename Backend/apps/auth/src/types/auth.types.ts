@@ -11,7 +11,7 @@ export class ErrorType {
 }
 
 @ObjectType()
-export class LoginResponse {
+export class LoginResponseService {
   @Field(() => User, { nullable: true })
   user?: User | unknown;
 
@@ -20,9 +20,11 @@ export class LoginResponse {
 
   @Field({ nullable: true })
   refreshToken?: string;
-
-  @Field(() => ErrorType, { nullable: true })
-  error?: ErrorType;
+}
+@ObjectType()
+export class LoginResponse {
+  @Field(() => User, { nullable: true })
+  user?: User | unknown;
 }
 
 @ObjectType()

@@ -1,7 +1,7 @@
 import { forwardRef, Injectable, Inject } from '@nestjs/common';
 import { User } from '../users/entities/user.entity';
 import { LoginInput } from './dto/auth.dto';
-import { LoginResponse } from '../types/auth.types';
+import { LoginResponseService } from '../types/auth.types';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 // import { AuthenticationError } from 'apollo-server-express';
@@ -25,7 +25,7 @@ export class AuthService {
 
   loginUserByPassword = async (
     loginInput: LoginInput,
-  ): Promise<LoginResponse | undefined> => {
+  ): Promise<LoginResponseService | undefined> => {
     let user: User | undefined;
     if (loginInput.email) {
       user = await this.userService.findOneByEmail(loginInput.email);
