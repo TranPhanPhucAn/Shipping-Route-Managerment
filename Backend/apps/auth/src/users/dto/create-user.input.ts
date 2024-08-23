@@ -7,19 +7,18 @@ export class CreateUserInput {
   // id: string;
 
   @Field()
-  @IsNotEmpty()
-  @IsString()
-  @IsEmail()
+  @IsNotEmpty({ message: 'Email is required.' })
+  @IsEmail({}, { message: 'Email must be valid' })
   email: string;
 
   @Field()
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: 'Username is required.' })
+  @IsString({ message: 'Username must be valid' })
   username: string;
 
   @Field()
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: 'Password is required' })
+  @IsString({ message: 'Password must be valid' })
   password: string;
 
   @Field()

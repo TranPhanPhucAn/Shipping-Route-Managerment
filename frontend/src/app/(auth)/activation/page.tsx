@@ -36,8 +36,8 @@ const Activate = () => {
         message.success("Activate successful!.");
         router.push("/login");
       }
-    } catch (err) {
-      message.error(`Registration failed: ${error?.message}`);
+    } catch (err: any) {
+      message.error(`Registration failed: ${err?.graphQLErrors[0]?.message}`);
     }
   };
 

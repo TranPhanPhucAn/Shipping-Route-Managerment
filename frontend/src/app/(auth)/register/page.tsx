@@ -18,7 +18,7 @@ import {
   FacebookOutlined,
   LockOutlined,
   UserOutlined,
-  HomeOutlined
+  HomeOutlined,
 } from "@ant-design/icons";
 import styles from "../../../styles/Auth.module.css";
 import LoginImage from "./Login.png";
@@ -34,6 +34,21 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
+      let re =
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!re.test(email) || !password || !username) {
+        if (!re.test(email)) message.error("Email is not valid!");
+        else if (!password) {
+          message.error("Password is required");
+        } else {
+          message.error("Username is required");
+        }
+        return;
+      }
+      if (!agreeToTerms) {
+        message.error("You must agree to the terms and conditions.");
+        return;
+      }
       const { data } = await registerUser({
         variables: {
           createUserInput: {
@@ -50,15 +65,9 @@ const Register = () => {
           "Registration successful! Please check your email for the activation code."
         );
         router.push(`/activation?token=${activationToken}`);
-      } else if (data?.createUser?.error) {
-        message.error(`Registration failed: ${data.createUser.error.message}`);
       }
     } catch (err: any) {
       message.error(`Login failed: ${err?.graphQLErrors[0]?.message}`);
-    }
-    if (!agreeToTerms) {
-      message.error("You must agree to the terms and conditions.");
-      return;
     }
   };
 
@@ -192,7 +201,7 @@ const Register = () => {
                 },
               ]}
             >
-              <Checkbox>
+              <Checkbox onChange={() => setAgreeToTerms(!agreeToTerms)}>
                 {" "}
                 By clicking, you agree to the{" "}
                 <a href="">CLT's Terms and Conditions</a>

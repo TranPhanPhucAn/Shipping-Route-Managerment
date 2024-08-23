@@ -68,7 +68,7 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
         typeQuery = fields[0];
       }
     }
-    const notCheckLogin = ['login'];
+    const notCheckLogin = ['login', 'createUser', 'activateUser'];
     if (notCheckLogin.includes(typeQuery)) {
       return {};
     } else {

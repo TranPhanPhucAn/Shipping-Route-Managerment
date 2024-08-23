@@ -48,7 +48,7 @@ export class UsersService {
       });
       return token;
     } catch (error) {
-      console.log('error: ', error);
+      throw error;
     }
   }
 
@@ -66,6 +66,7 @@ export class UsersService {
     );
     return { token, activationCode };
   }
+
   async activateUser(activationDto: ActivationDto) {
     const { activationToken, activationCode } = activationDto;
     const newUser: { user: CreateUserInput; activationCode: string } =
