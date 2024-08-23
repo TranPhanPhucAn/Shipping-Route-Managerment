@@ -33,6 +33,15 @@ const Login: React.FC = () => {
 
   const handleLogin = async () => {
     try {
+      let re =
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!re.test(email) || !password) {
+        if (!re.test(email)) message.error("Email is not valid!");
+        else {
+          message.error("Password is required");
+        }
+        return;
+      }
       const response = await loginUser({
         variables: {
           loginInput: {
