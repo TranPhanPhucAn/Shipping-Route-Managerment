@@ -10,7 +10,7 @@ import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { ActivationDto, CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { UseGuards } from '@nestjs/common';
+// import { UseGuards } from '@nestjs/common';
 import {
   ChangePasswordResponse,
   ForgotPasswordResponse,
@@ -18,7 +18,7 @@ import {
   RegisterResponse,
   ResetPasswordResponse,
 } from '../types/auth.types';
-import { AuthUserGuard } from '../auth/guards/auth.guards';
+// import { AuthUserGuard } from '../auth/guards/auth.guards';
 import {
   ChangePasswordDto,
   ForgotPasswordDto,

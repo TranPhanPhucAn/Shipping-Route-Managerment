@@ -86,6 +86,8 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
         const { decoded, expirationTime } = decodedToken(token);
         userId = decoded.userId;
         email = decoded.email;
+        // console.log('check user infor: ', await authService.getUser(userId));
+
         if (typeQuery === 'logout') {
           return {
             userid: userId,
@@ -94,13 +96,6 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
             expirationtime: expirationTime,
           };
         }
-        // if (typeQuery === 'refreshToken') {
-        //   return {
-        //     userid: userId,
-        //     email: email,
-        //     refreshtoken: refreshToken,
-        //   };
-        // }
       } else {
         throw new GraphQLError('Please login again', {
           extensions: {

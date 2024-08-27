@@ -13,6 +13,7 @@ import SvgComponent from "./Logo";
 import "./Header.scss";
 import { useRouter, usePathname } from "next/navigation"; // Import the useRouter hook
 import UserIcon from "./UserIcon";
+import ProfileDropUser from "./ProfileDropUser";
 const { Content, Footer } = Layout;
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -20,18 +21,10 @@ const items: MenuItem[] = [
   {
     label: <Link href={"/about"}>About Us</Link>,
     key: "/about",
-    // icon: <UserOutlined />,
   },
   {
     label: <Link href={"/contact"}>Contact Us</Link>,
     key: "/contact",
-  },
-];
-const itemsRight: MenuItem[] = [
-  {
-    label: <Link href={"/login"}></Link>,
-    key: "login",
-    icon: <UserOutlined style={{ fontSize: "16px" }} />,
   },
 ];
 const Header: React.FC = () => {
@@ -88,9 +81,10 @@ const Header: React.FC = () => {
             <AppMenu isInline />
           </Drawer>
           <div className="right-header">
-            <span className="icon" onClick={() => handleClick("/login")}>
+            <ProfileDropUser />
+            {/* <span className="icon" onClick={() => handleClick("/login")}>
               <UserIcon />
-            </span>
+            </span> */}
           </div>
           <div className="menu-icon">
             <MenuOutlined

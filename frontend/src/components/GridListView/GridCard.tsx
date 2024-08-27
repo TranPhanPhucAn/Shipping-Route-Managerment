@@ -1,3 +1,4 @@
+"use client";
 import { Card, Col } from "antd";
 import React from "react";
 import "./gridcard.scss";

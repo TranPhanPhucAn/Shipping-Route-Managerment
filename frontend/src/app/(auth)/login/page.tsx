@@ -25,6 +25,9 @@ import styles from "../../../styles/Auth.module.css";
 import RegisterImage from "./Register.png";
 import Image from "next/image";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+import type { SignInResponse } from "next-auth/react";
+
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,22 +45,37 @@ const Login: React.FC = () => {
         }
         return;
       }
-      const response = await loginUser({
-        variables: {
-          loginInput: {
-            email,
-            password,
-          } as LoginInput,
-        },
-      });
-      console.log("check response: ", response);
-      const { data } = response;
-      if (data?.login) {
+      const res = (await signIn("credentials", {
+        email: email,
+        password: password,
+        redirect: false,
+      })) as SignInResponse;
+      console.log("response credentials: ", res);
+      // const response = await loginUser({
+      //   variables: {
+      //     loginInput: {
+      //       email,
+      //       password,
+      //     } as LoginInput,
+      //   },
+      // });
+      // const { data } = response;
+      // if (data?.login) {
+      //   message.success("Login successful!");
+      //   router.push("/");
+      // }
+      console.log("alo: ", res?.status);
+
+      if (res?.status === 200) {
         message.success("Login successful!");
         router.push("/");
+      } else {
+        console.log("alo: ", res);
+        message.error(`Login failed: ${res?.error}`);
       }
     } catch (err: any) {
-      message.error(`Login failed: ${err?.graphQLErrors[0]?.message}`);
+      console.log("error client: ", err);
+      // message.error(`Login failed: ${err?.graphQLErrors[0]?.message}`);
     }
   };
 

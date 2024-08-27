@@ -21,8 +21,6 @@ export class GraphQLDataSource extends RemoteGraphQLDataSource {
     const { request, context, kind } = params;
 
     request.http.headers.set('userid', context.userid);
-    request.http.headers.set('accesstoken', context.accesstoken);
-    request.http.headers.set('refreshtoken', context.refreshtoken);
     request.http.headers.set('expirationtime', context.expirationtime);
 
     if (kind === GraphQLDataSourceRequestKind.INCOMING_OPERATION) {

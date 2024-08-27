@@ -28,7 +28,6 @@ export class UserGrpcServiceController implements UserServiceController {
     //   name: username,
     //   email: email,
     // };
-
     const cacheKey = `user-${data.id}`;
     const cachedUser = await this.cacheManager.get(cacheKey);
     if (cachedUser) {
