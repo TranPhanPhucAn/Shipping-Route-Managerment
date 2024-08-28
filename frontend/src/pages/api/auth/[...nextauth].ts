@@ -80,12 +80,19 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
               res.setHeader("Set-Cookie", cookiesArray);
             }
             // console.log(response);
-            const { data } = response;
+            const { data, errors } = await response.json();
+            // const { data } = response;
+            if (errors) {
+              throw new Error(errors[0].message);
+            }
+
             const user = data?.login?.user;
             console.log("user: ", response);
             return user;
           } catch (err: any) {
-            throw new Error(err?.graphQLErrors[0]?.message);
+            // console.log("???");
+            throw new Error(err?.message || "Login failed");
+            // throw new Error(err?.graphQLErrors[0]?.message);
           }
         },
       }),
