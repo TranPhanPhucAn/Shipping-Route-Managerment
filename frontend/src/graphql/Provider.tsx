@@ -6,6 +6,8 @@ import {
   createHttpLink,
   InMemoryCache,
 } from "@apollo/client";
+import { SessionProvider } from "next-auth/react";
+
 const link = createHttpLink({
   uri: process.env.NEXT_PUBLIC_SERVER_URI,
   credentials: "include", // tell your network interface to send the cookie along with every request.
@@ -23,7 +25,12 @@ const Provider = ({ children }: { children: ReactNode }) => {
   //   link,
   //   cache: new InMemoryCache(),
   // });
-  return <ApolloProvider client={client}>{children}</ApolloProvider>;
+
+  return (
+    <ApolloProvider client={client}>
+      <SessionProvider>{children} </SessionProvider>
+    </ApolloProvider>
+  );
 };
 export { client };
 export default Provider;

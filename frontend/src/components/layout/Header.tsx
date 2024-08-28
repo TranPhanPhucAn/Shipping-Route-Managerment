@@ -3,18 +3,13 @@ import React, { useState } from "react";
 import { Menu, Layout, Drawer } from "antd";
 import type { MenuProps } from "antd";
 import Link from "next/link";
-import {
-  HomeOutlined,
-  AppstoreOutlined,
-  UserOutlined,
-  MenuOutlined,
-} from "@ant-design/icons";
+import { MenuOutlined } from "@ant-design/icons";
 import SvgComponent from "./Logo";
 import "./Header.scss";
 import { useRouter, usePathname } from "next/navigation"; // Import the useRouter hook
-import UserIcon from "./UserIcon";
 import ProfileDropUser from "./ProfileDropUser";
-const { Content, Footer } = Layout;
+import { useSession } from "next-auth/react";
+
 type MenuItem = Required<MenuProps>["items"][number];
 
 const items: MenuItem[] = [
@@ -32,8 +27,9 @@ const Header: React.FC = () => {
   const [openMenu, setOpenMenu] = useState(false);
 
   const router = useRouter(); // Initialize useRouter
-  const pathname = usePathname();
-
+  const pathname = usePathname() || "/";
+  const { data: session, status, update } = useSession();
+  console.log("user session: ", session);
   const onClick: MenuProps["onClick"] = (e) => {
     console.log("click ", e);
     setCurrent(e.key);

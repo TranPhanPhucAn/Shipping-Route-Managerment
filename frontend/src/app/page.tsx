@@ -6,6 +6,7 @@ import "./homepage.scss";
 import Image from "next/image";
 import GridListView from "../components/GridListView/GridListView";
 import GridCardList from "../components/GridCardList/GridCardList";
+
 const HomePage: React.FC = () => {
   const imageTech: string[] = [
     "/logotechno/nest.png",
