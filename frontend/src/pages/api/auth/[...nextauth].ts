@@ -4,93 +4,133 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { client } from "@/src/graphql/Provider";
 import { LOGIN_USER } from "@/src/graphql/mutations/Auth";
-// import { useMutation } from "@apollo/client";
-// import { LOGIN_USER } from "../../../graphql/mutations/Auth";
-// import { LoginInput } from "@/src/graphql/types";
+import { NextApiRequest, NextApiResponse } from "next";
 
-// const [loginUser, { loading, error }] = useMutation(LOGIN_USER);
-export const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: "jwt",
-  },
-  // Configure one or more authentication providers
-  providers: [
-    CredentialsProvider({
-      // The name to display on the sign in form (e.g. "Sign in with...")
-      // name: "Credentials",
-      type: "credentials",
-      // `credentials` is used to generate a form on the sign in page.
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
-      credentials: {
-        // email: {},
-        // password: {},
-      },
-      async authorize(credentials, req): Promise<any> {
-        // Add logic here to look up the user from the credentials supplied
-        const { email, password } = credentials as {
-          email: string;
-          password: string;
-        };
-        try {
-          const response = await client.mutate({
-            mutation: LOGIN_USER,
-            variables: {
-              loginInput: {
-                email,
-                password,
+type NextAuthOptionsCallback = (
+  req: NextApiRequest,
+  res: NextApiResponse
+) => NextAuthOptions;
+
+// export const authOptions: NextAuthOptions = {
+const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
+  return {
+    secret: process.env.NEXTAUTH_SECRET,
+    session: {
+      strategy: "jwt",
+    },
+    // Configure one or more authentication providers
+    providers: [
+      CredentialsProvider({
+        type: "credentials",
+        credentials: {},
+        async authorize(credentials, req): Promise<any> {
+          // Add logic here to look up the user from the credentials supplied
+          const { email, password } = credentials as {
+            email: string;
+            password: string;
+          };
+          try {
+            // const response = await client.mutate({
+            //   mutation: LOGIN_USER,
+            //   variables: {
+            //     loginInput: {
+            //       email,
+            //       password,
+            //     },
+            //   },
+            //   context: {
+            //     fetchOptions: {
+            //       credentials: "include",
+            //     },
+            //   },
+            // });
+            const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URI!, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
               },
-            },
-          });
-          const { data } = response;
-          const user = data?.login?.user;
-          console.log("user: ", user);
-          return user;
-        } catch (err: any) {
-          throw new Error(err?.graphQLErrors[0]?.message);
+              body: JSON.stringify({
+                query: `
+                mutation Login($loginInput: LoginInput!) {
+                  login(loginInput: $loginInput) {
+                    user {
+                      id
+                      email
+                      username
+                    }
+                  }
+                }
+              `,
+                variables: {
+                  loginInput: {
+                    email,
+                    password,
+                  },
+                },
+              }),
+              credentials: "include",
+            });
+            const cookies = response.headers.get("set-cookie");
+            if (cookies) {
+              // Correctly handle splitting multiple cookies, considering commas in Expires attributes
+              const cookiesArray =
+                cookies.match(
+                  /(?<=^|,)([^,]*?Expires=.*?GMT);?(\s*HttpOnly)?(\s*Secure)?(\s*SameSite=None)?/g
+                ) || [];
+              res.setHeader("Set-Cookie", cookiesArray);
+            }
+            // console.log(response);
+            const { data } = response;
+            const user = data?.login?.user;
+            console.log("user: ", response);
+            return user;
+          } catch (err: any) {
+            throw new Error(err?.graphQLErrors[0]?.message);
+          }
+        },
+      }),
+      // GithubProvider({
+      //   clientId: process.env.GITHUB_ID || "",
+      //   clientSecret: process.env.GITHUB_SECRET || "",
+      // }),
+      // // ...add more providers here
+      // GithubProvider({
+      //   clientId: process.env.GOOGLE_ID || "",
+      //   clientSecret: process.env.GOOGLE_SECRET || "",
+      // }),
+    ],
+    callbacks: {
+      async jwt({ token, user }) {
+        if (user) {
+          token.id = user.id;
+          token.email = user.email;
+          token.username = user.username;
+          token.address = user.address;
         }
+        return token;
       },
-    }),
-    // GithubProvider({
-    //   clientId: process.env.GITHUB_ID || "",
-    //   clientSecret: process.env.GITHUB_SECRET || "",
-    // }),
-    // // ...add more providers here
-    // GithubProvider({
-    //   clientId: process.env.GOOGLE_ID || "",
-    //   clientSecret: process.env.GOOGLE_SECRET || "",
-    // }),
-  ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.email = user.email;
-        token.username = user.username;
-        token.address = user.address;
-      }
-      return token;
+      async session({ token, user, session }) {
+        if (token) {
+          return {
+            ...session,
+            user: {
+              ...session.user,
+              id: token.id,
+              username: token.username,
+              address: token.address,
+            },
+          };
+        }
+        return session;
+      },
     },
-    async session({ token, user, session }) {
-      if (token) {
-        return {
-          ...session,
-          user: {
-            ...session.user,
-            id: token.id,
-            username: token.username,
-            address: token.address,
-          },
-        };
-      }
-      return session;
+    pages: {
+      signIn: "/login",
     },
-  },
-  pages: {
-    signIn: "/login",
-  },
+  };
 };
 
-export default NextAuth(authOptions);
+// export default NextAuth(authOptions);
+export default (req: NextApiRequest, res: NextApiResponse) => {
+  return NextAuth(req, res, nextAuthOptions(req, res));
+};
