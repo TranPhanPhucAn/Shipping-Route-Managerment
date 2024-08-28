@@ -6,6 +6,8 @@ import UserIcon from "./UserIcon";
 import "./ProfileDropUser.scss";
 import { useRouter } from "next/navigation"; // Import the useRouter hook
 import { signOut, useSession } from "next-auth/react";
+import { useMutation } from "@apollo/client";
+import { LOGOUT_USER } from "@/src/graphql/mutations/Auth";
 
 const handleMenuClick: MenuProps["onClick"] = (e) => {
   //   message.info("Click on menu item.");
@@ -16,6 +18,12 @@ const ProfileDropUser: React.FC = () => {
   // const [singedIn, setSignedIn] = useState(false);
   const router = useRouter(); // Initialize useRouter
   const { data: session, status, update } = useSession();
+  const [logoutUser, { loading, error }] = useMutation(LOGOUT_USER);
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: "/login", redirect: true });
+
+    const response = await logoutUser();
+  };
   const items: MenuProps["items"] = [
     {
       label: <Link href={"/about"}>{session?.user?.username}</Link>,
@@ -26,7 +34,7 @@ const ProfileDropUser: React.FC = () => {
       key: "2",
     },
     {
-      label: <span onClick={() => signOut()}>Log Out</span>,
+      label: <span onClick={handleSignOut}>Log Out</span>,
       key: "3",
     },
   ];

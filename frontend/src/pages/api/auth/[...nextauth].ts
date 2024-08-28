@@ -133,6 +133,7 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
     },
     pages: {
       signIn: "/login",
+      signOut: "/",
     },
   };
 };
