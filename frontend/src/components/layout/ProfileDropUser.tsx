@@ -1,11 +1,11 @@
 import { Button, Dropdown, message, Space, Tooltip } from "antd";
 import type { MenuProps } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import UserIcon from "./UserIcon";
 import "./ProfileDropUser.scss";
 import { useRouter } from "next/navigation"; // Import the useRouter hook
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const handleMenuClick: MenuProps["onClick"] = (e) => {
   //   message.info("Click on menu item.");
@@ -13,7 +13,7 @@ const handleMenuClick: MenuProps["onClick"] = (e) => {
 };
 
 const ProfileDropUser: React.FC = () => {
-  const [singedIn, setSignedIn] = useState(true);
+  // const [singedIn, setSignedIn] = useState(false);
   const router = useRouter(); // Initialize useRouter
   const { data: session, status, update } = useSession();
   const items: MenuProps["items"] = [
@@ -26,7 +26,7 @@ const ProfileDropUser: React.FC = () => {
       key: "2",
     },
     {
-      label: "Log Out",
+      label: <span onClick={() => signOut()}>Log Out</span>,
       key: "3",
     },
   ];
@@ -40,7 +40,7 @@ const ProfileDropUser: React.FC = () => {
   };
   return (
     <div>
-      {singedIn ? (
+      {session ? (
         <Dropdown menu={menuProps} trigger={["click"]} placement="bottomRight">
           <span className="icon">
             <UserIcon />

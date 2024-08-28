@@ -27,7 +27,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import type { SignInResponse } from "next-auth/react";
-import { useSession } from "next-auth/react";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
