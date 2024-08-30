@@ -2,14 +2,14 @@ import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const privatePaths = ["/about"];
+const privatePaths = ["/profile"];
 const authPaths = ["/login", "/register"];
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const token = await getToken({ req: request });
-
+  // console.log("token: ", token);
   if (!token && privatePaths.some((path) => pathname.startsWith(path))) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
@@ -23,5 +23,6 @@ export async function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/about/:path*", "/login", "/register"],
+  // matcher: ["/about/:path*", "/login", "/register"],
+  matcher: "/:path*",
 };

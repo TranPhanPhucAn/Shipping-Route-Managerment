@@ -29,7 +29,6 @@ const Header: React.FC = () => {
   const router = useRouter(); // Initialize useRouter
   const pathname = usePathname() || "/";
   const { data: session, status, update } = useSession();
-  console.log("user session: ", session);
   const onClick: MenuProps["onClick"] = (e) => {
     console.log("click ", e);
     setCurrent(e.key);

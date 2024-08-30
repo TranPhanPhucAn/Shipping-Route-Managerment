@@ -21,16 +21,19 @@ const ProfileDropUser: React.FC = () => {
   const [logoutUser, { loading, error }] = useMutation(LOGOUT_USER);
   const handleSignOut = async () => {
     await signOut({ callbackUrl: "/login", redirect: true });
-
-    const response = await logoutUser();
+    try {
+      await logoutUser();
+    } catch (e) {
+      console.log("error: ", e);
+    }
   };
   const items: MenuProps["items"] = [
     {
-      label: <Link href={"/about"}>{session?.user?.username}</Link>,
+      label: <Link href={"/profile"}>{session?.user?.username}</Link>,
       key: "1",
     },
     {
-      label: <Link href={"/about"}>My Profile</Link>,
+      label: <Link href={"/profile"}>My Profile</Link>,
       key: "2",
     },
     {

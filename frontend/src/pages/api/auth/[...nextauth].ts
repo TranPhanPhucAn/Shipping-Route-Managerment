@@ -12,7 +12,7 @@ type NextAuthOptionsCallback = (
 ) => NextAuthOptions;
 
 // export const authOptions: NextAuthOptions = {
-const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
+export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
   return {
     secret: process.env.NEXTAUTH_SECRET,
     session: {
@@ -79,7 +79,6 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
                 ) || [];
               res.setHeader("Set-Cookie", cookiesArray);
             }
-            // console.log(response);
             const { data, errors } = await response.json();
             // const { data } = response;
             if (errors) {
@@ -90,7 +89,6 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
             console.log("user: ", response);
             return user;
           } catch (err: any) {
-            // console.log("???");
             throw new Error(err?.message || "Login failed");
             // throw new Error(err?.graphQLErrors[0]?.message);
           }
