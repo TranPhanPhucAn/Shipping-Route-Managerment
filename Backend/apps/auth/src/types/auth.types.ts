@@ -20,11 +20,17 @@ export class LoginResponseService {
 
   @Field({ nullable: true })
   refreshToken?: string;
+
+  @Field({ nullable: true })
+  expAccessToken?: number;
 }
 @ObjectType()
 export class LoginResponse {
   @Field(() => User, { nullable: true })
   user?: User | unknown;
+
+  @Field({ nullable: true })
+  expAccessToken?: number;
 }
 
 @ObjectType()
@@ -43,7 +49,7 @@ export class RegisterResponse {
 }
 
 @ObjectType()
-export class RefreshTokenResponse {
+export class RefreshTokenResponseService {
   @Field()
   accessToken: string;
 
@@ -52,6 +58,12 @@ export class RefreshTokenResponse {
 
   @Field(() => ErrorType, { nullable: true })
   error?: ErrorType;
+}
+
+@ObjectType()
+export class RefreshTokenResponse {
+  @Field()
+  message: string;
 }
 
 @ObjectType()

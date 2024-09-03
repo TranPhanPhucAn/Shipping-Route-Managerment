@@ -44,13 +44,14 @@ export class AuthService {
       console.log(err);
     }
     if (isMatch) {
-      const token = this.createAccessToken(user).token;
+      const { token, expAccessToken } = this.createAccessToken(user);
       const refreshToken = this.createRefreshToken(user).token;
       this.usersRepository.update(user.id, { refreshToken: refreshToken });
       return {
         user,
         accessToken: token,
         refreshToken: refreshToken,
+        expAccessToken: expAccessToken,
       };
     }
     throw new GraphQLError('Invalid email or password', {
@@ -70,7 +71,11 @@ export class AuthService {
     return { message: 'Logout out successfull' };
   };
 
-  createAccessToken(user: User): { data: JWTPayload; token: string } {
+  createAccessToken(user: User): {
+    data: JWTPayload;
+    token: string;
+    expAccessToken: number;
+  } {
     const data: JWTPayload = {
       userId: user.id,
       email: user.email,
@@ -78,9 +83,11 @@ export class AuthService {
       // permission: user.permission,
     };
     const jwt = this.jwtService.sign(data);
+    const decodedToken = this.jwtService.decode(jwt) as { exp: number };
     return {
       data,
       token: jwt,
+      expAccessToken: decodedToken.exp,
     };
   }
   createRefreshToken(user: User): { data: JWTPayload; token: string } {
@@ -123,10 +130,15 @@ export class AuthService {
       secret: process.env.REFRESH_SECRET,
       expiresIn: process.env.EXPIRES_IN_REFRESH,
     });
+    const decodedToken = this.jwtService.decode(accessToken) as { exp: number };
 
     this.usersRepository.update(user.userId, {
       refreshToken: refreshToken,
     });
-    return { accessToken: accessToken, refreshToken: refreshToken };
+    return {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      expAccessToken: decodedToken.exp,
+    };
   };
 }

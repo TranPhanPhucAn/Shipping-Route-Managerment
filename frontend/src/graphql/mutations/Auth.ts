@@ -43,3 +43,11 @@ export const ACTIVATE_ACCOUNT = gql`
     }
   }
 `;
+
+export const REFRESH_TOKEN = gql`
+  mutation {
+    refreshToken {
+      message
+    }
+  }
+`;

@@ -50,6 +50,7 @@ const Login: React.FC = () => {
         password: password,
         redirect: false,
       })) as SignInResponse;
+
       console.log("response credentials: ", res);
       // const response = await loginUser({
       //   variables: {

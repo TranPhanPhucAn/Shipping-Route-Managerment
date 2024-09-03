@@ -6,8 +6,9 @@ import "./homepage.scss";
 import Image from "next/image";
 import GridListView from "../components/GridListView/GridListView";
 import GridCardList from "../components/GridCardList/GridCardList";
+import { QUERY_USER } from "../graphql/queries/query";
 
-const HomePage: React.FC = () => {
+const HomePage: React.FC = async () => {
   const imageTech: string[] = [
     "/logotechno/nest.png",
     "/logotechno/next2.png",

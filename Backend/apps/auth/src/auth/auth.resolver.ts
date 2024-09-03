@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Context, Mutation } from '@nestjs/graphql';
+import { Resolver, Args, Context, Mutation } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { Auth } from './entities/auth.entity';
 import { LoginInput } from './dto/auth.dto';
@@ -25,7 +25,7 @@ export class AuthResolver {
     try {
       const result = await this.authService.loginUserByPassword(loginInput);
       if (result) {
-        const { accessToken, refreshToken } = result;
+        const { user, accessToken, refreshToken, expAccessToken } = result;
         const expires = new Date(Date.now() + 1 * 60 * 60 * 1000);
         context.res.cookie('access_token', 'Bearer ' + accessToken, {
           httpOnly: true,
@@ -41,7 +41,10 @@ export class AuthResolver {
           secure: true,
           expires,
         });
-        return result;
+        return {
+          user: user,
+          expAccessToken: expAccessToken,
+        };
       }
       throw new GraphQLError('Could not login with provided data', {
         extensions: {
@@ -61,9 +64,30 @@ export class AuthResolver {
     return await this.authService.logoutUser(context.req.headers);
   }
 
-  @Query(() => RefreshTokenResponse, { name: 'refreshToken' })
+  @Mutation(() => RefreshTokenResponse)
   @UseGuards(JwtAuthGuard)
-  async refreshToken(@Context('req') request: any) {
-    return await this.authService.refreshToken(request.user);
+  async refreshToken(@Context('req') request: any, @Context() context: any) {
+    const result = await this.authService.refreshToken(request.user);
+    const { accessToken, refreshToken, expAccessToken } = result;
+    const expires = new Date(Date.now() + 1 * 60 * 60 * 1000);
+    context.res.cookie('access_token', 'Bearer ' + accessToken, {
+      httpOnly: true,
+      sameSite: 'none',
+      path: '/',
+      secure: true,
+      expires,
+    });
+    context.res.cookie('refresh_token', 'Bearer ' + refreshToken, {
+      httpOnly: true,
+      sameSite: 'none',
+      path: '/',
+      secure: true,
+      expires,
+    });
+    return {
+      message: 'Refresh token successfull!',
+      expAccessToken: expAccessToken,
+    };
+    // return await this.authService.refreshToken(request.user);
   }
 }
