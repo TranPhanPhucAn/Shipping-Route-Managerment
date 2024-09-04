@@ -1,4 +1,4 @@
-import { getToken } from "next-auth/jwt";
+import { encode, getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -9,13 +9,117 @@ const authPaths = ["/login", "/register"];
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const token = await getToken({ req: request });
-  // console.log("token: ", token);
+  if (token && token.isLogin === true) {
+    if (token.expAccessToken - Date.now() < 10 * 1000) {
+      const accessToken = request.cookies.get("access_token")?.value || "";
+      const refreshToken = request.cookies.get("refresh_token")?.value || "";
+      console.log("accesstoken: ", accessToken);
+      console.log("refreshToken: ", accessToken);
+
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URI!, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Cookie: `access_token=${accessToken}; refresh_token=${refreshToken}`,
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            query: `
+                  mutation refreshToken{
+                    refreshToken {
+                      message
+                      expAccessToken
+                    }
+                  }
+                `,
+          }),
+        });
+        const { data, errors } = await response.json();
+        const expAccessToken = data?.refreshToken?.expAccessToken;
+
+        if (errors) {
+          console.log("errors:", errors[0]);
+          const res = NextResponse.redirect(new URL("/login", request.url));
+
+          res.cookies.set("access_token", "", {
+            maxAge: 0,
+            path: "/",
+            httpOnly: true,
+          });
+
+          res.cookies.set("refresh_token", "", {
+            maxAge: 0,
+            path: "/",
+            httpOnly: true,
+          });
+          token.isLogin = false;
+          const newEncodedToken = await encode({
+            token: token,
+            secret: process.env.NEXTAUTH_SECRET!,
+          });
+          res.cookies.set("next-auth.session-token", "", {
+            maxAge: 0,
+            path: "/",
+            httpOnly: true,
+          });
+          return res;
+        }
+        const res = NextResponse.redirect(request.url);
+        const cookiesList = response.headers.get("set-cookie");
+        if (cookiesList) {
+          // Correctly handle splitting multiple cookies, considering commas in Expires attributes
+          const cookiesArray =
+            cookiesList.match(
+              /(?<=^|,)([^,]*?Expires=.*?GMT);?(\s*HttpOnly)?(\s*Secure)?(\s*SameSite=None)?/g
+            ) || [];
+          console.log("cookieArray: ", cookiesArray);
+          cookiesArray.forEach((cookie) => {
+            const [nameValuePair, ...cookieAttributes] = cookie.split("; ");
+            const [name, value] = nameValuePair.split("=");
+            let valueSetCooki = decodeURIComponent(value);
+            const expiresAttribute = cookieAttributes.find((attr) =>
+              attr.startsWith("Expires=")
+            );
+            let expires;
+            if (expiresAttribute) {
+              expires = new Date(expiresAttribute.split("=")[1]);
+            }
+            res.cookies.set(name, valueSetCooki, {
+              httpOnly: cookieAttributes.includes("HttpOnly"),
+              secure: cookieAttributes.includes("Secure"),
+              sameSite: cookieAttributes.includes("SameSite=None")
+                ? "none"
+                : undefined,
+              expires: expires ? expires : undefined,
+            });
+          });
+          token.expAccessToken = expAccessToken * 1000;
+          const newEncodedToken = await encode({
+            token: token,
+            secret: process.env.NEXTAUTH_SECRET!,
+          });
+
+          res.cookies.set("next-auth.session-token", newEncodedToken, {
+            httpOnly: true,
+            secure: true,
+          });
+          return res;
+        }
+      } catch (e: any) {
+        console.log("error: ", e);
+      }
+    }
+  }
   if (!token && privatePaths.some((path) => pathname.startsWith(path))) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
-
   // Redirect to home if trying to access auth paths with a token
   if (token && authPaths.some((path) => pathname.startsWith(path))) {
+    if (token.isLogin === false && pathname === "/login") {
+      console.log("get middleware err");
+      return NextResponse.next();
+    }
     return NextResponse.redirect(new URL("/", request.url));
   }
   return NextResponse.next();

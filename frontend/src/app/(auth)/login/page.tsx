@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../../graphql/mutations/Auth";
 import { useRouter } from "next/navigation";
@@ -25,7 +25,7 @@ import styles from "../../../styles/Auth.module.css";
 import RegisterImage from "./Register.png";
 import Image from "next/image";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import type { SignInResponse } from "next-auth/react";
 
 const Login: React.FC = () => {
@@ -33,7 +33,6 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const [loginUser, { loading, error }] = useMutation(LOGIN_USER);
   const router = useRouter();
-
   const handleLogin = async () => {
     try {
       let re =

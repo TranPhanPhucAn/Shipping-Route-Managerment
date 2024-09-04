@@ -2,12 +2,7 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { client } from "@/src/graphql/Provider";
-import { LOGIN_USER, REFRESH_TOKEN } from "@/src/graphql/mutations/Auth";
 import { NextApiRequest, NextApiResponse } from "next";
-
-import { cookies } from "next/headers";
-import loginfetch from "@/src/app/(auth)/login/login";
 
 // import fetch from "node-fetch";
 type NextAuthOptionsCallback = (
@@ -35,21 +30,6 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
             password: string;
           };
           try {
-            // const response = await client.mutate({
-            //   mutation: LOGIN_USER,
-            //   variables: {
-            //     loginInput: {
-            //       email,
-            //       password,
-            //     },
-            //   },
-            //   context: {
-            //     fetchOptions: {
-            //       credentials: "include",
-            //     },
-            //   },
-            // });
-
             const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URI!, {
               method: "POST",
               headers: {
@@ -79,12 +59,6 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
             });
             const cookiesList = response.headers.get("set-cookie");
 
-            // const response = await loginfetch(email, password);
-            // if (!response.cookiesList) {
-            //   throw new Error(response.parsedRes.errors[0].message);
-            // }
-            // const cookiesList = response.cookiesList;
-
             if (cookiesList) {
               // Correctly handle splitting multiple cookies, considering commas in Expires attributes
               const cookiesArray =
@@ -92,20 +66,6 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
                   /(?<=^|,)([^,]*?Expires=.*?GMT);?(\s*HttpOnly)?(\s*Secure)?(\s*SameSite=None)?/g
                 ) || [];
               res.setHeader("Set-Cookie", cookiesArray);
-              // const accessToken = cookiesList.split(";")[0].split("=")[1];
-              // console.log("accesstoken: ", accessToken);
-              // cookies().set({
-              //   name: "access_token",
-              //   value: accessToken,
-              //   secure: true,
-              //   httpOnly: true,
-              //   expires: new Date(Date.now() + 1 * 60 * 60 * 1000),
-              // });
-              // res.setHeader("Set-Cookie", [
-              //   `access_token=${accessToken}; Path=/; HttpOnly; Secure; SameSite=None; Expires=${new Date(
-              //     Date.now() + 1 * 60 * 60 * 1000
-              //   ).toUTCString()}`,
-              // ]);
               console.log("abcxyz");
             }
             const { data, errors } = await response.json();
@@ -141,62 +101,22 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
     callbacks: {
       async jwt({ token, user }) {
         console.log("get jwt: ", token);
-        // const cookieStore = cookies();
-        // const acceess = cookieStore.get("access_token");
-        // console.log("cookies store: ", cookieStore);
-        // console.log("access token: ", acceess);
-
         if (user) {
           token.id = user.id;
           token.email = user.email;
           token.username = user.username;
           token.address = user.address;
           token.expAccessToken = user.expAccessToken * 1000;
-        }
-        console.log("Date: ", Date.now());
-        if (token.expAccessToken - Date.now() < 30 * 1000) {
-          const accessToken = req?.cookies["access_token"];
-          const refreshToken = req?.cookies["refresh_token"];
-
-          try {
-            const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URI!, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Cookie: `access_token=${accessToken}; refresh_token=${refreshToken}`,
-              },
-              credentials: "include",
-              body: JSON.stringify({
-                query: `
-                  mutation refreshToken{
-                    refreshToken {
-                      message
-                    }
-                  }
-                `,
-              }),
-            });
-            const cookiesList = response.headers.get("set-cookie");
-            if (cookiesList) {
-              // Correctly handle splitting multiple cookies, considering commas in Expires attributes
-              const cookiesArray =
-                cookiesList.match(
-                  /(?<=^|,)([^,]*?Expires=.*?GMT);?(\s*HttpOnly)?(\s*Secure)?(\s*SameSite=None)?/g
-                ) || [];
-              res.setHeader("Set-Cookie", cookiesArray);
-            }
-          } catch (e: any) {
-            // console.log("error 1: ", e.networkError.result);
-            console.log("error: ", e);
-          }
+          token.isLogin = true;
         }
         return token;
       },
 
       async session({ token, user, session }) {
-        // console.log("get session");
+        console.log("get session");
 
         if (token) {
+          console.log("islogin: ", token.isLogin);
           return {
             ...session,
             user: {
@@ -204,6 +124,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
               id: token.id,
               username: token.username,
               address: token.address,
+              isLogin: token.isLogin,
             },
           };
         }
@@ -212,7 +133,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
     },
     pages: {
       signIn: "/login",
-      signOut: "/",
+      // signOut: "/login",
     },
   };
 };

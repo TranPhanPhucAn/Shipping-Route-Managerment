@@ -64,6 +64,9 @@ export class RefreshTokenResponseService {
 export class RefreshTokenResponse {
   @Field()
   message: string;
+
+  @Field()
+  expAccessToken: number;
 }
 
 @ObjectType()
