@@ -49,11 +49,6 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
   try {
     // console.log('check cookies: ', req.cookies['access_token']);
     const accesstoken = req.cookies['access_token'];
-    const refreshtoken = req.cookies['refresh_token'];
-
-    console.log('token: ', accesstoken);
-    console.log('refresh token: ', refreshtoken);
-
     let userId: string = '';
     let email: string = '';
     // const refreshToken: string = req.headers.refreshtoken;
