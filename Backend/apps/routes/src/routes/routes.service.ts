@@ -1,56 +1,50 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Route } from './entities/route.entity';
 import { Repository } from 'typeorm';
+import { Route } from './entities/route.entity';
 import { CreateRouteInput } from './dto/create-route.input';
-import { ClientGrpc } from '@nestjs/microservices';
-import { UserServiceClient } from 'proto/user';
-// import { UpdateRouteInput } from './dto/update-route.input';
+import { UpdateRouteInput } from './dto/update-route.input';
 
 @Injectable()
-export class RoutesService implements OnModuleInit {
+export class RoutesService {
   constructor(
     @InjectRepository(Route)
-    private routesRepository: Repository<Route>,
-    @Inject('USER_SERVICE') private readonly client: ClientGrpc,
+    private routeRepository: Repository<Route>,
   ) {}
 
-  create = async (createRouteInput: CreateRouteInput): Promise<Route> => {
-    const routeEntity = this.routesRepository.create();
-    const newRoute = {
-      ...routeEntity,
-      ...createRouteInput,
-    };
-    const route: Route | undefined = await this.routesRepository.save(newRoute);
-    return route;
-  };
+  async create(createRouteInput: CreateRouteInput): Promise<Route> {
+    const newRoute = this.routeRepository.create(createRouteInput);
+    return this.routeRepository.save(newRoute);
+  }
+
   async findAll(): Promise<Route[]> {
-    return await this.routesRepository.find();
+    return this.routeRepository.find();
   }
 
   async findOne(id: string): Promise<Route> {
-    return await this.routesRepository.findOne({ where: { id: id } });
+    const route = await this.routeRepository.findOneBy({ id });
+    if (!route) {
+      throw new NotFoundException(`Route with ID "${id}" not found`);
+    }
+    return route;
   }
 
-  // update(id: number, updateRouteInput: UpdateRouteInput) {
-  //   return `This action updates a #${id} route`;
-  // }
+  async update(id: string, updateRouteInput: UpdateRouteInput): Promise<Route> {
+    const route = await this.routeRepository.preload({
+      id: id,
+      ...updateRouteInput,
+    });
 
-  remove(id: number) {
-    return `This action removes a #${id} route`;
+    if (!route) {
+      throw new NotFoundException(`Route with ID "${id}" not found`);
+    }
+
+    return this.routeRepository.save(route);
   }
 
-  async forUser(id: string) {
-    return await this.routesRepository.find({ where: { userId: id } });
-  }
-
-  private userService: UserServiceClient;
-
-  onModuleInit() {
-    this.userService = this.client.getService<UserServiceClient>('UserService');
-  }
-
-  getUser(id: string) {
-    return this.userService.getUser({ id });
+  async remove(id: string): Promise<Route> {
+    const route = await this.findOne(id);
+    await this.routeRepository.remove(route);
+    return route;
   }
 }

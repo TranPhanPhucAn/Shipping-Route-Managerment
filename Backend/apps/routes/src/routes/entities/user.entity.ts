@@ -5,10 +5,10 @@ import { Route } from './route.entity';
 // @Directive('@extends')
 @Directive('@key(fields: "id")')
 export class User {
-  @Field((type) => ID)
+  @Field(() => ID)
   // @Directive('@external')
   id: string;
 
-  @Field((type) => [Route])
+  @Field(() => [Route])
   routes?: Route[];
 }
