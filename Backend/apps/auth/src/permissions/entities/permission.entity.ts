@@ -4,41 +4,26 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn,
+  ManyToMany,
   // UpdateDateColumn,
 } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
 @Entity()
 @ObjectType()
 @Directive('@key(fields: "id")')
-export class User {
+export class Permission {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   id: string;
 
   @Column()
   @Field()
-  email: string;
+  permission: string;
 
   @Column()
   @Field()
-  username: string;
+  description: string;
 
-  @Column()
-  password: string;
-
-  @Column()
-  @Field()
-  address: string;
-
-  @Column({
-    type: 'text',
-    nullable: true,
-  })
-  refreshToken: string | null;
-
-  @ManyToOne(() => Role, (role) => role.users)
-  @JoinColumn({ name: 'roleId' })
-  role: Role;
+  @ManyToMany(() => Role, (role) => role.permissions)
+  roles: Role[];
 }

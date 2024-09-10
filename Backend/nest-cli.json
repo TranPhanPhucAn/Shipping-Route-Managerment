@@ -4,12 +4,10 @@
   "sourceRoot": "apps/gateway/src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "webpack": true,
-    "tsConfigPath": "apps/gateway/tsconfig.app.json",
-    "assets": ["**/*.proto"]
+    "webpack": false,
+    "assets": ["**/*.proto", "db-migration"]
   },
   "monorepo": true,
-  "root": "apps/gateway",
   "projects": {
     "gateway": {
       "type": "application",

@@ -32,8 +32,6 @@ export class JwtAuthGuard implements CanActivate {
       const user = await this.usersRepository.findOne({
         where: { id: payload.userId },
       });
-      console.log('refresh token database: ', user.refreshToken);
-      console.log('refresh token fe: ', token);
 
       if (user.refreshToken !== token) {
         throw new GraphQLError('Please login again', {

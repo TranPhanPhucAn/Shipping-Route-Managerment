@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
-import { IntrospectAndCompose, RemoteGraphQLDataSource } from '@apollo/gateway';
+import { IntrospectAndCompose } from '@apollo/gateway';
 import * as dotenv from 'dotenv';
 import { AuthModule } from './auth/auth.module';
 import { handleAuth } from './auth.context';

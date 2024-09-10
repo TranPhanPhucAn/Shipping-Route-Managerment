@@ -9,13 +9,12 @@ const authPaths = ["/login", "/register"];
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const token = await getToken({ req: request });
-  if (token && token.isLogin === true) {
+
+  if (token) {
     if (token.expAccessToken - Date.now() < 10 * 1000) {
+      console.log("date: ", Date.now());
       const accessToken = request.cookies.get("access_token")?.value || "";
       const refreshToken = request.cookies.get("refresh_token")?.value || "";
-      console.log("accesstoken: ", accessToken);
-      console.log("refreshToken: ", accessToken);
-
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URI!, {
           method: "POST",
@@ -112,6 +111,7 @@ export async function middleware(request: NextRequest) {
     }
   }
   if (!token && privatePaths.some((path) => pathname.startsWith(path))) {
+    console.log("alo");
     return NextResponse.redirect(new URL("/login", request.url));
   }
   // Redirect to home if trying to access auth paths with a token

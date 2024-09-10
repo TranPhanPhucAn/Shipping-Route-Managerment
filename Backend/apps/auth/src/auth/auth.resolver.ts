@@ -1,6 +1,5 @@
 import { Resolver, Args, Context, Mutation } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { Auth } from './entities/auth.entity';
 import { LoginInput } from './dto/auth.dto';
 import {
   LoginResponse,
@@ -13,7 +12,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guards';
 import { GraphQLError } from 'graphql';
 // import { AuthUserGuard } from './guards/auth.guards';
 
-@Resolver(() => Auth)
+@Resolver()
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 

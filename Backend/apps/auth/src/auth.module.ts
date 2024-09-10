@@ -17,6 +17,10 @@ import { CacheModule } from '@nestjs/cache-manager';
 // import { redisStore } from 'cache-manager-redis-store';
 import * as redisStore from 'cache-manager-redis-store';
 // import { GraphQLError, GraphQLFormattedError } from 'graphql';
+import { RolesModule } from './roles/roles.module';
+import { PermissionsModule } from './permissions/permissions.module';
+import { join } from 'path';
+import { dataSourceOptions } from 'db-migration/data-source';
 
 interface OriginalError {
   message: string[];
@@ -60,18 +64,7 @@ interface OriginalError {
         };
       },
     }),
-    TypeOrmModule.forRoot({
-      type: process.env.TYPE_DB as 'postgres',
-      host: process.env.HOST,
-      port: parseInt(process.env.POSTGRES_PORT, 10),
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      // entities: [User],
-      // entities: [join(__dirname, '/**/**.entity{.ts,.js}')],
-      autoLoadEntities: true,
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
     UsersModule,
     HealthModule,
     AuthenModule,
@@ -88,6 +81,8 @@ interface OriginalError {
         ttl: 60,
       }),
     }),
+    RolesModule,
+    PermissionsModule,
   ],
   providers: [],
   controllers: [UserGrpcServiceController],
