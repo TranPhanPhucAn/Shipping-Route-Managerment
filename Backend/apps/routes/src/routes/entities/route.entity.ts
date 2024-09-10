@@ -1,35 +1,71 @@
-/* eslint-disable prettier/prettier */
-import { ObjectType, Field, ID, Directive } from '@nestjs/graphql';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './user.entity';
-@Entity()
-@Directive('@key(fields:"id")')
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  // ManyToOne,
+  // JoinColumn,
+} from 'typeorm';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
+// import { Port } from '../../ports/entities/port.entity';
+// import { User } from './user.entity';
+
 @ObjectType()
+@Entity()
 export class Route {
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
   id: string;
 
-  @Column()
-  @Field()
-  departure: string;
+  // @Field(() => Port)
+  // departurePort: Port;
 
-  @Column()
-  @Field()
-  destination: string;
+  // @Field(() => Port)
+  // @ManyToOne(() => Port)
+  // @JoinColumn({ name: 'departure_port_id' })
+  // departurePortId: string;
 
-  @Column()
-  @Field()
-  transportation: string;
+  // @Field(() => Port)
+  // destinationPort: Port;
 
-  @Column()
-  @Field()
-  duration: string;
+  // @Field(() => Port)
+  // @ManyToOne(() => Port)
+  // @JoinColumn({ name: 'destination_port_id' })
+  // destinationPortId: string;
 
-  @Field(() => User)
-  user: User;
-
-  @Column()
   @Field()
-  userId: string;
+  @Column()
+  departurePort: string;
+
+  @Field()
+  @Column()
+  destinationPort: string;
+
+  @Field()
+  @Column('float')
+  distance: number;
+
+  @Field()
+  @Column('int')
+  estimatedTime: number;
+
+  @Field()
+  @Column('float')
+  price: number;
+
+  // @Field(() => User)
+  // user: User;
+
+  // @Column()
+  // @Field()
+  // userId: string;
+
+  @Field()
+  @CreateDateColumn()
+  created_at: Date;
+
+  @Field()
+  @UpdateDateColumn()
+  updated_at: Date;
 }
