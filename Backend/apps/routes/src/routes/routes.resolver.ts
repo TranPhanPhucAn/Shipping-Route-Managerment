@@ -27,16 +27,13 @@ export class RoutesResolver {
 
   @Mutation(() => Route)
   async updateRoute(
-    @Args('id', { type: () => ID }) id: string,
     @Args('updateRouteInput') updateRouteInput: UpdateRouteInput,
   ): Promise<Route> {
-    return this.routeService.update(id, updateRouteInput);
+    return this.routeService.update(updateRouteInput.id, updateRouteInput);
   }
 
   @Mutation(() => Route)
-  async removeRoute(
-    @Args('id', { type: () => ID }) id: string,
-  ): Promise<Route> {
-    return this.routeService.remove(id);
+  async removeROute(@Args('id', { type: () => Number }) id: number) {
+    return this.routeService.delete(id);
   }
 }

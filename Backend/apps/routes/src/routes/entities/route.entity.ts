@@ -4,12 +4,12 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
+  // ManyToOne,
+  // JoinColumn,
 } from 'typeorm';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Port } from '../../ports/entities/port.entity';
-import { User } from './user.entity';
+// import { Port } from '../../ports/entities/port.entity';
+// import { User } from './user.entity';
 
 @ObjectType()
 @Entity()
@@ -18,15 +18,29 @@ export class Route {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Field(() => Port)
-  @ManyToOne(() => Port, { eager: true })
-  @JoinColumn({ name: 'departure_port_name' })
-  departurePort: Port;
+  // @Field(() => Port)
+  // departurePort: Port;
 
-  @Field(() => Port)
-  @ManyToOne(() => Port, { eager: true })
-  @JoinColumn({ name: 'destination_port_name' })
-  destinationPort: Port;
+  // @Field(() => Port)
+  // @ManyToOne(() => Port)
+  // @JoinColumn({ name: 'departure_port_id' })
+  // departurePortId: string;
+
+  // @Field(() => Port)
+  // destinationPort: Port;
+
+  // @Field(() => Port)
+  // @ManyToOne(() => Port)
+  // @JoinColumn({ name: 'destination_port_id' })
+  // destinationPortId: string;
+
+  @Field()
+  @Column()
+  departurePort: string;
+
+  @Field()
+  @Column()
+  destinationPort: string;
 
   @Field()
   @Column('float')
@@ -40,12 +54,12 @@ export class Route {
   @Column('float')
   price: number;
 
-  @Field(() => User)
-  user: User;
+  // @Field(() => User)
+  // user: User;
 
-  @Column()
-  @Field()
-  userId: string;
+  // @Column()
+  // @Field()
+  // userId: string;
 
   @Field()
   @CreateDateColumn()

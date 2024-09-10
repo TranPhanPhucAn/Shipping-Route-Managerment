@@ -1,15 +1,15 @@
-import { IsNotEmpty, IsUUID, IsInt, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsInt, IsNumber } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateRouteInput {
   @Field()
   @IsNotEmpty()
-  departurePortName: string;
+  departurePort: string;
 
   @Field()
   @IsNotEmpty()
-  destinationPortName: string;
+  destinationPort: string;
 
   @Field()
   @IsNotEmpty()
@@ -19,15 +19,15 @@ export class CreateRouteInput {
   @Field()
   @IsNotEmpty()
   @IsInt()
-  estimated_time: number;
+  estimatedTime: number;
 
   @Field()
   @IsNotEmpty()
   @IsNumber()
   price: number;
 
-  @Field()
-  @IsNotEmpty()
-  @IsUUID()
-  userId: string;
+  // @Field()
+  // @IsNotEmpty()
+  // @IsUUID()
+  // userId: string;
 }

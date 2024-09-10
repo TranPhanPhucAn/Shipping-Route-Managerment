@@ -30,21 +30,11 @@ export class RoutesService {
   }
 
   async update(id: string, updateRouteInput: UpdateRouteInput): Promise<Route> {
-    const route = await this.routeRepository.preload({
-      id: id,
-      ...updateRouteInput,
-    });
-
-    if (!route) {
-      throw new NotFoundException(`Route with ID "${id}" not found`);
-    }
-
-    return this.routeRepository.save(route);
+    await this.routeRepository.update(id, updateRouteInput);
+    return await this.routeRepository.findOne({ where: { id: id } });
   }
 
-  async remove(id: string): Promise<Route> {
-    const route = await this.findOne(id);
-    await this.routeRepository.remove(route);
-    return route;
+  async delete(id: number): Promise<void> {
+    await this.routeRepository.delete(id);
   }
 }
