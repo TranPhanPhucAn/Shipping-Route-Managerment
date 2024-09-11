@@ -21,6 +21,7 @@ import { RolesModule } from './roles/roles.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { join } from 'path';
 import { dataSourceOptions } from 'db-migration/data-source';
+import { SeedingModule } from './seeding/seeding.module';
 
 interface OriginalError {
   message: string[];
@@ -69,6 +70,7 @@ interface OriginalError {
     HealthModule,
     AuthenModule,
     EmailModule,
+    SeedingModule,
     CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -83,6 +85,7 @@ interface OriginalError {
     }),
     RolesModule,
     PermissionsModule,
+    SeedingModule,
   ],
   providers: [],
   controllers: [UserGrpcServiceController],

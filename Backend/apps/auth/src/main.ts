@@ -14,7 +14,9 @@ async function bootstrap() {
     transport: Transport.GRPC,
     options: {
       package: 'user',
-      protoPath: join(__dirname, '_proto/user.proto'),
+      // protoPath: join(__dirname, '_proto/user.proto'),
+      protoPath: 'dist/_proto/user.proto',
+
       url: 'localhost:50052', // URL and port for gRPC server
     },
   });

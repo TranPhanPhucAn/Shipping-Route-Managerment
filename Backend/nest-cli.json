@@ -5,7 +5,7 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": false,
-    "assets": ["**/*.proto", "db-migration"]
+    "assets": ["db-migration", "**/*.proto"]
   },
   "monorepo": true,
   "projects": {
