@@ -10,3 +10,19 @@ export const QUERY_USER = gql`
     }
   }
 `;
+
+export const GET_ROUTES = gql`
+  query {
+    routes {
+      id
+      departurePort {
+        name
+      }
+      destinationPort {
+        name
+      }
+      distance
+      createdAt
+    }
+  }
+`;

@@ -21,3 +21,19 @@ export interface ActivationDto {
   activationCode: string;
   activationToken: string;
 }
+
+export interface Port {
+  name: string;
+}
+
+export interface Route {
+  id: string;
+  departurePort: Port;
+  destinationPort: Port;
+  distance: number;
+  createdAt: string;
+}
+
+export interface GetRoutesData {
+  routes: Route[];
+}

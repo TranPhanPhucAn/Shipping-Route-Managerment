@@ -51,3 +51,15 @@ export const REFRESH_TOKEN = gql`
     }
   }
 `;
+
+export const CREATE_ROUTE = gql`
+  mutation createRoute($createRouteInput:CreateRouteInput!){
+      createRoute(createRouteInput:$createRouteInput){
+      id
+      departurePort
+      destinationPort
+      distance
+      }
+    }
+`;
+
