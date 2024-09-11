@@ -13,8 +13,8 @@ dotenv.config();
           host: process.env.SMTP_HOST,
           secure: true,
           auth: {
-            user: process.env.SMTP_MAIL,
-            pass: process.env.SMTP_PASSWORD,
+            user: 'an.tran.clv@gmail.com',
+            pass: 'syvi shdk rnkq ntpg',
           },
         },
         defaults: {

@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { PortsService } from './ports.service';
 import { Port } from './entities/port.entity';
 import { CreatePortInput } from './dto/create-port.input';
@@ -21,20 +21,22 @@ export class PortsResolver {
   }
 
   @Query(() => Port, { name: 'port' })
-  async findOne(@Args('id', { type: () => ID }) id: string): Promise<Port> {
+  async findOne(@Args('ID', { type: () => String }) id: string): Promise<Port> {
     return this.portService.findOne(id);
   }
 
   @Mutation(() => Port)
   async updatePort(
-    @Args('id', { type: () => ID }) id: string,
+    @Args('ID', { type: () => String }) id: string,
     @Args('updatePortInput') updatePortInput: UpdatePortInput,
   ): Promise<Port> {
     return this.portService.update(id, updatePortInput);
   }
 
   @Mutation(() => Port)
-  async removePort(@Args('id', { type: () => ID }) id: string): Promise<Port> {
+  async removePort(
+    @Args('ID', { type: () => String }) id: string,
+  ): Promise<Port> {
     return this.portService.remove(id);
   }
 }
