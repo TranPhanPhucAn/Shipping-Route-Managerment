@@ -12,10 +12,11 @@ import * as redisStore from 'cache-manager-redis-store';
 // import { Role } from '../roles/entities/role.entity';
 import { EmailService } from '../email/email.service';
 import { Role } from '../roles/entities/role.entity';
+import { Permission } from '../permissions/entities/permission.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Role]),
+    TypeOrmModule.forFeature([User, Role, Permission]),
     forwardRef(() => AuthenModule),
     CacheModule.registerAsync({
       imports: [ConfigModule],

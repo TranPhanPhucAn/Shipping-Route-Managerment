@@ -1,5 +1,6 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
+import { Route } from '../routes/entities/route.entity';
 dotenv.config();
 
 export const dataSourceOptions: DataSourceOptions = {
@@ -9,7 +10,8 @@ export const dataSourceOptions: DataSourceOptions = {
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
-  entities: ['dist/apps/**/**/**/entities/*{.js,.ts}'],
+  // entities: ['dist/apps/**/**/**/entities/*{.js,.ts}'],
+  entities: [Route],
   migrations: ['migrations/**'],
 };
 const dataSource = new DataSource(dataSourceOptions);

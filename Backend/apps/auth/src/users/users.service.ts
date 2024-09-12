@@ -17,6 +17,7 @@ import {
 import { GraphQLError } from 'graphql';
 import { Role } from '../roles/entities/role.entity';
 import { GetUserResponse } from '../proto/user';
+import { Permission } from '../permissions/entities/permission.entity';
 
 @Injectable()
 export class UsersService {
@@ -27,6 +28,8 @@ export class UsersService {
     private readonly jwtService: JwtService,
     @InjectRepository(Role)
     private readonly rolesRepository: Repository<Role>,
+    @InjectRepository(Permission)
+    private readonly permissionsRepository: Repository<Permission>,
   ) {}
 
   async create(createUserInput: CreateUserInput) {
@@ -106,16 +109,27 @@ export class UsersService {
   }
 
   async findOneById(id: string): Promise<User> {
-    return await this.usersRepository.findOne({ where: { id: id } });
+    return await this.usersRepository.findOne({
+      where: { id: id },
+      relations: { role: true },
+    });
   }
 
   async findOneByIdService(userId: string): Promise<GetUserResponse> {
-    const result = await this.findOneById(userId);
-    const { id, username, email } = result;
+    const resultUser = await this.findOneById(userId);
+    const { id, username, email, role } = resultUser;
+    const resultPermissions = await this.rolesRepository.findOne({
+      where: { id: role.id },
+      relations: { permissions: true },
+    });
+    const permissions = resultPermissions.permissions.map(
+      (perm) => perm.permission,
+    );
     return {
       id: id,
       name: username,
       email: email,
+      permissions: permissions,
     };
   }
 

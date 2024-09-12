@@ -18,6 +18,7 @@ export interface GetUserResponse {
   id: string;
   name: string;
   email: string;
+  permissions: string[];
 }
 
 export const USER_PACKAGE_NAME = "user";

@@ -25,6 +25,8 @@ import {
   PaginationUserDto,
   ResetPasswordDto,
 } from './dto/user.dto';
+import { SetMetadata, UseGuards } from '@nestjs/common';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
 
 @Resolver((of) => User)
 export class UsersResolver {
@@ -41,11 +43,15 @@ export class UsersResolver {
     return await this.usersService.activateUser(activationDto);
   }
 
+  @SetMetadata('permissions', ['get:users'])
+  @UseGuards(PermissionsGuard)
   @Query(() => [User], { name: 'users' })
   findAll() {
     return this.usersService.findAll();
   }
 
+  @SetMetadata('permissions', ['get:user'])
+  @UseGuards(PermissionsGuard)
   @Query(() => User, { name: 'user' })
   findOne(@Args('id') id: string) {
     return this.usersService.findOneById(id);
@@ -57,11 +63,14 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
+  @UseGuards(PermissionsGuard)
+  @SetMetadata('permissions', ['update:user'])
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
     return this.usersService.update(updateUserInput.id, updateUserInput);
   }
 
   @Mutation(() => User)
+  @UseGuards(PermissionsGuard)
   removeUser(@Args('id', { type: () => Int }) id: number) {
     return this.usersService.delete(id);
   }
