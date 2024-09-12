@@ -4,7 +4,8 @@ import { Route } from './entities/route.entity';
 import { Repository } from 'typeorm';
 import { CreateRouteInput } from './dto/create-route.input';
 import { ClientGrpc } from '@nestjs/microservices';
-import { UserServiceClient } from 'proto/user';
+import { UserServiceClient } from '../proto/user';
+// import { UserServiceClient } from 'proto/user';
 // import { UpdateRouteInput } from './dto/update-route.input';
 
 @Injectable()

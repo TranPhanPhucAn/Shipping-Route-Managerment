@@ -21,8 +21,8 @@ import { join } from 'path';
             url: 'localhost:50052', // URL where UserService is running
             package: 'user',
             // protoPath: 'apps/routes/src/routes/_proto/user.proto',
-            // protoPath: join(__dirname, './routes/_proto/user.proto'),
-            protoPath: 'dist/_proto/user.proto',
+            protoPath: join(__dirname, '../routes/_proto/user.proto'),
+            // protoPath: 'dist/_proto/user.proto',
           },
         });
       },

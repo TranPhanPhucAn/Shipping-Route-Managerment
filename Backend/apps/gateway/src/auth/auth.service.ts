@@ -1,9 +1,10 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-import { UserServiceClient } from 'proto/user';
+// import { UserServiceClient } from 'proto/user';
 import { firstValueFrom } from 'rxjs';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { UserServiceClient } from '../proto/user';
 
 @Injectable()
 export class AuthService implements OnModuleInit {

@@ -5,11 +5,12 @@ import {
   GetUserRequest,
   // GetUserResponse,
   UserServiceControllerMethods,
-} from 'proto/user';
-import { UserServiceController } from 'proto/user';
+} from '../proto/user';
+// import { UserServiceController } from 'proto/user';
 // import { Observable } from 'rxjs';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { UserServiceController } from '../proto/user';
 @Controller()
 @UserServiceControllerMethods()
 export class UserGrpcServiceController implements UserServiceController {

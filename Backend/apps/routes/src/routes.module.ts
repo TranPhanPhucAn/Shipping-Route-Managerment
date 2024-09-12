@@ -10,7 +10,8 @@ import { ConfigModule } from '@nestjs/config';
 import { RouteModule } from './routes/routes.module';
 import { HealthModule } from './health/health.module';
 import { User } from './routes/entities/user.entity';
-import { dataSourceOptions } from 'db-migration/data-source';
+import { dataSourceOptions } from './db-migration/data-source';
+// import { dataSourceOptions } from 'db-migration/data-source';
 @Module({
   imports: [
     ConfigModule.forRoot(),

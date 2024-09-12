@@ -38,7 +38,8 @@ export class User {
   })
   refreshToken: string | null;
 
-  @ManyToOne(() => Role, (role) => role.users)
+  @ManyToOne(() => Role, (role) => role.users, { cascade: true })
   @JoinColumn({ name: 'roleId' })
+  @Field()
   role: Role;
 }

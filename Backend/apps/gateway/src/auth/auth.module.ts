@@ -15,8 +15,8 @@ import * as redisStore from 'cache-manager-redis-store';
         transport: Transport.GRPC, // Specifies that this is a gRPC service
         options: {
           package: 'user', // Name of the package in your proto file
-          // protoPath: join(__dirname, './_proto/user.proto'), // Path to your proto file
-          protoPath: 'dist/_proto/user.proto',
+          protoPath: join(__dirname, '../_proto/user.proto'), // Path to your proto file
+          // protoPath: 'dist/_proto/user.proto',
 
           url: 'localhost:50052', // The URL of the gRPC server
         },

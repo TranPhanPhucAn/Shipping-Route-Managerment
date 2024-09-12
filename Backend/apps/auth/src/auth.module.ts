@@ -20,8 +20,8 @@ import * as redisStore from 'cache-manager-redis-store';
 import { RolesModule } from './roles/roles.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { join } from 'path';
-import { dataSourceOptions } from 'db-migration/data-source';
 import { SeedingModule } from './seeding/seeding.module';
+import { dataSourceOptions } from './db-migration/data-source';
 
 interface OriginalError {
   message: string[];

@@ -7,7 +7,7 @@ import { User } from './entities/user.entity';
 import * as bycypt from 'bcrypt';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
-import { GetUserResponse } from 'proto/user';
+// import { GetUserResponse } from 'proto/user';
 import {
   ChangePasswordDto,
   ForgotPasswordDto,
@@ -15,6 +15,8 @@ import {
   ResetPasswordDto,
 } from './dto/user.dto';
 import { GraphQLError } from 'graphql';
+import { Role } from '../roles/entities/role.entity';
+import { GetUserResponse } from '../proto/user';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +25,8 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
     private readonly emailService: EmailService,
     private readonly jwtService: JwtService,
+    @InjectRepository(Role)
+    private readonly rolesRepository: Repository<Role>,
   ) {}
 
   async create(createUserInput: CreateUserInput) {
@@ -80,11 +84,15 @@ export class UsersService {
         },
       });
     }
+    const roleRegister = await this.rolesRepository.findOne({
+      where: { name: 'user' },
+    });
     const userEntity = this.usersRepository.create();
     const createUser = {
       ...userEntity,
       ...newUser.user,
       refreshToken: '',
+      role: roleRegister,
     };
     const user: User | undefined = await this.usersRepository.save(createUser);
     return user;
@@ -114,6 +122,7 @@ export class UsersService {
   async findOneByEmail(email: string): Promise<User | null> {
     const user = await this.usersRepository.findOne({
       where: { email: email },
+      relations: { role: true },
     });
     if (user) return user;
     return null;
