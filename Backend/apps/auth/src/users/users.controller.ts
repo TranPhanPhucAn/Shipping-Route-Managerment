@@ -5,11 +5,14 @@ import {
   GetUserRequest,
   // GetUserResponse,
   UserServiceControllerMethods,
-} from 'proto/user';
-import { UserServiceController } from 'proto/user';
+} from '../proto/user';
+// import { UserServiceController } from 'proto/user';
 // import { Observable } from 'rxjs';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+// import { UserServiceController } from 'proto/user';
+import { UserServiceController } from '../proto/user';
+import { GetUserResponse } from '../proto/user';
 @Controller()
 @UserServiceControllerMethods()
 export class UserGrpcServiceController implements UserServiceController {
@@ -35,8 +38,14 @@ export class UserGrpcServiceController implements UserServiceController {
       return cachedUser;
     }
     const result = await this.usersService.findOneByIdService(data.id);
-    await this.cacheManager.set(cacheKey, result, { ttl: 60 });
-    return result;
+    const userResponse: GetUserResponse = {
+      id: result.id,
+      name: result.name,
+      email: result.email,
+      permissions: result.permissions || [], // Ensure permissions is included
+    };
+    await this.cacheManager.set(cacheKey, userResponse, { ttl: 60 });
+    return userResponse;
     // this.cacheManager.set('test', 'Hello', { ttl: 60 });
     // return await this.usersService.findOneByIdService(data.id);
   }

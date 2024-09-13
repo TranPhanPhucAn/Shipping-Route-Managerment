@@ -7,14 +7,18 @@ import { User } from './entities/user.entity';
 import * as bycypt from 'bcrypt';
 import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
-import { GetUserResponse } from 'proto/user';
+// import { GetUserResponse } from 'proto/user';
 import {
+  AssignRoleDto,
   ChangePasswordDto,
   ForgotPasswordDto,
   PaginationUserDto,
   ResetPasswordDto,
 } from './dto/user.dto';
 import { GraphQLError } from 'graphql';
+import { Role } from '../roles/entities/role.entity';
+import { GetUserResponse } from '../proto/user';
+import { Permission } from '../permissions/entities/permission.entity';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +27,10 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
     private readonly emailService: EmailService,
     private readonly jwtService: JwtService,
+    @InjectRepository(Role)
+    private readonly rolesRepository: Repository<Role>,
+    @InjectRepository(Permission)
+    private readonly permissionsRepository: Repository<Permission>,
   ) {}
 
   async create(createUserInput: CreateUserInput) {
@@ -80,11 +88,15 @@ export class UsersService {
         },
       });
     }
+    const roleRegister = await this.rolesRepository.findOne({
+      where: { name: 'user' },
+    });
     const userEntity = this.usersRepository.create();
     const createUser = {
       ...userEntity,
       ...newUser.user,
       refreshToken: '',
+      role: roleRegister,
     };
     const user: User | undefined = await this.usersRepository.save(createUser);
     return user;
@@ -98,22 +110,34 @@ export class UsersService {
   }
 
   async findOneById(id: string): Promise<User> {
-    return await this.usersRepository.findOne({ where: { id: id } });
+    return await this.usersRepository.findOne({
+      where: { id: id },
+      relations: { role: true },
+    });
   }
 
   async findOneByIdService(userId: string): Promise<GetUserResponse> {
-    const result = await this.findOneById(userId);
-    const { id, username, email } = result;
+    const resultUser = await this.findOneById(userId);
+    const { id, username, email, role } = resultUser;
+    const resultPermissions = await this.rolesRepository.findOne({
+      where: { id: role.id },
+      relations: { permissions: true },
+    });
+    const permissions = resultPermissions.permissions.map(
+      (perm) => perm.permission,
+    );
     return {
       id: id,
       name: username,
       email: email,
+      permissions: permissions,
     };
   }
 
   async findOneByEmail(email: string): Promise<User | null> {
     const user = await this.usersRepository.findOne({
       where: { email: email },
+      relations: { role: true },
     });
     if (user) return user;
     return null;
@@ -124,8 +148,19 @@ export class UsersService {
     return await this.usersRepository.findOne({ where: { id: id } });
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string) {
+    const user = this.usersRepository.findOne({
+      where: { id: id },
+    });
+    if (!user) {
+      return {
+        message: 'User is not exist',
+      };
+    }
     await this.usersRepository.delete(id);
+    return {
+      message: 'Delete user succeed',
+    };
   }
 
   async generateForgotPasswordLink(user: User) {
@@ -213,5 +248,17 @@ export class UsersService {
     } else {
       return { message: 'You enter wrong current password' };
     }
+  }
+
+  async assignRoleForUser(assignRoleDto: AssignRoleDto) {
+    const user = await this.usersRepository.findOne({
+      where: { id: assignRoleDto.userId },
+    });
+    const role = await this.rolesRepository.findOne({
+      where: { id: assignRoleDto.roleId },
+    });
+    user.role = role;
+    await this.usersRepository.save(user);
+    return user;
   }
 }

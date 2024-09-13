@@ -4,8 +4,11 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
   // UpdateDateColumn,
 } from 'typeorm';
+import { Role } from '../../roles/entities/role.entity';
 @Entity()
 @ObjectType()
 @Directive('@key(fields: "id")')
@@ -34,4 +37,9 @@ export class User {
     nullable: true,
   })
   refreshToken: string | null;
+
+  @ManyToOne(() => Role, (role) => role.users, { cascade: true })
+  @JoinColumn({ name: 'roleId' })
+  @Field()
+  role: Role;
 }

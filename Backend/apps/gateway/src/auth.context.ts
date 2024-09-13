@@ -7,6 +7,7 @@ import {
   FieldNode,
   GraphQLError,
 } from 'graphql';
+import { permission } from 'process';
 
 const getToken = (authToken: string): string => {
   const match = authToken.match(/^Bearer (.*)$/);
@@ -87,13 +88,19 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
         userId = decoded.userId;
         email = decoded.email;
         // console.log('check user infor: ', await authService.getUser(userId));
-
+        const userInfor = await authService.getUser(userId);
         if (typeQuery === 'logout') {
           return {
             userid: userId,
             email: email,
             accesstoken: token,
             expirationtime: expirationTime,
+          };
+        } else {
+          return {
+            userid: userId,
+            email: email,
+            permissions: userInfor.permissions,
           };
         }
       } else {

@@ -107,3 +107,21 @@ export class PaginationUserResponse {
   @Field(() => ErrorType, { nullable: true })
   error?: ErrorType;
 }
+
+@ObjectType()
+export class DeleteUserResponse {
+  @Field()
+  message?: string;
+}
+
+@ObjectType()
+export class DeletePermissionResponse {
+  @Field()
+  message?: string;
+}
+
+@ObjectType()
+export class DeleteRoleResponse {
+  @Field()
+  message?: string;
+}

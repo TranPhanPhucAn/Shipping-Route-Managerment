@@ -1,15 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Route } from './entities/route.entity';
 import { CreateRouteInput } from './dto/create-route.input';
 import { UpdateRouteInput } from './dto/update-route.input';
+import { ClientGrpc } from '@nestjs/microservices';
+import { UserServiceClient } from '../proto/user';
+// import { UserServiceClient } from 'proto/user';
+// import { UpdateRouteInput } from './dto/update-route.input';
 
 @Injectable()
 export class RoutesService {
   constructor(
     @InjectRepository(Route)
     private routeRepository: Repository<Route>,
+    @Inject('USER_SERVICE') private readonly client: ClientGrpc,
   ) {}
 
   async create(createRouteInput: CreateRouteInput): Promise<Route> {
@@ -36,5 +41,15 @@ export class RoutesService {
 
   async delete(id: number): Promise<void> {
     await this.routeRepository.delete(id);
+  }
+
+  private userService: UserServiceClient;
+
+  onModuleInit() {
+    this.userService = this.client.getService<UserServiceClient>('UserService');
+  }
+
+  getUser(id: string) {
+    return this.userService.getUser({ id });
   }
 }

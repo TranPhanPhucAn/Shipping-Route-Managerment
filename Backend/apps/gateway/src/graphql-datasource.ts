@@ -22,6 +22,7 @@ export class GraphQLDataSource extends RemoteGraphQLDataSource {
 
     request.http.headers.set('userid', context.userid);
     request.http.headers.set('expirationtime', context.expirationtime);
+    request.http.headers.set('permissions', context.permissions);
 
     if (kind === GraphQLDataSourceRequestKind.INCOMING_OPERATION) {
       const cookie =

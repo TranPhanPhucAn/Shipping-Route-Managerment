@@ -7,6 +7,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
+    "build:auth": "nest build auth",
+    "start:auth": "nest start auth",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -18,11 +20,17 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/gateway/test/jest-e2e.json",
-    "generate-proto:user": "protoc --plugin=protoc-gen-ts_proto=.\\node_modules\\.bin\\protoc-gen-ts_proto.cmd --ts_proto_out=. --ts_proto_opt=nestJs=true ./proto/user.proto"
+    "generate-proto:user": "protoc --plugin=protoc-gen-ts_proto=.\\node_modules\\.bin\\protoc-gen-ts_proto.cmd --ts_proto_out=. --ts_proto_opt=nestJs=true ./proto/user.proto",
+    "typeorm": "ts-node ./node_modules/typeorm/cli",
+    "typeorm:create-migration": "pnpm run typeorm migration:create ./db-migration",
+    "typeorm:run-migrations": "pnpm run typeorm migration:run -d ./db-migration/data-source.ts",
+    "typeorm:revert-migrations": "pnpm run typeorm migration:revert -- -d ./db-migration/data-source.ts",
+    "typeorm:generate-migrations": "pnpm run typeorm -d ./db-migration/data-source.ts migration:generate ./migrations/NewMigrations"
   },
   "dependencies": {
     "@apollo/gateway": "^2.8.2",
     "@apollo/subgraph": "^2.8.2",
+    "@faker-js/faker": "^9.0.0",
     "@grpc/grpc-js": "^1.11.1",
     "@grpc/proto-loader": "^0.7.13",
     "@nestjs-modules/mailer": "^2.0.2",
@@ -60,7 +68,8 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "ts-proto": "^1.181.1",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "typeorm-extension": "^3.6.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

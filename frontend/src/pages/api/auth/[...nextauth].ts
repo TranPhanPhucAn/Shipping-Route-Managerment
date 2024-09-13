@@ -66,7 +66,6 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
                   /(?<=^|,)([^,]*?Expires=.*?GMT);?(\s*HttpOnly)?(\s*Secure)?(\s*SameSite=None)?/g
                 ) || [];
               res.setHeader("Set-Cookie", cookiesArray);
-              console.log("abcxyz");
             }
             const { data, errors } = await response.json();
             // const { data } = response;
@@ -100,7 +99,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
     ],
     callbacks: {
       async jwt({ token, user }) {
-        console.log("get jwt: ", token);
+        // console.log("get jwt: ", token);
         if (user) {
           token.id = user.id;
           token.email = user.email;
@@ -113,10 +112,10 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
       },
 
       async session({ token, user, session }) {
-        console.log("get session");
+        // console.log("get session");
 
         if (token) {
-          console.log("islogin: ", token.isLogin);
+          // console.log("islogin: ", token.isLogin);
           return {
             ...session,
             user: {

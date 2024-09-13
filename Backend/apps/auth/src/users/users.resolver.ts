@@ -3,7 +3,6 @@ import {
   Query,
   Mutation,
   Args,
-  Int,
   ResolveReference,
 } from '@nestjs/graphql';
 import { UsersService } from './users.service';
@@ -13,6 +12,7 @@ import { UpdateUserInput } from './dto/update-user.input';
 // import { UseGuards } from '@nestjs/common';
 import {
   ChangePasswordResponse,
+  DeleteUserResponse,
   ForgotPasswordResponse,
   PaginationUserResponse,
   RegisterResponse,
@@ -20,11 +20,14 @@ import {
 } from '../types/auth.types';
 // import { AuthUserGuard } from '../auth/guards/auth.guards';
 import {
+  AssignRoleDto,
   ChangePasswordDto,
   ForgotPasswordDto,
   PaginationUserDto,
   ResetPasswordDto,
 } from './dto/user.dto';
+import { SetMetadata, UseGuards } from '@nestjs/common';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
 
 @Resolver((of) => User)
 export class UsersResolver {
@@ -41,11 +44,15 @@ export class UsersResolver {
     return await this.usersService.activateUser(activationDto);
   }
 
+  @SetMetadata('permissions', ['get:users'])
+  @UseGuards(PermissionsGuard)
   @Query(() => [User], { name: 'users' })
   findAll() {
     return this.usersService.findAll();
   }
 
+  @SetMetadata('permissions', ['get:user'])
+  @UseGuards(PermissionsGuard)
   @Query(() => User, { name: 'user' })
   findOne(@Args('id') id: string) {
     return this.usersService.findOneById(id);
@@ -57,12 +64,15 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
+  @UseGuards(PermissionsGuard)
+  @SetMetadata('permissions', ['update:user'])
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
     return this.usersService.update(updateUserInput.id, updateUserInput);
   }
 
-  @Mutation(() => User)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
+  @Mutation(() => DeleteUserResponse)
+  @UseGuards(PermissionsGuard)
+  removeUser(@Args('id') id: string) {
     return this.usersService.delete(id);
   }
 
@@ -85,6 +95,13 @@ export class UsersResolver {
   @Query(() => PaginationUserResponse, { name: 'paginationUser' })
   paginationUser(@Args('paginationUser') paginationUser: PaginationUserDto) {
     return this.usersService.paginationUser(paginationUser);
+  }
+
+  @SetMetadata('permissions', ['assignRole:user'])
+  @UseGuards(PermissionsGuard)
+  @Mutation(() => User)
+  assignRoleForUser(@Args('assignRoleDto') assignRoleDto: AssignRoleDto) {
+    return this.usersService.assignRoleForUser(assignRoleDto);
   }
 
   @ResolveReference()

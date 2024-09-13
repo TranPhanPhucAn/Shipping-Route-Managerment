@@ -9,10 +9,14 @@ import { UserGrpcServiceController } from './users.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
+// import { Role } from '../roles/entities/role.entity';
+import { EmailService } from '../email/email.service';
+import { Role } from '../roles/entities/role.entity';
+import { Permission } from '../permissions/entities/permission.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Role, Permission]),
     forwardRef(() => AuthenModule),
     CacheModule.registerAsync({
       imports: [ConfigModule],
@@ -32,6 +36,7 @@ import * as redisStore from 'cache-manager-redis-store';
     UsersService,
     JwtService,
     UserGrpcServiceController,
+    EmailService,
   ],
   exports: [UsersService],
 })
