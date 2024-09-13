@@ -1,7 +1,14 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
+import { IsNotEmpty } from 'class-validator';
 
 @InputType()
 export class CreatePermissionInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  // @Field()
+  // id: string;
+  @Field()
+  @IsNotEmpty({ message: 'Permission is required.' })
+  permission: string;
+
+  @Field()
+  description: string;
 }

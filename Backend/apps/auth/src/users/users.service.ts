@@ -9,6 +9,7 @@ import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
 // import { GetUserResponse } from 'proto/user';
 import {
+  AssignRoleDto,
   ChangePasswordDto,
   ForgotPasswordDto,
   PaginationUserDto,
@@ -147,8 +148,19 @@ export class UsersService {
     return await this.usersRepository.findOne({ where: { id: id } });
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string) {
+    const user = this.usersRepository.findOne({
+      where: { id: id },
+    });
+    if (!user) {
+      return {
+        message: 'User is not exist',
+      };
+    }
     await this.usersRepository.delete(id);
+    return {
+      message: 'Delete user succeed',
+    };
   }
 
   async generateForgotPasswordLink(user: User) {
@@ -236,5 +248,17 @@ export class UsersService {
     } else {
       return { message: 'You enter wrong current password' };
     }
+  }
+
+  async assignRoleForUser(assignRoleDto: AssignRoleDto) {
+    const user = await this.usersRepository.findOne({
+      where: { id: assignRoleDto.userId },
+    });
+    const role = await this.rolesRepository.findOne({
+      where: { id: assignRoleDto.roleId },
+    });
+    user.role = role;
+    await this.usersRepository.save(user);
+    return user;
   }
 }

@@ -41,18 +41,58 @@ export class SeedingService {
         permission: 'delete:user',
         description: 'Delete one user',
       });
-
+      const permission5 = permissionsRepository.create({
+        permission: 'create:permission',
+        description: 'Create new permission',
+      });
+      const permission6 = permissionsRepository.create({
+        permission: 'delete:permission',
+        description: 'Delete a permission',
+      });
+      const permission7 = permissionsRepository.create({
+        permission: 'create:role',
+        description: 'Create new role',
+      });
+      const permission8 = permissionsRepository.create({
+        permission: 'update:role',
+        description: 'Update a role',
+      });
+      const permission9 = permissionsRepository.create({
+        permission: 'assginPer:role',
+        description: 'Assign permissions for role',
+      });
+      const permission10 = permissionsRepository.create({
+        permission: 'assignRole:user',
+        description: 'Assign role for user',
+      });
       await permissionsRepository.save([
         permission1,
         permission2,
         permission3,
         permission4,
+        permission5,
+        permission6,
+        permission7,
+        permission8,
+        permission9,
+        permission10,
       ]);
 
       const role1 = rolesRepository.create({
         name: 'admin',
         description: 'Admin can manage all resource',
-        permissions: [permission1, permission2, permission3, permission4],
+        permissions: [
+          permission1,
+          permission2,
+          permission3,
+          permission4,
+          permission5,
+          permission6,
+          permission7,
+          permission8,
+          permission9,
+          permission10,
+        ],
       });
       const role2 = rolesRepository.create({
         name: 'supplier',
@@ -93,7 +133,6 @@ export class SeedingService {
       await usersRepository.save([user1, user2, user3]);
 
       await queryRunner.commitTransaction();
-      console.log('abcxyas:', await usersRepository.find());
     } catch (e) {
       await queryRunner.rollbackTransaction();
       console.log('error', e);

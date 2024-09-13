@@ -2,10 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 // import { UsersService } from '../../users/users.service';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { AuthenticationError } from 'apollo-server-express';
 import { GraphQLError } from 'graphql';
-import { permission } from 'process';
-
 @Injectable()
 export class PermissionsGuard implements CanActivate {
   //   constructor(private usersService: UsersService) {}

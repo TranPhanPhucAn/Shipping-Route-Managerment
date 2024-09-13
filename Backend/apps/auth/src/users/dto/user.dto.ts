@@ -45,3 +45,16 @@ export class PaginationUserDto {
   @IsNotEmpty({ message: 'Offset is required' })
   offset: number;
 }
+
+@InputType()
+export class AssignRoleDto {
+  // @Field()
+  // id: string;
+  @Field()
+  @IsNotEmpty({ message: 'userId is required.' })
+  userId: string;
+
+  @Field()
+  @IsNotEmpty({ message: 'roleId is required.' })
+  roleId: string;
+}

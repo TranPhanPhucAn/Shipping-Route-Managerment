@@ -3,7 +3,6 @@ import {
   Query,
   Mutation,
   Args,
-  Int,
   ResolveReference,
 } from '@nestjs/graphql';
 import { UsersService } from './users.service';
@@ -13,6 +12,7 @@ import { UpdateUserInput } from './dto/update-user.input';
 // import { UseGuards } from '@nestjs/common';
 import {
   ChangePasswordResponse,
+  DeleteUserResponse,
   ForgotPasswordResponse,
   PaginationUserResponse,
   RegisterResponse,
@@ -20,6 +20,7 @@ import {
 } from '../types/auth.types';
 // import { AuthUserGuard } from '../auth/guards/auth.guards';
 import {
+  AssignRoleDto,
   ChangePasswordDto,
   ForgotPasswordDto,
   PaginationUserDto,
@@ -69,9 +70,9 @@ export class UsersResolver {
     return this.usersService.update(updateUserInput.id, updateUserInput);
   }
 
-  @Mutation(() => User)
+  @Mutation(() => DeleteUserResponse)
   @UseGuards(PermissionsGuard)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
+  removeUser(@Args('id') id: string) {
     return this.usersService.delete(id);
   }
 
@@ -94,6 +95,13 @@ export class UsersResolver {
   @Query(() => PaginationUserResponse, { name: 'paginationUser' })
   paginationUser(@Args('paginationUser') paginationUser: PaginationUserDto) {
     return this.usersService.paginationUser(paginationUser);
+  }
+
+  @SetMetadata('permissions', ['assignRole:user'])
+  @UseGuards(PermissionsGuard)
+  @Mutation(() => User)
+  assignRoleForUser(@Args('assignRoleDto') assignRoleDto: AssignRoleDto) {
+    return this.usersService.assignRoleForUser(assignRoleDto);
   }
 
   @ResolveReference()
