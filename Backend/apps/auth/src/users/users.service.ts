@@ -1,11 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ActivationDto, CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bycypt from 'bcrypt';
-import { EmailService } from '../email/email.service';
 import { JwtService } from '@nestjs/jwt';
 // import { GetUserResponse } from 'proto/user';
 import {
@@ -18,19 +17,19 @@ import {
 import { GraphQLError } from 'graphql';
 import { Role } from '../roles/entities/role.entity';
 import { GetUserResponse } from '../proto/user';
-import { Permission } from '../permissions/entities/permission.entity';
-
+import { ClientKafka } from '@nestjs/microservices';
+import { UserActivateEvent } from './events/user-activate.event';
+import { ForgotPasswordEvent } from './events/forgot-password.event';
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-    private readonly emailService: EmailService,
     private readonly jwtService: JwtService,
     @InjectRepository(Role)
     private readonly rolesRepository: Repository<Role>,
-    @InjectRepository(Permission)
-    private readonly permissionsRepository: Repository<Permission>,
+    @Inject('NOTIFICATION_SERVICE')
+    private readonly notificationClient: ClientKafka,
   ) {}
 
   async create(createUserInput: CreateUserInput) {
@@ -47,13 +46,15 @@ export class UsersService {
       }
       const { token, activationCode } =
         await this.createActivationToken(createUserInput);
-      await this.emailService.sendMail({
-        email: createUserInput.email,
-        subject: 'Activate your accout',
-        name: createUserInput.username,
-        activationCode: activationCode,
-        template: './activation-mail',
-      });
+      this.notificationClient.emit(
+        'user_activation',
+        new UserActivateEvent(
+          createUserInput.email,
+          'Activate your accout',
+          createUserInput.username,
+          activationCode,
+        ),
+      );
       return token;
     } catch (error) {
       throw error;
@@ -187,14 +188,16 @@ export class UsersService {
     }
     const forgotPasswordToken = await this.generateForgotPasswordLink(user);
     const resetPasswordUrl = `${process.env.CLIENT_URL}/reset-password?verify=${forgotPasswordToken}`;
-    await this.emailService.sendMail({
-      email,
-      subject: 'Reset your password',
-      template: './forgot-password-mail',
-      name: user.username,
-      activationCode: resetPasswordUrl,
-    });
-    return { message: 'Your reset password request successfull!' };
+    this.notificationClient.emit(
+      'forgot_password',
+      new ForgotPasswordEvent(
+        email,
+        'Activate your accout',
+        user.username,
+        resetPasswordUrl,
+      ),
+    );
+    return { message: 'Check your email to reset password' };
   }
 
   async resetPassword(resetPasswordDto: ResetPasswordDto) {

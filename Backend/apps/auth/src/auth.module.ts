@@ -19,7 +19,6 @@ import * as redisStore from 'cache-manager-redis-store';
 // import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { RolesModule } from './roles/roles.module';
 import { PermissionsModule } from './permissions/permissions.module';
-import { join } from 'path';
 import { SeedingModule } from './seeding/seeding.module';
 import { dataSourceOptions } from './db-migration/data-source';
 

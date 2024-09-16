@@ -13,6 +13,7 @@ import * as redisStore from 'cache-manager-redis-store';
 import { EmailService } from '../email/email.service';
 import { Role } from '../roles/entities/role.entity';
 import { Permission } from '../permissions/entities/permission.entity';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -30,6 +31,21 @@ import { Permission } from '../permissions/entities/permission.entity';
         ttl: 60,
       }),
     }),
+    ClientsModule.register([
+      {
+        name: 'NOTIFICATION_SERVICE',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: 'notification',
+            brokers: ['localhost:9092'],
+          },
+          consumer: {
+            groupId: 'notification-consumer',
+          },
+        },
+      },
+    ]),
   ],
   providers: [
     UsersResolver,

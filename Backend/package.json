@@ -59,6 +59,7 @@
     "ejs": "^3.1.10",
     "graphql": "^16.9.0",
     "jsonwebtoken": "^9.0.2",
+    "kafkajs": "^2.2.4",
     "nodemailer": "^6.9.14",
     "nodemon": "^3.1.4",
     "passport-jwt": "^4.0.1",

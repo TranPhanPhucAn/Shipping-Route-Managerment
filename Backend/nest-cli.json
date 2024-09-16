@@ -5,7 +5,7 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": false,
-    "assets": ["**/*.proto"]
+    "assets": ["**/*.proto", "**/*.ejs"]
   },
   "monorepo": true,
   "root": "apps/gateway",
@@ -44,6 +44,15 @@
       "sourceRoot": "apps/auth/src",
       "compilerOptions": {
         "tsConfigPath": "apps/auth/tsconfig.app.json"
+      }
+    },
+    "notification": {
+      "type": "application",
+      "root": "apps/notification",
+      "entryFile": "main",
+      "sourceRoot": "apps/notification/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/notification/tsconfig.app.json"
       }
     }
   }
