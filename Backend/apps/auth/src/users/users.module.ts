@@ -10,7 +10,6 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
 // import { Role } from '../roles/entities/role.entity';
-import { EmailService } from '../email/email.service';
 import { Role } from '../roles/entities/role.entity';
 import { Permission } from '../permissions/entities/permission.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -38,7 +37,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         options: {
           client: {
             clientId: 'notification',
-            brokers: ['localhost:9092'],
+            brokers: [process.env.BROKER_KAFKA],
           },
           consumer: {
             groupId: 'notification-consumer',
@@ -52,7 +51,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     UsersService,
     JwtService,
     UserGrpcServiceController,
-    EmailService,
   ],
   exports: [UsersService],
 })

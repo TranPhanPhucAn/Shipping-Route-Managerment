@@ -3,6 +3,7 @@ import { EmailService } from './email.service';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import * as dotenv from 'dotenv';
+import { join } from 'path';
 dotenv.config();
 @Global()
 @Module({
@@ -21,8 +22,8 @@ dotenv.config();
           from: 'Nhom4',
         },
         template: {
-          // dir: join(__dirname, 'email-templates'),
-          dir: 'apps/auth/src/email-templates',
+          dir: join(__dirname, '..', 'email-templates'),
+          // dir: 'apps/auth/src/email-templates',
           adapter: new EjsAdapter(),
           options: {
             strict: false,

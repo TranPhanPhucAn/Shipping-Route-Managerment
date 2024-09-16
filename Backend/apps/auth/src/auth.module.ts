@@ -11,7 +11,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HealthModule } from './health/health.module';
 // import { join } from 'path';
 import { AuthenModule } from './auth/authen.module';
-import { EmailModule } from './email/email.module';
 import { UserGrpcServiceController } from './users/users.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 // import { redisStore } from 'cache-manager-redis-store';
@@ -68,7 +67,6 @@ interface OriginalError {
     UsersModule,
     HealthModule,
     AuthenModule,
-    EmailModule,
     SeedingModule,
     CacheModule.registerAsync({
       imports: [ConfigModule],
