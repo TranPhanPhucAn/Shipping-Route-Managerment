@@ -135,7 +135,7 @@ const Login: React.FC = () => {
                 <Form.Item name="remember" valuePropName="checked" noStyle>
                   <Checkbox>Remember me</Checkbox>
                 </Form.Item>
-                <Link href={"/resetpassword"} className={styles.forgotLink}>
+                <Link href={"/forgot-password"} className={styles.forgotLink}>
                   Forgot Password!
                 </Link>
               </Flex>

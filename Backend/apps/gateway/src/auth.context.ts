@@ -7,7 +7,6 @@ import {
   FieldNode,
   GraphQLError,
 } from 'graphql';
-import { permission } from 'process';
 
 const getToken = (authToken: string): string => {
   const match = authToken.match(/^Bearer (.*)$/);
@@ -69,7 +68,13 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
         typeQuery = fields[0];
       }
     }
-    const notCheckLogin = ['login', 'createUser', 'activateUser'];
+    const notCheckLogin = [
+      'login',
+      'createUser',
+      'activateUser',
+      'forgotPassword',
+      'resetPassword',
+    ];
     if (notCheckLogin.includes(typeQuery)) {
       return {};
     } else {

@@ -1,43 +1,31 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { ACTIVATE_ACCOUNT } from "../../../graphql/mutations/Auth";
+import { FORGOT_PASSWORD } from "../../../graphql/mutations/Auth";
 import { Input, Button, message, Row, Col, Form } from "antd";
 import { useRouter } from "next/navigation";
 import styles from "../../../styles/Auth.module.css";
 import VacationCodeImage from "./activateCode.jpg";
 import Image from "next/image";
+import Link from "next/link";
 
-const Activate = () => {
-  const [activationToken, setActivationToken] = useState("");
-  const [activationCode, setActivationCode] = useState("");
-  const [activateUser, { loading, error }] = useMutation(ACTIVATE_ACCOUNT);
+const ForgotPassword = () => {
+  const [email, setEmail] = useState("");
+  const [forgotPassword, { loading, error }] = useMutation(FORGOT_PASSWORD);
   const router = useRouter();
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
-    if (token) {
-      setActivationToken(token);
-    }
-  }, []);
-
-  const handleActivation = async () => {
+  const handleForgotPass = async () => {
     try {
-      const { data } = await activateUser({
+      const { data } = await forgotPassword({
         variables: {
-          activationDto: {
-            activationToken,
-            activationCode,
-          },
+          forgotPasswordDto: { email },
         },
       });
-      if (data?.activateUser) {
-        message.success("Activate successful!.");
+      if (data?.forgotPassword) {
+        message.success("Reset password link was sent to your email!.");
         router.push("/login");
       }
     } catch (err: any) {
-      message.error(`Activation failed: ${err?.graphQLErrors[0]?.message}`);
+      message.error(`Reset password failed: ${err?.graphQLErrors[0]?.message}`);
     }
   };
 
@@ -51,27 +39,29 @@ const Activate = () => {
           style={{ width: "400px", height: "300px" }}
         />
       </Col>
-      <Col className={styles.spBox} style={{ height: "300px" }}>
+      <Col className={styles.spBox} style={{ height: "330px" }}>
         <Form>
           <h2 className={styles.title} style={{ paddingTop: "3rem" }}>
-            Activation Code
+            Find Your Account
           </h2>
-          <p className={styles.subTitle}>
-            We have sent the activation code to your email.
-          </p>
+          <p className={styles.subTitle}>Enter your email address</p>
           <Form.Item
-            name="Activation Code"
+            name="Email"
             rules={[
               {
                 required: true,
-                message: "Please input your Activation Code you got!",
+                message: "Please input your Email!",
+              },
+              {
+                type: "email",
+                message: "Email is not a valid email!",
               },
             ]}
           >
             <Input
-              placeholder="Activation Code"
-              value={activationCode}
-              onChange={(e) => setActivationCode(e.target.value)}
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className={styles.input}
               style={{ width: "90%" }}
             />
@@ -79,7 +69,7 @@ const Activate = () => {
           <Form.Item>
             <Button
               loading={loading}
-              onClick={handleActivation}
+              onClick={handleForgotPass}
               className={styles.mainButton}
             >
               Submit & Continue
@@ -87,9 +77,12 @@ const Activate = () => {
           </Form.Item>
           {error && <p style={{ color: "red" }}>{error.message}</p>}
         </Form>
+        <div>
+          Go back to <Link href={"/login"}>Login</Link>
+        </div>
       </Col>
     </Row>
   );
 };
 
-export default Activate;
+export default ForgotPassword;

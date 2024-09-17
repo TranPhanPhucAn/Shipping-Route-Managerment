@@ -176,8 +176,8 @@ export class UsersService {
     );
     return forgotPasswordToken;
   }
-  async forgotPassword(forgotPassword: ForgotPasswordDto) {
-    const { email } = forgotPassword;
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
+    const { email } = forgotPasswordDto;
     const user = await this.findOneByEmail(email);
     if (!user) {
       throw new GraphQLError('User not found with this email!', {
@@ -204,7 +204,16 @@ export class UsersService {
     const { password, forgotPasswordToken } = resetPasswordDto;
     const decoded = this.jwtService.verify(forgotPasswordToken, {
       secret: process.env.FORGOT_PASSWORD_SECRET,
+      ignoreExpiration: true,
     });
+    const expirationTime = decoded?.exp;
+    if (expirationTime * 1000 < Date.now()) {
+      throw new GraphQLError('Link reset password expired', {
+        extensions: {
+          errorCode: '5001-11',
+        },
+      });
+    }
     if (!decoded) {
       throw new GraphQLError('Invalid token', {
         extensions: {

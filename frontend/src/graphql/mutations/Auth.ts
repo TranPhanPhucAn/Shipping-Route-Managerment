@@ -51,3 +51,19 @@ export const REFRESH_TOKEN = gql`
     }
   }
 `;
+
+export const FORGOT_PASSWORD = gql`
+  mutation forgotPassword($forgotPasswordDto: ForgotPasswordDto!) {
+    forgotPassword(forgotPasswordDto: $forgotPasswordDto) {
+      message
+    }
+  }
+`;
+
+export const RESET_PASSWORD = gql`
+  mutation resetPassword($resetPasswordDto: ResetPasswordDto!) {
+    resetPassword(resetPasswordDto: $resetPasswordDto) {
+      message
+    }
+  }
+`;

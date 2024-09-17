@@ -77,13 +77,15 @@ export class UsersResolver {
   }
 
   @Mutation(() => ForgotPasswordResponse, { name: 'forgotPassword' })
-  forgotPassword(@Args('forgotPassword') forgotPassword: ForgotPasswordDto) {
-    return this.usersService.forgotPassword(forgotPassword);
+  forgotPassword(
+    @Args('forgotPasswordDto') forgotPasswordDto: ForgotPasswordDto,
+  ) {
+    return this.usersService.forgotPassword(forgotPasswordDto);
   }
 
   @Mutation(() => ResetPasswordResponse, { name: 'resetPassword' })
-  resetPassword(@Args('resetPassword') resetPassword: ResetPasswordDto) {
-    return this.usersService.resetPassword(resetPassword);
+  resetPassword(@Args('resetPasswordDto') resetPasswordDto: ResetPasswordDto) {
+    return this.usersService.resetPassword(resetPasswordDto);
   }
 
   // @UseGuards(AuthUserGuard)

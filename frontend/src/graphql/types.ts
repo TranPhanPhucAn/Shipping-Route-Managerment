@@ -21,3 +21,12 @@ export interface ActivationDto {
   activationCode: string;
   activationToken: string;
 }
+
+export interface ForgotPasswordDto {
+  email: string;
+}
+
+export interface ResetPasswordDto {
+  password: string;
+  forgotPasswordToken: string;
+}
