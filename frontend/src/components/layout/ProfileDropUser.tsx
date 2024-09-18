@@ -20,6 +20,7 @@ const ProfileDropUser: React.FC = () => {
   const { data: session, status, update } = useSession();
   const [logoutUser, { loading, error }] = useMutation(LOGOUT_USER);
   const handleSignOut = async () => {
+    console.log("get");
     await signOut({ callbackUrl: "/login", redirect: true });
     try {
       await logoutUser();

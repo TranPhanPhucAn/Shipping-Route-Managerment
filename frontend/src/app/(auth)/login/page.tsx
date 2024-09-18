@@ -156,6 +156,7 @@ const Login: React.FC = () => {
                 <Button
                   icon={<GoogleOutlined />}
                   className={styles.socialButton}
+                  onClick={() => signIn("google")}
                 />
               </Col>
               <Col>

@@ -15,6 +15,7 @@ const Profile = () => {
     variables: { id: id },
   });
 
-  return <>{data ? data?.user?.username : ""}</>;
+  // return <>{data ? data?.user?.username : ""}</>;
+  return <>{session ? session?.user?.username : ""}</>;
 };
 export default Profile;

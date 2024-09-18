@@ -12,3 +12,16 @@ export class LoginInput {
   @IsString()
   password: string;
 }
+
+@InputType()
+export class LoginInputGoogle {
+  @Field()
+  @IsNotEmpty({ message: 'Email is required.' })
+  @IsEmail({}, { message: 'Email must be valid' })
+  email: string;
+
+  @Field()
+  @IsNotEmpty({ message: 'Password is required' })
+  @IsString()
+  password: string;
+}

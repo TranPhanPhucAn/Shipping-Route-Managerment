@@ -1,6 +1,6 @@
 import { Resolver, Args, Context, Mutation } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { LoginInput } from './dto/auth.dto';
+import { LoginInput, LoginInputGoogle } from './dto/auth.dto';
 import {
   LoginResponse,
   LogoutResponse,
@@ -23,6 +23,46 @@ export class AuthResolver {
   ): Promise<LoginResponse> {
     try {
       const result = await this.authService.loginUserByPassword(loginInput);
+      if (result) {
+        const { user, accessToken, refreshToken, expAccessToken } = result;
+        const expires = new Date(Date.now() + 1 * 60 * 60 * 1000);
+        context.res.cookie('access_token', 'Bearer ' + accessToken, {
+          httpOnly: true,
+          sameSite: 'none',
+          path: '/',
+          secure: true,
+          expires,
+        });
+        context.res.cookie('refresh_token', 'Bearer ' + refreshToken, {
+          httpOnly: true,
+          sameSite: 'none',
+          path: '/',
+          secure: true,
+          expires,
+        });
+        return {
+          user: user,
+          expAccessToken: expAccessToken,
+        };
+      }
+      throw new GraphQLError('Could not login with provided data', {
+        extensions: {
+          errorCode: '5001-2',
+        },
+      });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Mutation(() => LoginResponse)
+  async loginWithGoogle(
+    @Args('loginInputGoogle') loginInputGoogle: LoginInputGoogle,
+    @Context() context: any,
+  ): Promise<LoginResponse> {
+    try {
+      const result =
+        await this.authService.loginUserByPassword(loginInputGoogle);
       if (result) {
         const { user, accessToken, refreshToken, expAccessToken } = result;
         const expires = new Date(Date.now() + 1 * 60 * 60 * 1000);

@@ -91,15 +91,21 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
       //   clientId: process.env.GITHUB_ID || "",
       //   clientSecret: process.env.GITHUB_SECRET || "",
       // }),
-      // // ...add more providers here
-      // GithubProvider({
-      //   clientId: process.env.GOOGLE_ID || "",
-      //   clientSecret: process.env.GOOGLE_SECRET || "",
-      // }),
+      GoogleProvider({
+        clientId: process.env.GOOGLE_CLIENT_ID || "",
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+        authorization: {
+          params: {
+            prompt: "consent",
+            access_type: "offline",
+            response_type: "code",
+          },
+        },
+      }),
     ],
     callbacks: {
-      async jwt({ token, user }) {
-        // console.log("get jwt: ", token);
+      async jwt({ token, user, account }) {
+        console.log("get jwt: ", account);
         if (user) {
           token.id = user.id;
           token.email = user.email;
@@ -108,11 +114,14 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
           token.expAccessToken = user.expAccessToken * 1000;
           token.isLogin = true;
         }
+        if (token) {
+          token.username = token.name ?? "";
+        }
         return token;
       },
 
       async session({ token, user, session }) {
-        // console.log("get session");
+        console.log("get session: ", token);
 
         if (token) {
           // console.log("islogin: ", token.isLogin);
@@ -128,6 +137,16 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
           };
         }
         return session;
+      },
+      async signIn({ user, account, profile, email, credentials }) {
+        if (account?.provider === "google") {
+          console.log("user: ", user);
+          console.log("account: ", account);
+          console.log("profile: ", profile);
+          console.log("email: ", email);
+          console.log("credentials: ", credentials);
+        }
+        return true;
       },
     },
     pages: {
