@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -15,8 +15,8 @@ import { Port } from '../../ports/entities/port.entity';
 @Entity('routes')
 @Unique(['departurePort', 'destinationPort'])
 export class Route {
-  @Field(() => String)
-  @PrimaryGeneratedColumn('uuid')
+  @Field(() => ID)
+  @PrimaryGeneratedColumn()
   id: string;
 
   @Field(() => Port)

@@ -64,12 +64,39 @@ export class RoutesService {
   }
 
   async update(id: string, updateRouteInput: UpdateRouteInput): Promise<Route> {
-    await this.routeRepository.update(id, updateRouteInput);
-    return await this.routeRepository.findOne({ where: { id: id } });
+    const { departurePortId, destinationPortId, distance } = updateRouteInput;
+
+    const route = await this.routeRepository.findOne({ where: { id } });
+    if (!route) {
+      throw new NotFoundException(`Route with ID ${id} not found`);
+    }
+
+    const departurePort = await this.portRepository.findOne({
+      where: { id: departurePortId },
+    });
+    const destinationPort = await this.portRepository.findOne({
+      where: { id: destinationPortId },
+    });
+
+    if (!departurePort || !destinationPort) {
+      throw new BadRequestException('Invalid port id(s)');
+    }
+
+    if (departurePortId === destinationPortId) {
+      throw new BadRequestException(
+        'Departure port and destination port cannot be the same',
+      );
+    }
+
+    route.departurePort = departurePort;
+    route.destinationPort = destinationPort;
+    route.distance = distance;
+
+    return this.routeRepository.save(route);
   }
 
-  async remove(id: string): Promise<boolean> {
-    const result = await this.routeRepository.delete(id);
-    return result.affected > 0;
+  async remove(id: string): Promise<string> {
+    await this.routeRepository.delete(id);
+    return id;
   }
 }

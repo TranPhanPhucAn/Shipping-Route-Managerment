@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { RoutesService } from './routes.service';
 import { Route } from './entities/route.entity';
 import { Port } from '../ports/entities/port.entity';
@@ -27,21 +27,20 @@ export class RoutesResolver {
     return this.routeService.findAll();
   }
   @Query(() => Route, { name: 'route' })
-  async findOne(@Args('id', { type: () => ID }) id: string): Promise<Route> {
+  async findOne(@Args('id') id: string): Promise<Route> {
     return this.routeService.findOne(id);
   }
 
   @Mutation(() => Route)
   async updateRoute(
+    @Args('id') id: string,
     @Args('updateRouteInput') updateRouteInput: UpdateRouteInput,
   ): Promise<Route> {
-    return this.routeService.update(updateRouteInput.id, updateRouteInput);
+    return this.routeService.update(id, updateRouteInput);
   }
 
-  @Mutation(() => Boolean)
-  async removeRoute(
-    @Args('id', { type: () => ID }) id: string,
-  ): Promise<boolean> {
+  @Mutation(() => String)
+  async removeRoute(@Args('id') id: string): Promise<string> {
     return this.routeService.remove(id);
   }
 }
