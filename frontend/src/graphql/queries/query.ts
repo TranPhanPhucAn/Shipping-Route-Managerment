@@ -16,13 +16,24 @@ export const GET_ROUTES = gql`
     routes {
       id
       departurePort {
+        id  
         name
       }
       destinationPort {
+        id
         name
       }
       distance
-      createdAt
+      createdAt 
+    }
+  }
+`;
+
+export const GET_PORTS = gql`
+  query GetPorts {
+    ports {
+      id
+      name
     }
   }
 `;

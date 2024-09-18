@@ -23,7 +23,16 @@ export interface ActivationDto {
 }
 
 export interface Port {
+  id: string;
   name: string;
+  location: string;
+  departureRoutes: Route;
+  destinationRoutes: Route;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface GetPortsData {
+  ports: Port[];
 }
 
 export interface Route {
@@ -32,8 +41,20 @@ export interface Route {
   destinationPort: Port;
   distance: number;
   createdAt: string;
+  UpdatedAt: string;
 }
 
 export interface GetRoutesData {
   routes: Route[];
+}
+export interface createRouteInput {
+  departurePortId: string;
+  destinationPortId: string;
+  distance: number;
+}
+
+export interface UpdateRouteInput {
+  departurePortId: string;
+  destinationPortId: string;
+  distance: number;
 }
