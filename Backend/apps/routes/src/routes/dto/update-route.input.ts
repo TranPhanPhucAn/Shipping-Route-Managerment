@@ -1,8 +1,5 @@
 import { CreateRouteInput } from './create-route.input';
-import { InputType, Field, PartialType } from '@nestjs/graphql';
+import { InputType, PartialType } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateRouteInput extends PartialType(CreateRouteInput) {
-  @Field()
-  id: string;
-}
+export class UpdateRouteInput extends PartialType(CreateRouteInput) {}

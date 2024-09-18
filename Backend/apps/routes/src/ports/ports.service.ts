@@ -24,7 +24,7 @@ export class PortsService {
   async findOne(id: string): Promise<Port> {
     const port = await this.portRepository.findOneBy({ id });
     if (!port) {
-      throw new NotFoundException(`Port with ID "${id}" not found`);
+      throw new NotFoundException(`Port with Name "${id}" not found`);
     }
     return port;
   }
@@ -36,13 +36,13 @@ export class PortsService {
     });
 
     if (!port) {
-      throw new NotFoundException(`Port with ID "${id}" not found`);
+      throw new NotFoundException(`Port with Name "${id}" not found`);
     }
 
     return this.portRepository.save(port);
   }
 
-  async remove(id: string): Promise<Port> {
+  async remove(id: string) {
     const port = await this.findOne(id);
     await this.portRepository.remove(port);
     return port;

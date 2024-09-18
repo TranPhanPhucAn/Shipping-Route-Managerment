@@ -17,13 +17,13 @@ export class Schedule {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Field(() => Vessel)
-  @ManyToOne(() => Vessel, { nullable: false })
-  vessel: Vessel;
+  @Field(() => String)
+  @ManyToOne(() => Vessel, (vessel) => vessel.id, { nullable: false })
+  vessel_Id: Vessel;
 
   @Field(() => Route)
-  @ManyToOne(() => Route, { nullable: false })
-  route: Route;
+  @ManyToOne(() => Route, (route) => route.id, { nullable: false })
+  route_Id: Route;
 
   @Field()
   @Column()

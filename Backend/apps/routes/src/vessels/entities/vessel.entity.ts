@@ -6,7 +6,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { User } from '../../routes/entities/user.entity';
 
 @ObjectType()
 @Entity()
@@ -27,12 +26,9 @@ export class Vessel {
   @Column()
   capacity: number;
 
-  @Field(() => User)
-  user: User;
-
+  @Field(() => String)
   @Column()
-  @Field()
-  userId: string;
+  ownerId: string;
 
   @Field()
   @CreateDateColumn()

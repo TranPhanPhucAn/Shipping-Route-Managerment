@@ -1,36 +1,44 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
+  Entity,
+  PrimaryColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { Route } from '../../routes/entities/route.entity';
 
 @ObjectType()
-@Entity()
+@Entity('ports')
 export class Port {
-  @Field(() => ID)
-  @PrimaryGeneratedColumn()
+  @Field(() => String)
+  @PrimaryColumn()
   id: string;
 
-  @Field()
-  @Column({ unique: true })
+  @Field(() => String)
+  @Column()
   name: string;
 
-  @Field()
+  @Field(() => String)
   @Column()
   location: string;
 
+  @Field(() => [Route])
+  @OneToMany(() => Route, (route) => route.departurePort)
+  departureRoutes: Route[];
+
+  @Field(() => [Route])
+  @OneToMany(() => Route, (route) => route.destinationPort)
+  destinationRoutes: Route[];
+
   @Field()
   @Column()
-  country: string;
-
-  @Field()
   @CreateDateColumn()
-  created_at: Date;
+  createdAt: Date;
 
   @Field()
+  @Column()
   @UpdateDateColumn()
-  updated_at: Date;
+  updatedAt: Date;
 }
