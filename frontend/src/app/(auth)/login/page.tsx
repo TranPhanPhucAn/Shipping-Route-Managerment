@@ -79,6 +79,14 @@ const Login: React.FC = () => {
     }
   };
 
+  const handleLoginGoogle = async () => {
+    try {
+      await signIn("google", { callbackUrl: "/" });
+    } catch (err: any) {
+      console.log("error client: ", err);
+      // message.error(`Login failed: ${err?.graphQLErrors[0]?.message}`);
+    }
+  };
   return (
     <Row className={styles.container}>
       <Col>
@@ -156,7 +164,7 @@ const Login: React.FC = () => {
                 <Button
                   icon={<GoogleOutlined />}
                   className={styles.socialButton}
-                  onClick={() => signIn("google")}
+                  onClick={handleLoginGoogle}
                 />
               </Col>
               <Col>

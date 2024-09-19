@@ -104,8 +104,10 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
       }),
     ],
     callbacks: {
-      async jwt({ token, user, account }) {
-        console.log("get jwt: ", account);
+      async jwt({ token, user }) {
+        // console.log("get jwt: ", user);
+        // console.log("get token jwt: ", token);
+
         if (user) {
           token.id = user.id;
           token.email = user.email;
@@ -113,9 +115,6 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
           token.address = user.address;
           token.expAccessToken = user.expAccessToken * 1000;
           token.isLogin = true;
-        }
-        if (token) {
-          token.username = token.name ?? "";
         }
         return token;
       },
@@ -138,13 +137,69 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
         }
         return session;
       },
-      async signIn({ user, account, profile, email, credentials }) {
+      async signIn({ user, account, profile }) {
         if (account?.provider === "google") {
-          console.log("user: ", user);
-          console.log("account: ", account);
-          console.log("profile: ", profile);
-          console.log("email: ", email);
-          console.log("credentials: ", credentials);
+          const { id_token } = account;
+          const { email } = user;
+          try {
+            const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URI!, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                query: `
+                mutation loginWithGoogle($loginInputGoogle: LoginInputGoogle!) {
+                  loginWithGoogle(loginInputGoogle: $loginInputGoogle) {
+                    user {
+                      id
+                      email
+                      username
+                    }
+                    expAccessToken
+                  }
+                }
+              `,
+                variables: {
+                  loginInputGoogle: {
+                    email,
+                    idToken: id_token,
+                  },
+                },
+              }),
+              credentials: "include",
+            });
+            const cookiesList = response.headers.get("set-cookie");
+
+            if (cookiesList) {
+              // Correctly handle splitting multiple cookies, considering commas in Expires attributes
+              const cookiesArray =
+                cookiesList.match(
+                  /(?<=^|,)([^,]*?Expires=.*?GMT);?(\s*HttpOnly)?(\s*Secure)?(\s*SameSite=None)?/g
+                ) || [];
+              res.setHeader("Set-Cookie", cookiesArray);
+            }
+            const { data, errors } = await response.json();
+            // const { data } = response;
+
+            if (errors) {
+              console.log("erros: ", errors);
+              throw new Error(errors[0].message);
+            }
+
+            // const { data, errors } = response.parsedRes;
+
+            const userBackend = data?.loginWithGoogle?.user;
+            const expAccessToken = data?.loginWithGoogle?.expAccessToken;
+            user.expAccessToken = expAccessToken;
+            user.id = userBackend.id;
+            user.username = userBackend.userBackend;
+            user.address = userBackend.address;
+            return true;
+          } catch (err: any) {
+            throw new Error(err?.message || "Login failed");
+            // throw new Error(err?.graphQLErrors[0]?.message);
+          }
         }
         return true;
       },
@@ -152,6 +207,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
     pages: {
       signIn: "/login",
       // signOut: "/login",
+      error: "/authError",
     },
   };
 };

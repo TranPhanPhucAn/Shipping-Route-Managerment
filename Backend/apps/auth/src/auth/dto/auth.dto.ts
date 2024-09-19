@@ -21,7 +21,7 @@ export class LoginInputGoogle {
   email: string;
 
   @Field()
-  @IsNotEmpty({ message: 'Password is required' })
+  @IsNotEmpty({ message: 'Token is required' })
   @IsString()
-  password: string;
+  idToken: string;
 }

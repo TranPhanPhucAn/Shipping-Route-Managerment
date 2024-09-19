@@ -1,6 +1,6 @@
 import { forwardRef, Injectable, Inject } from '@nestjs/common';
 import { User } from '../users/entities/user.entity';
-import { LoginInput } from './dto/auth.dto';
+import { LoginInput, LoginInputGoogle } from './dto/auth.dto';
 import { LoginResponseService } from '../types/auth.types';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
@@ -12,6 +12,8 @@ import { Repository } from 'typeorm';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { GraphQLError } from 'graphql';
+import { Role } from '../roles/entities/role.entity';
+import { OAuth2Client } from 'google-auth-library';
 @Injectable()
 export class AuthService {
   constructor(
@@ -20,6 +22,8 @@ export class AuthService {
     private jwtService: JwtService,
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    @InjectRepository(Role)
+    private readonly rolesRepository: Repository<Role>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
@@ -59,6 +63,96 @@ export class AuthService {
         errorCode: '5001-1',
       },
     });
+  };
+
+  loginUserByGoogle = async (loginInputGoogle: LoginInputGoogle) => {
+    let user: User | undefined;
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+    if (loginInputGoogle.email) {
+      user = await this.userService.findOneByEmail(loginInputGoogle.email);
+      if (!user) {
+        let ticket;
+        try {
+          ticket = await client.verifyIdToken({
+            idToken: loginInputGoogle.idToken,
+            audience: process.env.GOOGLE_CLIENT_ID,
+          });
+        } catch (err) {
+          console.log('err: ', err);
+          throw new GraphQLError('Error verify Google account', {
+            extensions: {
+              errorCode: '5001-12',
+            },
+          });
+        }
+        const payload = ticket.getPayload();
+        console.log('payload: ', payload);
+        if (payload.email != loginInputGoogle.email) {
+          throw new GraphQLError('Error verify Google account', {
+            extensions: {
+              errorCode: '5001-13',
+            },
+          });
+        }
+
+        const roleRegister = await this.rolesRepository.findOne({
+          where: { name: 'user' },
+        });
+        const userEntity = this.usersRepository.create();
+        let createUser = {
+          ...userEntity,
+          email: payload.email,
+          password: '',
+          address: '',
+          username: payload.name,
+          role: roleRegister,
+        };
+        const { token, expAccessToken } = this.createAccessToken(createUser);
+        const refreshToken = this.createRefreshToken(createUser).token;
+        createUser = {
+          ...createUser,
+          refreshToken: refreshToken,
+        };
+        const newUser: User | undefined =
+          await this.usersRepository.save(createUser);
+        return {
+          user: newUser,
+          accessToken: token,
+          refreshToken: refreshToken,
+          expAccessToken: expAccessToken,
+        };
+      } else {
+        if (user.password) {
+          throw new GraphQLError('You signed up by other method', {
+            extensions: {
+              errorCode: '5001-14',
+            },
+          });
+        }
+        try {
+          await client.verifyIdToken({
+            idToken: loginInputGoogle.idToken,
+            audience: process.env.GOOGLE_CLIENT_ID,
+          });
+          const { token, expAccessToken } = this.createAccessToken(user);
+          const refreshToken = this.createRefreshToken(user).token;
+          this.usersRepository.update(user.id, { refreshToken: refreshToken });
+          return {
+            user: user,
+            accessToken: token,
+            refreshToken: refreshToken,
+            expAccessToken: expAccessToken,
+          };
+        } catch (err) {
+          console.log('err: ', err);
+          throw new GraphQLError('Error verify Google account', {
+            extensions: {
+              errorCode: '5001-12',
+            },
+          });
+        }
+      }
+    }
   };
 
   logoutUser = async (req: any) => {

@@ -1,0 +1,17 @@
+.autherror {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100vh;
+  .box-error {
+    border: 2px solid black;
+    padding: 20px;
+    border-radius: 20px;
+    .header-error {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+  }
+}

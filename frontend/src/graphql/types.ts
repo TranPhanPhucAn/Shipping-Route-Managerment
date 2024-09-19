@@ -3,6 +3,11 @@ export interface LoginInput {
   password: string;
 }
 
+export interface LoginInputGoogle {
+  email: string;
+  idToken: string;
+}
+
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;

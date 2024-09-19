@@ -61,8 +61,7 @@ export class AuthResolver {
     @Context() context: any,
   ): Promise<LoginResponse> {
     try {
-      const result =
-        await this.authService.loginUserByPassword(loginInputGoogle);
+      const result = await this.authService.loginUserByGoogle(loginInputGoogle);
       if (result) {
         const { user, accessToken, refreshToken, expAccessToken } = result;
         const expires = new Date(Date.now() + 1 * 60 * 60 * 1000);

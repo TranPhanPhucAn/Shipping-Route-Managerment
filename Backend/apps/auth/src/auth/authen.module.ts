@@ -11,6 +11,7 @@ import { User } from '../users/entities/user.entity';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
+import { Role } from '../roles/entities/role.entity';
 
 dotenv.config();
 @Module({
@@ -21,7 +22,7 @@ dotenv.config();
       signOptions: { expiresIn: process.env.EXPIRES_IN },
     }),
     forwardRef(() => UsersModule),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Role]),
     CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
