@@ -105,7 +105,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
     ],
     callbacks: {
       async jwt({ token, user }) {
-        // console.log("get jwt: ", user);
+        console.log("get jwt: ", user);
         // console.log("get token jwt: ", token);
 
         if (user) {
@@ -115,6 +115,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
           token.address = user.address;
           token.expAccessToken = user.expAccessToken * 1000;
           token.isLogin = true;
+          console.log("get token jwt: ", token);
         }
         return token;
       },
@@ -193,7 +194,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
             const expAccessToken = data?.loginWithGoogle?.expAccessToken;
             user.expAccessToken = expAccessToken;
             user.id = userBackend.id;
-            user.username = userBackend.userBackend;
+            user.username = userBackend.username;
             user.address = userBackend.address;
             return true;
           } catch (err: any) {

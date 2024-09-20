@@ -167,12 +167,12 @@ const Login: React.FC = () => {
                   onClick={handleLoginGoogle}
                 />
               </Col>
-              <Col>
+              {/* <Col>
                 <Button
                   icon={<FacebookOutlined />}
                   className={styles.socialButton}
                 />
-              </Col>
+              </Col> */}
             </Row>
           </div>
         </Form>

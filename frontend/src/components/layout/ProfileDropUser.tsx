@@ -9,12 +9,14 @@ import { signOut, useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
 import { LOGOUT_USER } from "@/src/graphql/mutations/Auth";
 
-const handleMenuClick: MenuProps["onClick"] = (e) => {
-  //   message.info("Click on menu item.");
-  console.log("click", e);
-};
-
 const ProfileDropUser: React.FC = () => {
+  const handleMenuClick: MenuProps["onClick"] = async (e) => {
+    //   message.info("Click on menu item.");
+    console.log("click", e);
+    if (e.key === "3") {
+      await handleSignOut();
+    }
+  };
   // const [singedIn, setSignedIn] = useState(false);
   const router = useRouter(); // Initialize useRouter
   const { data: session, status, update } = useSession();
@@ -38,7 +40,7 @@ const ProfileDropUser: React.FC = () => {
       key: "2",
     },
     {
-      label: <span onClick={handleSignOut}>Log Out</span>,
+      label: <span>Log Out</span>,
       key: "3",
     },
   ];

@@ -192,7 +192,7 @@ export class UsersService {
       'forgot_password',
       new ForgotPasswordEvent(
         email,
-        'Activate your accout',
+        'Reset password',
         user.username,
         resetPasswordUrl,
       ),
