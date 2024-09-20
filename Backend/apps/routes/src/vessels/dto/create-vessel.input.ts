@@ -12,5 +12,5 @@ export class CreateVesselInput {
   capacity: number;
 
   @Field()
-  userId: string;
+  ownerId: string;
 }

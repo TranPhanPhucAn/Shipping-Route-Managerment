@@ -2,19 +2,32 @@ import { encode, getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const privatePaths = ["/profile"];
+const privatePaths = ["/profile", "/routes"];
 const authPaths = ["/login", "/register"];
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const token = await getToken({ req: request });
-
   if (token) {
-    if (token.expAccessToken - Date.now() < 10 * 1000) {
-      console.log("date: ", Date.now());
+    if (token.expAccessToken - Date.now() < 60 * 1000) {
       const accessToken = request.cookies.get("access_token")?.value || "";
       const refreshToken = request.cookies.get("refresh_token")?.value || "";
+      if (!accessToken) {
+        const res = NextResponse.redirect(new URL("/login", request.url));
+        res.cookies.set("refresh_token", "", {
+          maxAge: 0,
+          path: "/",
+          httpOnly: true,
+        });
+        res.cookies.set("next-auth.session-token", "", {
+          maxAge: 0,
+          path: "/",
+          httpOnly: true,
+        });
+        return res;
+      }
+
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URI!, {
           method: "POST",

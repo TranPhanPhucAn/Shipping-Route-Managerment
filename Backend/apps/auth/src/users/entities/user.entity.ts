@@ -14,7 +14,7 @@ import { Role } from '../../roles/entities/role.entity';
 @Directive('@key(fields: "id")')
 export class User {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   id: string;
 
   @Column()

@@ -41,10 +41,6 @@
   cursor: pointer;
   margin-top: 0.5rem;
 }
-.spButton:hover {
-  background-color: #334155 !important;
-  color: white !important;
-}
 
 .title {
   margin: 0 auto;
@@ -85,9 +81,6 @@
   color: white !important;
   border: none;
   cursor: pointer;
-}
-.mainButton:hover {
-  width: 100%;
 }
 
 .socialLogin {

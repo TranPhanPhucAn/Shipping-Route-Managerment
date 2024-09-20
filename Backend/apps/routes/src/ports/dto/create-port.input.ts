@@ -1,8 +1,14 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
+import { OneToMany } from 'typeorm';
 
 @InputType()
 export class CreatePortInput {
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  id: string;
+
   @Field()
   @IsNotEmpty()
   @IsString()
@@ -12,9 +18,4 @@ export class CreatePortInput {
   @IsNotEmpty()
   @IsString()
   location: string;
-
-  @Field()
-  @IsNotEmpty()
-  @IsString()
-  country: string;
 }

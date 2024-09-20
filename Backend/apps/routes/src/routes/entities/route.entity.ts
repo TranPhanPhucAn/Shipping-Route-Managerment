@@ -1,71 +1,45 @@
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
+  Column,
   Entity,
   PrimaryGeneratedColumn,
-  Column,
+  ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
-  // ManyToOne,
-  // JoinColumn,
+  Unique,
+  JoinColumn,
 } from 'typeorm';
-import { ObjectType, Field, ID } from '@nestjs/graphql';
-// import { Port } from '../../ports/entities/port.entity';
-// import { User } from './user.entity';
+import { Port } from '../../ports/entities/port.entity';
 
 @ObjectType()
-@Entity()
+@Entity('routes')
+@Unique(['departurePort', 'destinationPort'])
 export class Route {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: string;
 
-  // @Field(() => Port)
-  // departurePort: Port;
+  @Field(() => Port)
+  @ManyToOne(() => Port, (port) => port.departureRoutes, { eager: true })
+  @JoinColumn({ name: 'departurePortId' })
+  departurePort: Port;
 
-  // @Field(() => Port)
-  // @ManyToOne(() => Port)
-  // @JoinColumn({ name: 'departure_port_id' })
-  // departurePortId: string;
+  @Field(() => Port)
+  @ManyToOne(() => Port, (port) => port.destinationRoutes, { eager: true })
+  @JoinColumn({ name: 'destinationPortId' })
+  destinationPort: Port;
 
-  // @Field(() => Port)
-  // destinationPort: Port;
-
-  // @Field(() => Port)
-  // @ManyToOne(() => Port)
-  // @JoinColumn({ name: 'destination_port_id' })
-  // destinationPortId: string;
-
-  @Field()
+  @Field(() => Number)
   @Column()
-  departurePort: string;
-
-  @Field()
-  @Column()
-  destinationPort: string;
-
-  @Field()
-  @Column('float')
   distance: number;
 
   @Field()
-  @Column('int')
-  estimatedTime: number;
-
-  @Field()
-  @Column('float')
-  price: number;
-
-  // @Field(() => User)
-  // user: User;
-
-  // @Column()
-  // @Field()
-  // userId: string;
-
-  @Field()
+  @Column()
   @CreateDateColumn()
-  created_at: Date;
+  createdAt: Date;
 
   @Field()
+  @Column()
   @UpdateDateColumn()
-  updated_at: Date;
+  updatedAt: Date;
 }
