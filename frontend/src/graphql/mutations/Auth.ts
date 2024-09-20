@@ -91,3 +91,62 @@ export const DELETE_ROUTE = gql`
     removeRoute(id: $id)
   }
 `;
+
+export const CREATE_SCHEDULE = gql`
+  mutation CreateSchedule($createScheduleInput: CreateScheduleInput!) {
+    createSchedule(createScheduleInput: $createScheduleInput) {
+      id
+      vessel {
+        id
+        name
+      }
+      route {
+        id
+        departurePort {
+          id
+          name
+        }
+        destinationPort {
+          id
+          name
+        }
+      }
+      departure_time
+      arrival_time
+      status
+    }
+  }
+`;
+
+export const UPDATE_SCHEDULE = gql`
+  mutation UpdateSchedule(
+    $id: String!
+    $updateScheduleInput: UpdateScheduleInput!
+  ) {
+    updateSchedule(id: $id, updateScheduleInput: $updateScheduleInput) {
+      id
+      vessel {
+        id
+        name
+      }
+      route {
+        id
+        departurePort {
+          name
+        }
+        destinationPort {
+          name
+        }
+      }
+      departure_time
+      arrival_time
+      status
+    }
+  }
+`;
+export const DELETE_SCHEDULE = gql`
+  mutation removeSchedule($id: String!) {
+    removeSchedule(id: $id)
+  }
+`;
+

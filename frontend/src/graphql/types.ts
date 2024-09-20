@@ -58,3 +58,32 @@ export interface UpdateRouteInput {
   destinationPortId: string;
   distance: number;
 }
+
+export interface CreateScheduleInput {
+  vesselId: string;
+  routeId: string;
+  departureTime: string;
+  arrivalTime: string;
+}
+
+export interface Vessel {
+  id: string;
+  name: string;
+  type: string;
+  capacity: number;
+  status: string;
+}
+export interface GetVesselsData {
+  vessels: Vessel[];
+}
+export interface Schedule {
+  id: string;
+  vessel: Vessel;
+  route: Route;
+  departure_time: string;
+  arrival_time: string;
+  status: string;
+}
+export interface GetSchedulesData {
+  schedules: Schedule[];
+}

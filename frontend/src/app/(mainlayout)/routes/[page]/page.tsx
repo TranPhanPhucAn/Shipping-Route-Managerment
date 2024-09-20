@@ -1,14 +1,21 @@
 "use client";
 import { useMutation, useQuery } from "@apollo/client";
-import { Table, Button, message, Breadcrumb } from "antd";
-import { GET_ROUTES } from "../../graphql/queries/query";
-import { GetRoutesData, Route } from "../../graphql/types";
+import {
+  Table,
+  Button,
+  message,
+  Popconfirm,
+  TablePaginationConfig,
+} from "antd";
+import { GET_ROUTES } from "../../../../graphql/queries/query";
+import { GetRoutesData, Route } from "../../../../graphql/types";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import CreateRouteModal from "./CreateRouteModal";
-import UpdateRouteModal from "./UpdateRouteModal";
+import CreateRouteModal from "../../../../components/Routes/CreateRouteModal";
+import UpdateRouteModal from "../../../../components/Routes/UpdateRouteModal";
 import { DELETE_ROUTE } from "@/src/graphql/mutations/Auth";
-import { useState } from "react";
-import styles from "../../styles/Route.module.css";
+import { useState, useEffect } from "react";
+import styles from "../../../../styles/Route.module.css";
+import { useParams, useRouter } from "next/navigation";
 
 const getUniqueValues = (data: any[], key: string) => {
   return Array.from(
@@ -22,14 +29,22 @@ const RoutesList = () => {
   const [selectedRoute, setSelectedRoute] = useState<Route | null>(null);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const routesData = data?.routes || [];
-  const [pagination, setPagination] = useState({
-    current: 1,
+  const params = useParams();
+  const page = params?.page ? Number(params.page) : 1;
+  const router = useRouter();
+  const [pagination, setPagination] = useState<TablePaginationConfig>({
+    current: page,
     pageSize: 5,
-    total: routesData.length,
   });
-
-  const handleTableChange = (paginationInfo: any) => {
-    setPagination(paginationInfo);
+  useEffect(() => {
+    setPagination((prev) => ({
+      ...prev,
+      current: page,
+    }));
+  }, [page]);
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    setPagination(pagination);
+    router.push(`/routes/${pagination.current}`);
   };
   const handleRemove = async (id: string) => {
     try {
@@ -128,50 +143,60 @@ const RoutesList = () => {
           <Button
             type="link"
             onClick={() => handleEdit(record)}
-            icon={<EditOutlined />} 
+            icon={<EditOutlined />}
           >
             Edit
           </Button>
-          <Button
-            type="link"
-            danger
-            onClick={() => handleRemove(record.id)}
-            loading={deleteLoading}
-            icon={<DeleteOutlined />}
-          
+          <Popconfirm
+            placement="topLeft"
+            title={"Are you sure to delete this route?"}
+            description={"Delete the route"}
+            okText="Yes"
+            cancelText="No"
+            onConfirm={() => handleRemove(record.id)}
+            onCancel={() => console.log("Delete canceled")}
           >
-            Delete
-          </Button>
+            <Button
+              type="link"
+              danger
+              loading={deleteLoading}
+              icon={<DeleteOutlined />}
+            >
+              Delete
+            </Button>
+          </Popconfirm>
         </>
       ),
     },
   ];
 
   return (
-    <div className={styles.container}>
-      {/* <div className={styles.buttonContainer}>
+    <div>
+      <h1 className={styles.Title}>ROUTES</h1>
+      <p className={styles.addButton}>
         <CreateRouteModal />
-      </div> */}
-      <Table
-        dataSource={routesData}
-        columns={columns}
-        className={styles.routeTable}
-        pagination={pagination}
-        onChange={handleTableChange}
-        scroll={{
-          x: 500,
-          y: 500,
-        }}
-      />
-      {selectedRoute && (
-        <UpdateRouteModal
-          id={selectedRoute.id}
-          route={selectedRoute}
-          visible={isUpdateModalVisible}
-          onClose={handleUpdateModalClose}
-          // refetch={refetch}
+      </p>
+      <div className={styles.container}>
+        <Table
+          dataSource={routesData}
+          columns={columns}
+          className={styles.routeTable}
+          pagination={{
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+          }}
+          onChange={handleTableChange}
         />
-      )}
+        {selectedRoute && (
+          <UpdateRouteModal
+            id={selectedRoute.id}
+            route={selectedRoute}
+            visible={isUpdateModalVisible}
+            onClose={handleUpdateModalClose}
+            // refetch={refetch}
+          />
+        )}
+      </div>
     </div>
   );
 };

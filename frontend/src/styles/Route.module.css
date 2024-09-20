@@ -1,3 +1,7 @@
+.Title {
+  text-align: left;
+  margin-left: 2rem;
+}
 .container {
   display: flex;
   max-width: 100%;
@@ -26,7 +30,7 @@
 }
 
 .addButton {
-  background-color: #1890ff;
+  background-color: #334155;
   color: white;
   padding: 8px 16px;
   border: none;
@@ -36,7 +40,7 @@
 }
 
 .addButton:hover {
-  background-color: #40a9ff;
+  background-color:  #334155 ;
 }
 
 /* Edit/Delete buttons inside table */
