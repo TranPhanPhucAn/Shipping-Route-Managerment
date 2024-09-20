@@ -28,6 +28,9 @@ export class VesselsService {
     }
     return vessel;
   }
+  async save(vessel: Vessel): Promise<Vessel> {
+    return this.vesselRepository.save(vessel);
+  }
 
   async update(
     id: string,

@@ -27,9 +27,10 @@ export class VesselsResolver {
 
   @Mutation(() => Vessel)
   updateVessel(
+    @Args('ID') id: string,
     @Args('updateVesselInput') updateVesselInput: UpdateVesselInput,
   ) {
-    return this.vesselService.update(updateVesselInput.id, updateVesselInput);
+    return this.vesselService.update(id, updateVesselInput);
   }
 
   @Mutation(() => Vessel)

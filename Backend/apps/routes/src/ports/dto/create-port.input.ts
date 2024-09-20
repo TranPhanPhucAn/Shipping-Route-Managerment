@@ -1,6 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
-import { OneToMany } from 'typeorm';
 
 @InputType()
 export class CreatePortInput {
