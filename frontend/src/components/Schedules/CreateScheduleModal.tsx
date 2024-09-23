@@ -13,7 +13,6 @@ import {
 } from "../../graphql/types";
 import moment from "moment";
 
-
 const { Option } = Select;
 
 const CreateScheduleModal = () => {
@@ -26,7 +25,6 @@ const CreateScheduleModal = () => {
   const { data: vesselsData } = useQuery<GetVesselsData>(GET_VESSELS);
   const { data: routesData } = useQuery<GetRoutesData>(GET_ROUTES);
   const [form] = Form.useForm();
- 
 
   const vessels: Vessel[] = vesselsData?.vessels || [];
   const routes: Route[] = routesData?.routes || [];

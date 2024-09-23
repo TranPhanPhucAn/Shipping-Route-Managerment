@@ -6,10 +6,12 @@ import {
   message,
   Popconfirm,
   TablePaginationConfig,
+  Tag,
+  Divider,
 } from "antd";
 import { GET_SCHEDULES } from "../../../../graphql/queries/query";
 import { GetSchedulesData, Schedule } from "../../../../graphql/types";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, EyeOutlined} from "@ant-design/icons";
 import CreateScheduleModal from "../../../../components/Schedules/CreateScheduleModal";
 import UpdateScheduleModal from "../../../../components/Schedules/UpdateScheduleModal";
 import { DELETE_SCHEDULE } from "@/src/graphql/mutations/Auth";
@@ -51,6 +53,7 @@ const SchedulesList = () => {
   const handleTableChange = (pagination: TablePaginationConfig) => {
     setPagination(pagination);
     router.push(`/schedules/${pagination.current}`);
+    refetch();
   };
 
   const handleRemove = async (id: string) => {
@@ -106,16 +109,57 @@ const SchedulesList = () => {
         { text: "Cancelled", value: "CANCELLED" },
       ],
       onFilter: (value: any, record: any) => record.status === value,
+      render: (text: string, record: Schedule) => {
+        let color = "white";
+
+        if (record.status === "SCHEDULED") {
+          color = "#FCDC94";
+        } else if (record.status === "IN_TRANSIT") {
+          color = "#85C1E9";
+        } else if (record.status === "COMPLETED") {
+          color = "#58D68D";
+        } else {
+          color = "red";
+        }
+
+        return (
+          <Tag color={color} key={record.id}>
+            {record.status.toUpperCase()}
+          </Tag>
+        );
+      },
     },
     {
       title: "Depature Time",
       dataIndex: ["departure_time"],
       key: "departure_time",
+      // render: (departure_time: string) => {
+      //   const date = new Date(departure_time);
+      //   const formattedDate = date.toLocaleDateString("en-GB", {
+      //     day: "2-digit",
+      //     month: "short",
+      //     year: "numeric",
+      //   });
+
+      //   return `${formattedDate} `;
+      // },
+      render: (text: string, record: Schedule) => {
+        const formattedDate = new Date(
+          record.departure_time
+        ).toLocaleDateString("en-GB");
+        return <span>{formattedDate}</span>;
+      },
     },
     {
       title: "Arrival Time",
       dataIndex: ["arrival_time"],
       key: "arrival_time",
+      render: (text: string, record: Schedule) => {
+        const formattedDate = new Date(record.arrival_time).toLocaleDateString(
+          "en-GB"
+        );
+        return <span>{formattedDate}</span>;
+      },
     },
     {
       title: "Action",
@@ -123,6 +167,13 @@ const SchedulesList = () => {
       key: "id",
       render: (text: string, record: Schedule) => (
         <>
+          <Button
+            type="link"
+            onClick={() => handleEdit(record)}
+            icon={<EyeOutlined />}
+          >
+            View
+          </Button>
           <Button
             type="link"
             onClick={() => handleEdit(record)}
@@ -154,16 +205,19 @@ const SchedulesList = () => {
   ];
 
   return (
-    <div>
-      <h1 className={styles.Title}>SCHEDULES</h1>
-      <p className={styles.addButton}>
-        <CreateScheduleModal />
-      </p>
+    <div className={styles.body}>
+      <div className={styles.Title}>Schedules</div>
+      <div className={styles.subtitle}>
+        Search our extensive routes to find the schedule which fits your supply
+        chain.
+      </div>
+      <Divider style={{ borderColor: "#334155" }}></Divider>
+      <CreateScheduleModal />
       <div className={styles.container}>
         <Table
-          dataSource={schedulesData}
+          dataSource={schedulesData || []}
           columns={columns}
-          className={styles.routeTable}
+          className={styles.Table}
           pagination={{
             current: pagination.current,
             pageSize: pagination.pageSize,

@@ -6,10 +6,11 @@ import {
   message,
   Popconfirm,
   TablePaginationConfig,
+  Divider
 } from "antd";
 import { GET_ROUTES } from "../../../../graphql/queries/query";
 import { GetRoutesData, Route } from "../../../../graphql/types";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import CreateRouteModal from "../../../../components/Routes/CreateRouteModal";
 import UpdateRouteModal from "../../../../components/Routes/UpdateRouteModal";
 import { DELETE_ROUTE } from "@/src/graphql/mutations/Auth";
@@ -143,6 +144,13 @@ const RoutesList = () => {
           <Button
             type="link"
             onClick={() => handleEdit(record)}
+            icon={<EyeOutlined />}
+          >
+            View
+          </Button>
+          <Button
+            type="link"
+            onClick={() => handleEdit(record)}
             icon={<EditOutlined />}
           >
             Edit
@@ -171,16 +179,16 @@ const RoutesList = () => {
   ];
 
   return (
-    <div>
+    <div className={styles.body}>
       <h1 className={styles.Title}>ROUTES</h1>
-      <p className={styles.addButton}>
-        <CreateRouteModal />
-      </p>
+      <Divider style={{ borderColor: "#334155" }}></Divider>
+      <CreateRouteModal />
+
       <div className={styles.container}>
         <Table
           dataSource={routesData}
           columns={columns}
-          className={styles.routeTable}
+          className={styles.Table}
           pagination={{
             current: pagination.current,
             pageSize: pagination.pageSize,
