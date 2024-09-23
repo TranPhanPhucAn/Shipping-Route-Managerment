@@ -82,15 +82,23 @@ export class SchedulesService {
     const vessel = await this.vesselsRepository.findOne({
       where: { id: schedule.vessel.id },
     });
-    schedule.status = updateScheduleInput.status;
+    if (
+      schedule.status === ScheduleStatus.SCHEDULED ||
+      schedule.status === ScheduleStatus.IN_TRANSIT
+    ) {
+      schedule.status = updateScheduleInput.status;
+    } else {
+      throw new NotFoundException(`This schedule cannot update!`);
+    }
     const savedSchedule = await this.schedulesRepository.save(schedule);
     if (
-      schedule.status != ScheduleStatus.IN_TRANSIT &&
-      schedule.status != ScheduleStatus.SCHEDULED
+      schedule.status === ScheduleStatus.CANCELLED ||
+      schedule.status === ScheduleStatus.COMPLETED
     ) {
       vessel.status = VesselStatus.AVAILABLE;
       await this.vesselsRepository.save(vessel);
     }
+
     return savedSchedule;
   }
 

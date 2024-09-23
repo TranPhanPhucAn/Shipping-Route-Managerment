@@ -9,6 +9,14 @@ import {
 import { ObjectType, Field, ID, registerEnumType } from '@nestjs/graphql';
 import { Schedule } from '../../schedules/entities/schedule.entity';
 
+export enum VesselType {
+  CONTAINER_SHIP = 'CONTAINER_SHIP',
+  BULK_CARRIER = 'BULK_CARRIER',
+  TANKER = 'TANKER',
+  RO_RO_SHIP = 'RO_RO_SHIP',
+  PASSENGER_SHIP = 'PASSENGER_SHIP',
+}
+
 export enum VesselStatus {
   AVAILABLE = 'AVAILABLE',
   IN_TRANSIT = 'IN_TRANSIT',
@@ -17,6 +25,10 @@ export enum VesselStatus {
 registerEnumType(VesselStatus, {
   name: 'VesselStatus',
   description: 'The current operational status of the vessel',
+});
+registerEnumType(VesselType, {
+  name: 'VesselType',
+  description: 'Types of vessels used for different purposes',
 });
 @ObjectType()
 @Entity()
@@ -29,9 +41,9 @@ export class Vessel {
   @Column({ unique: true })
   name: string;
 
-  @Field()
+  @Field(() => VesselType)
   @Column()
-  type: string;
+  type: VesselType;
 
   @Field()
   @Column()

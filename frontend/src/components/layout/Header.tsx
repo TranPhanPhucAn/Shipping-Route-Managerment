@@ -29,12 +29,16 @@ const items: MenuItem[] = [
     label: <Link href={"/schedules/1"}>Schedules</Link>,
     key: "/schedules/1",
   },
+  {
+    label: <Link href={"/vessels/1"}>Vessels</Link>,
+    key: "/vessels/1",
+  },
 ];
 const Header: React.FC = () => {
   const [current, setCurrent] = useState("/");
   const [openMenu, setOpenMenu] = useState(false);
 
-  const router = useRouter(); 
+  const router = useRouter();
   const pathname = usePathname() || "/";
   const { data: session, status, update } = useSession();
   const onClick: MenuProps["onClick"] = (e) => {

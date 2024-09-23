@@ -1,10 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Button, Form, Input, Modal, message } from "antd";
-import { useMutation } from "@apollo/client";
+import { Button, Form, Input, Modal, message, Select } from "antd";
+import { useMutation, useQuery } from "@apollo/client";
 import { UPDATE_ROUTE } from "../../graphql/mutations/Auth";
 import { Route } from "../../graphql/types";
 import styles from "../../styles/Route.module.css";
+import { GetPortsData, Port } from "../../graphql/types";
+import { GET_PORTS } from "@/src/graphql/queries/query";
+
+const { Option } = Select;
 
 interface UpdateRouteModalProps {
   id: string;
@@ -18,11 +22,14 @@ const UpdateRouteModal = ({
   visible,
   onClose,
 }: UpdateRouteModalProps) => {
-  const [form] = Form.useForm();
   const [departurePortId, setDeparturePortId] = useState("");
   const [destinationPortId, setDestinationPortId] = useState("");
   const [distance, setDistance] = useState("");
   const [updateRoute, { loading, error }] = useMutation(UPDATE_ROUTE);
+  const { data } = useQuery<GetPortsData>(GET_PORTS);
+  const [form] = Form.useForm();
+
+  const PortsData: Port[] = data?.ports || [];
 
   useEffect(() => {
     if (route) {
@@ -68,21 +75,27 @@ const UpdateRouteModal = ({
       onCancel={handleCancel}
       footer={null}
     >
-      <Form
-        form={form}
-        onFinish={handleUpdateRoute}
-        layout="vertical"
-        
-      >
+      <Form form={form} onFinish={handleUpdateRoute} layout="vertical">
         <Form.Item
           label="Departure Port"
           name="departurePortId"
           rules={[{ required: true, message: "Please enter Departure Port!" }]}
         >
-          <Input
+          <Select
             value={departurePortId}
-            onChange={(e) => setDeparturePortId(e.target.value)}
-          />
+            showSearch
+            onChange={(value) => setDeparturePortId(value)}
+            placeholder="Enter Departure Port"
+            filterOption={(input, option) =>
+              option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {PortsData.map((port) => (
+              <Option key={port.id} value={port.id}>
+                {port.name}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item
           label="Destination Port"
@@ -91,10 +104,21 @@ const UpdateRouteModal = ({
             { required: true, message: "Please enter Destination Port!" },
           ]}
         >
-          <Input
+          <Select
             value={destinationPortId}
-            onChange={(e) => setDestinationPortId(e.target.value)}
-          />
+            showSearch
+            onChange={(value) => setDestinationPortId(value)}
+            placeholder="Enter Destination Port"
+            filterOption={(input, option) =>
+              option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {PortsData.map((port) => (
+              <Option key={port.id} value={port.id}>
+                {port.name}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item
           label="Distance"
