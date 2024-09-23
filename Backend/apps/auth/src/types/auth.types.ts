@@ -125,3 +125,9 @@ export class DeleteRoleResponse {
   @Field()
   message?: string;
 }
+
+@ObjectType()
+export class UploadResponse {
+  @Field()
+  message?: string;
+}

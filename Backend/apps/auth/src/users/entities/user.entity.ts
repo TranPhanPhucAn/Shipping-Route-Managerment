@@ -33,6 +33,18 @@ export class User {
   address: string;
 
   @Column({
+    nullable: true,
+  })
+  @Field()
+  phone_number: string;
+
+  @Column({
+    nullable: true,
+  })
+  @Field()
+  image_url: string;
+
+  @Column({
     type: 'text',
     nullable: true,
   })

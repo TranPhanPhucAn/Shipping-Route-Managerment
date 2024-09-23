@@ -20,6 +20,7 @@ import { RolesModule } from './roles/roles.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { SeedingModule } from './seeding/seeding.module';
 import { dataSourceOptions } from './db-migration/data-source';
+import { FilesModule } from './files/files.module';
 
 interface OriginalError {
   message: string[];
@@ -83,6 +84,7 @@ interface OriginalError {
     RolesModule,
     PermissionsModule,
     SeedingModule,
+    FilesModule,
   ],
   providers: [],
   controllers: [UserGrpcServiceController],
