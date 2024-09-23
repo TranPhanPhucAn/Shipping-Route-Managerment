@@ -2,9 +2,13 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "declaration": false,
-    "outDir": "../../dist/apps/auth"
-    // "rootDir": "../../"
+    "outDir": "../../dist/apps/auth",
+    // "rootDir": "../../".
+    "allowJs": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts", "migrations"],
+  "watchOptions": {
+    "excludeFiles": ["migrations"]
+  }
 }

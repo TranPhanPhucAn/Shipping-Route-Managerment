@@ -20,6 +20,8 @@ import { GetUserResponse } from '../proto/user';
 import { ClientKafka } from '@nestjs/microservices';
 import { UserActivateEvent } from './events/user-activate.event';
 import { ForgotPasswordEvent } from './events/forgot-password.event';
+import { FilesService } from '../files/files.service';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -30,6 +32,7 @@ export class UsersService {
     private readonly rolesRepository: Repository<Role>,
     @Inject('NOTIFICATION_SERVICE')
     private readonly notificationClient: ClientKafka,
+    private readonly fileService: FilesService,
   ) {}
 
   async create(createUserInput: CreateUserInput) {
@@ -272,5 +275,21 @@ export class UsersService {
     user.role = role;
     await this.usersRepository.save(user);
     return user;
+  }
+  async saveUrl(id, file_url: string, containerName: string): Promise<void> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+    });
+    const file_image = user?.image_url;
+    let getfile = '';
+
+    if (file_image) {
+      getfile = file_image.split('/').pop();
+    }
+    await this.usersRepository.save({
+      ...user,
+      image_url: file_url,
+    });
+    await this.fileService.deleteFile(getfile, containerName);
   }
 }

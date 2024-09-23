@@ -13,6 +13,7 @@ import * as redisStore from 'cache-manager-redis-store';
 import { Role } from '../roles/entities/role.entity';
 import { Permission } from '../permissions/entities/permission.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { FilesService } from '../files/files.service';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     UsersService,
     JwtService,
     UserGrpcServiceController,
+    FilesService,
   ],
   exports: [UsersService],
 })

@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 // import { client } from "@/src/graphql/Provider";
 import { QUERY_USER } from "@/src/graphql/queries/query";
 import { useQuery } from "@apollo/client";
+import "./profile.scsss";
 
 const Profile = () => {
   const { data: session, status, update } = useSession();
@@ -16,6 +17,19 @@ const Profile = () => {
   });
 
   // return <>{data ? data?.user?.username : ""}</>;
-  return <>{session ? session?.user?.username : ""}</>;
+  return (
+    <>
+      {session ? session?.user?.username : ""}
+      <div className="container-profile">
+        <div>
+          <div className="avatar"></div>
+          <div className="">
+            <div className="username">{data.user.username}</div>
+            <div className=""></div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 export default Profile;

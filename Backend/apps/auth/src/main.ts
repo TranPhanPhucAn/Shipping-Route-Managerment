@@ -6,10 +6,16 @@ import { join } from 'path';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
-
+import * as graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AuthModule);
+  // app.use(graphqlUploadExpress({ maxFileSize: 1000000, maxFiles: 10 }));
+  app.use(
+    '/graphql',
+    graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }),
+  );
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
@@ -22,7 +28,6 @@ async function bootstrap() {
   });
   await app.startAllMicroservices();
   app.use(cookieParser());
-
   app.useGlobalPipes(new ValidationPipe());
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'email-templates'));

@@ -17,6 +17,7 @@ import {
   PaginationUserResponse,
   RegisterResponse,
   ResetPasswordResponse,
+  UploadResponse,
 } from '../types/auth.types';
 // import { AuthUserGuard } from '../auth/guards/auth.guards';
 import {
@@ -28,10 +29,17 @@ import {
 } from './dto/user.dto';
 import { SetMetadata, UseGuards } from '@nestjs/common';
 import { PermissionsGuard } from '../auth/guards/permissions.guard';
+import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import * as Upload from 'graphql-upload/Upload.js';
+
+import { FilesService } from '../files/files.service';
 
 @Resolver((of) => User)
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly fileService: FilesService,
+  ) {}
 
   @Mutation(() => RegisterResponse)
   async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
@@ -109,5 +117,24 @@ export class UsersResolver {
   @ResolveReference()
   resolveReferRoute(ref: { __typename: string; id: string }) {
     return this.usersService.findOneById(ref.id);
+  }
+
+  @Mutation(() => UploadResponse, { name: 'uploadImage' })
+  async uploadImage(
+    @Args('file', { type: () => GraphQLUpload }) file: Upload,
+    @Args('id') id: string,
+  ) {
+    // const check = await file;
+
+    // const fileData = await file;
+
+    // Log the entire file data to inspect it
+
+    const containerName = 'fileupload';
+    const upload = await this.fileService.uploadFile(file.file, containerName);
+    this.usersService.saveUrl(id, upload, containerName);
+    return {
+      message: 'Upload image successfull',
+    };
   }
 }
