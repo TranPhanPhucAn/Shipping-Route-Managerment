@@ -11,3 +11,8 @@ export class RouteUserResponse {
   @Field({ nullable: true })
   email: string;
 }
+@ObjectType()
+export class SeedResponse {
+  @Field()
+  message?: string;
+}

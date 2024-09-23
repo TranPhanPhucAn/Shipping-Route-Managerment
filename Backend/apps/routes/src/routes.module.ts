@@ -12,11 +12,13 @@ import { User } from './routes/entities/user.entity';
 import { DataSource } from 'typeorm';
 import { PortsModule } from './ports/ports.module';
 import { VesselsModule } from './vessels/vessels.module';
+import { SchedulesModule } from './schedules/schedules.module';
 import { dataSourceOptions } from './db-migration/data-source';
 // import { dataSourceOptions } from 'db-migration/data-source';
+import { SeedingModule } from './seeding/seeding.module';
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
       autoSchemaFile: {
@@ -29,6 +31,8 @@ import { dataSourceOptions } from './db-migration/data-source';
     HealthModule,
     PortsModule,
     VesselsModule,
+    SchedulesModule,
+    SeedingModule,
   ],
   providers: [],
 })

@@ -43,3 +43,40 @@ export const GET_PORTS = gql`
     }
   }
 `;
+
+export const GET_SCHEDULES = gql`
+  query GetSchedules {
+    schedules {
+      id
+      vessel {
+        id
+        name
+      }
+      route {
+        id
+        departurePort {
+          id
+          name
+        }
+        destinationPort {
+          id
+          name
+        }
+      }
+      departure_time
+      arrival_time
+      status
+    }
+  }
+`;
+export const GET_VESSELS = gql`
+  query GetVessels {
+    vessels {
+      id
+      name
+      type
+      capacity
+      status
+    }
+  }
+`;

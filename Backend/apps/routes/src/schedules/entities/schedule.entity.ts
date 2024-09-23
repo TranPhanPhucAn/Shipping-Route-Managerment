@@ -5,40 +5,59 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, registerEnumType } from '@nestjs/graphql';
 import { Vessel } from '../../vessels/entities/vessel.entity';
 import { Route } from '../../routes/entities/route.entity';
+
+export enum ScheduleStatus {
+  SCHEDULED = 'Scheduled',
+  IN_TRANSIT = 'In Transit',
+  COMPLETED = 'Completed',
+  CANCELLED = 'Cancelled',
+}
+
+registerEnumType(ScheduleStatus, {
+  name: 'ScheduleStatus',
+  description: 'The status of the schedule',
+});
 
 @ObjectType()
 @Entity()
 export class Schedule {
   @Field(() => ID)
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: string;
 
-  @Field(() => String)
-  @ManyToOne(() => Vessel, (vessel) => vessel.id, { nullable: false })
-  vessel_Id: Vessel;
+  @Field(() => Vessel, { nullable: true })
+  @ManyToOne(() => Vessel, (vessel) => vessel.schedules, {
+    onDelete: 'SET NULL',
+    nullable: true,
+  })
+  @JoinColumn({ name: 'vesselId' })
+  vessel: Vessel | null;
 
   @Field(() => Route)
-  @ManyToOne(() => Route, (route) => route.id, { nullable: false })
-  route_Id: Route;
+  @ManyToOne(() => Route, (route) => route.schedules, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'routeId' })
+  route: Route;
 
   @Field()
   @Column()
-  departure_time: Date;
+  departure_time: string;
 
   @Field()
   @Column()
-  arrival_time: Date;
+  arrival_time: string;
 
-  @Field()
+  @Field(() => ScheduleStatus)
   @Column({
     type: 'enum',
-    enum: ['Scheduled', 'In Transit', 'Completed', 'Cancelled'],
+    enum: ScheduleStatus,
+    default: ScheduleStatus.SCHEDULED,
   })
-  status: string;
+  status: ScheduleStatus;
 
   @Field()
   @CreateDateColumn()
