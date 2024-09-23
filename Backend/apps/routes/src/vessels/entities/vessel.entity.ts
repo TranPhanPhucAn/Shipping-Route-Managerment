@@ -4,9 +4,32 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, registerEnumType } from '@nestjs/graphql';
+import { Schedule } from '../../schedules/entities/schedule.entity';
 
+export enum VesselType {
+  CONTAINER_SHIP = 'CONTAINER_SHIP',
+  BULK_CARRIER = 'BULK_CARRIER',
+  TANKER = 'TANKER',
+  RO_RO_SHIP = 'RO_RO_SHIP',
+  PASSENGER_SHIP = 'PASSENGER_SHIP',
+}
+
+export enum VesselStatus {
+  AVAILABLE = 'AVAILABLE',
+  IN_TRANSIT = 'IN_TRANSIT',
+  UNDER_MAINTENANCE = 'UNDER_MAINTENANCE',
+}
+registerEnumType(VesselStatus, {
+  name: 'VesselStatus',
+  description: 'The current operational status of the vessel',
+});
+registerEnumType(VesselType, {
+  name: 'VesselType',
+  description: 'Types of vessels used for different purposes',
+});
 @ObjectType()
 @Entity()
 export class Vessel {
@@ -18,9 +41,9 @@ export class Vessel {
   @Column({ unique: true })
   name: string;
 
-  @Field()
+  @Field(() => VesselType)
   @Column()
-  type: string;
+  type: VesselType;
 
   @Field()
   @Column()
@@ -29,6 +52,18 @@ export class Vessel {
   @Field(() => String)
   @Column()
   ownerId: string;
+
+  @Field(() => VesselStatus)
+  @Column({
+    type: 'enum',
+    enum: VesselStatus,
+    default: VesselStatus.AVAILABLE,
+  })
+  status: VesselStatus;
+
+  @Field(() => [Schedule], { nullable: 'items' })
+  @OneToMany(() => Schedule, (schedule) => schedule.vessel)
+  schedules: Schedule[];
 
   @Field()
   @CreateDateColumn()

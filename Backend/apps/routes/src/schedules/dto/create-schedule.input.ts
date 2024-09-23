@@ -1,35 +1,31 @@
-import { IsNotEmpty, IsUUID, IsEnum } from 'class-validator';
-import { Field, InputType } from '@nestjs/graphql';
+import { IsNotEmpty, IsEnum } from 'class-validator';
+import { Field, InputType, registerEnumType } from '@nestjs/graphql';
+import { ScheduleStatus } from '../entities/schedule.entity';
 
-enum ScheduleStatus {
-  SCHEDULED = 'Scheduled',
-  IN_TRANSIT = 'In Transit',
-  COMPLETED = 'Completed',
-  CANCELLED = 'Cancelled',
-}
+registerEnumType(ScheduleStatus, {
+  name: 'ScheduleStatus',
+  description: 'The status of the schedule',
+});
 
 @InputType()
 export class CreateScheduleInput {
   @Field()
   @IsNotEmpty()
-  @IsUUID()
   vesselId: string;
 
   @Field()
   @IsNotEmpty()
-  @IsUUID()
   routeId: string;
 
   @Field()
   @IsNotEmpty()
-  departure_time: Date;
+  departure_time: string;
 
   @Field()
   @IsNotEmpty()
-  arrival_time: Date;
+  arrival_time: string;
 
-  @Field()
-  @IsNotEmpty()
+  @Field(() => ScheduleStatus, { defaultValue: ScheduleStatus.SCHEDULED })
   @IsEnum(ScheduleStatus)
   status: ScheduleStatus;
 }

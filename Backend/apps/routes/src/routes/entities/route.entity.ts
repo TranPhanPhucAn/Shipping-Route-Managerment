@@ -8,8 +8,10 @@ import {
   UpdateDateColumn,
   Unique,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Port } from '../../ports/entities/port.entity';
+import { Schedule } from '../../schedules/entities/schedule.entity';
 
 @ObjectType()
 @Entity('routes')
@@ -32,6 +34,10 @@ export class Route {
   @Field(() => Number)
   @Column()
   distance: number;
+
+  @Field(() => [Schedule])
+  @OneToMany(() => Schedule, (schedule) => schedule.route)
+  schedules: Schedule[];
 
   @Field()
   @Column()

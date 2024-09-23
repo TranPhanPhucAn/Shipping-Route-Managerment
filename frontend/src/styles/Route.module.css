@@ -1,22 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+.body {
+  margin: 1rem 6rem;
+}
 .container {
   display: flex;
-  max-width: 100%;
   justify-content: center;
+  background-color: white;
+  width: 100%;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
   align-items: center;
-  background-color: #fff;
+  text-align: center;
+  flex-wrap: wrap;
 }
-
-.routeTable {
-  margin-top: 2rem;
+.Title {
+  margin-left: 0.5rem;
+  font-size: 3rem;
+  font-family: Playfair Display; 
+  font-weight: 700;
+  font-style: Normal;
+  color: #334155;
+}
+.subtitle {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: italic;
+  color: #334155;
+}
+.Table {
   width: 100%;
   width: 1100px;
-  height: 500px;
+  min-height: 500px;
   height: 100%;
   table-layout: fixed;
   white-space: nowrap;
   background-color: #fff;
   border-collapse: collapse;
   overflow: hidden;
+  align-items: center;
 }
 
 .buttonContainer {
@@ -26,7 +48,7 @@
 }
 
 .addButton {
-  background-color: #1890ff;
+  background-color: #334155;
   color: white;
   padding: 8px 16px;
   border: none;
@@ -36,7 +58,7 @@
 }
 
 .addButton:hover {
-  background-color: #40a9ff;
+  background-color: #334155;
 }
 
 /* Edit/Delete buttons inside table */
