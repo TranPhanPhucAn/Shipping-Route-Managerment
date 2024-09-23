@@ -15,6 +15,7 @@ import { VesselsModule } from './vessels/vessels.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { dataSourceOptions } from './db-migration/data-source';
 // import { dataSourceOptions } from 'db-migration/data-source';
+import { SeedingModule } from './seeding/seeding.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -31,6 +32,7 @@ import { dataSourceOptions } from './db-migration/data-source';
     PortsModule,
     VesselsModule,
     SchedulesModule,
+    SeedingModule,
   ],
   providers: [],
 })
