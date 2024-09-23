@@ -64,7 +64,7 @@ export class AuthResolver {
       const result = await this.authService.loginUserByGoogle(loginInputGoogle);
       if (result) {
         const { user, accessToken, refreshToken, expAccessToken } = result;
-        const expires = new Date(Date.now() + 1 * 60 * 60 * 1000);
+        const expires = new Date(Date.now() + 20 * 60 * 60 * 1000);
         context.res.cookie('access_token', 'Bearer ' + accessToken, {
           httpOnly: true,
           sameSite: 'none',

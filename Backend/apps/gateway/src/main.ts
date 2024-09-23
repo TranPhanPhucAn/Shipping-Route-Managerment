@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import * as cookieParser from 'cookie-parser';
-import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
+import * as graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 
 dotenv.config();
 async function bootstrap() {

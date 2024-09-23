@@ -105,6 +105,7 @@ export class AuthService {
           password: '',
           address: '',
           username: payload.name,
+          image_url: payload.picture,
           role: roleRegister,
         };
         const { token, expAccessToken } = this.createAccessToken(createUser);

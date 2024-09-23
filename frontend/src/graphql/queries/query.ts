@@ -7,6 +7,12 @@ export const QUERY_USER = gql`
       email
       username
       address
+      image_url
+      phone_number
+      role {
+        id
+        name
+      }
     }
   }
 `;
@@ -16,7 +22,7 @@ export const GET_ROUTES = gql`
     routes {
       id
       departurePort {
-        id  
+        id
         name
       }
       destinationPort {
@@ -24,7 +30,7 @@ export const GET_ROUTES = gql`
         name
       }
       distance
-      createdAt 
+      createdAt
     }
   }
 `;

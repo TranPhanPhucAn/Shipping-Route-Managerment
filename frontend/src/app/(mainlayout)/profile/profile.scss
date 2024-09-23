@@ -1,4 +1,31 @@
 .container-profile {
-  width: 86vw;
+  width: 80vw;
   margin: 0 auto;
+  .header-profile {
+    font-size: 30px;
+    font-weight: 500;
+    padding-top: 20px;
+    border-bottom: 2px solid black;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+  }
+  .content-infor {
+    display: flex;
+    // justify-content: space-between;
+    .avatar {
+      overflow: hidden;
+      padding-right: 30px;
+    }
+    .detail {
+      margin-bottom: 15px;
+    }
+    .user-information-left {
+      font-size: 20px;
+      width: 50%;
+    }
+    .user-information-right {
+      font-size: 20px;
+      width: 50%;
+    }
+  }
 }

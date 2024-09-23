@@ -1,4 +1,4 @@
-import { Button, Dropdown, message, Space, Tooltip } from "antd";
+import { Avatar, Button, Dropdown, message, Space, Tooltip } from "antd";
 import type { MenuProps } from "antd";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"; // Import the useRouter hook
 import { signOut, useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
 import { LOGOUT_USER } from "@/src/graphql/mutations/Auth";
+import { UserOutlined } from "@ant-design/icons";
 
 const ProfileDropUser: React.FC = () => {
   const handleMenuClick: MenuProps["onClick"] = async (e) => {
@@ -57,7 +58,14 @@ const ProfileDropUser: React.FC = () => {
       {session ? (
         <Dropdown menu={menuProps} trigger={["click"]} placement="bottomRight">
           <span className="icon">
-            <UserIcon />
+            {/* <UserIcon /> */}
+            <Avatar
+              size={50}
+              src={
+                // "https://lh3.googleusercontent.com/a/ACg8ocKiM0UBkOMdSqXTKoS9FlLPYPbZHT8AvLxLF9egAQHNYzmOWA=s96-c"
+                "https://shippingroutes.blob.core.windows.net/fileupload/4bb564f9-623c-466b-bc5c-578d98aa3aa0.jpg"
+              }
+            ></Avatar>
           </span>
         </Dropdown>
       ) : (
