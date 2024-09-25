@@ -25,6 +25,7 @@
     "apollo-server-express": "^3.13.0",
     "axios": "^1.7.3",
     "cookie": "^0.6.0",
+    "dayjs": "^1.11.13",
     "framer-motion": "^11.3.24",
     "frontend": "file:",
     "graphql": "^16.9.0",

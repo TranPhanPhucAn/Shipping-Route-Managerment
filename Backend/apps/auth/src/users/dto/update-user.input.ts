@@ -7,4 +7,13 @@ export class UpdateUserInput extends PartialType(
 ) {
   @Field()
   id: string;
+
+  @Field()
+  phone_number: string;
+
+  @Field()
+  birthday: string;
+
+  @Field()
+  gender: string;
 }

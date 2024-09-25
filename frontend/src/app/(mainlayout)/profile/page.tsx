@@ -19,6 +19,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { FaBirthdayCake, FaTransgender } from "react-icons/fa";
+import UpdateUserModal from "@/src/components/UserProfile/UpdateUserModal";
 
 const Profile = () => {
   const { data: session, status, update } = useSession();
@@ -26,10 +27,18 @@ const Profile = () => {
   const { loading, error, data } = useQuery(QUERY_USER, {
     variables: { id: id },
   });
+
   console.log("id: ", id);
-  console.log("data: ", data);
+  // console.log("data: ", data);
   const userInfor = data?.user || {};
+  const joiningDate = new Date(userInfor.createdAt).toLocaleDateString("en-GB");
+  const birthDate = userInfor.birthday
+    ? new Date(userInfor.birthday).toLocaleDateString("en-GB")
+    : "";
+  console.log("birth: ", birthDate);
   // return <>{data ? data?.user?.username : ""}</>;
+  if (loading) return <p>Loading...</p>;
+
   return (
     <>
       <div className="container-profile">
@@ -70,7 +79,7 @@ const Profile = () => {
                 }}
               />
               <span style={{ fontWeight: 600 }}>Phone: </span>
-              {userInfor.phone}
+              {userInfor.phone_number}
             </div>
             <div className="detail">
               <MailFilled
@@ -92,6 +101,7 @@ const Profile = () => {
                 }}
               />
               <span style={{ fontWeight: 600 }}>Gender: </span>
+              {userInfor.gender}
             </div>
             <div className="detail">
               <HomeFilled
@@ -126,7 +136,7 @@ const Profile = () => {
                 }}
               />
               <span style={{ fontWeight: 600 }}>Joining Date: </span>
-              20/04/2015
+              {joiningDate}
             </div>
             <div className="detail">
               <FaBirthdayCake
@@ -137,8 +147,9 @@ const Profile = () => {
                 }}
               />
               <span style={{ fontWeight: 600 }}>Birth Date: </span>
-              20/04/2003
+              {birthDate}
             </div>
+            {userInfor && <UpdateUserModal userProfile={userInfor} />}
           </div>
         </div>
       </div>

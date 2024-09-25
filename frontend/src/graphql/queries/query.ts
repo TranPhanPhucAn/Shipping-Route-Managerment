@@ -9,6 +9,9 @@ export const QUERY_USER = gql`
       address
       image_url
       phone_number
+      createdAt
+      gender
+      birthday
       role {
         id
         name

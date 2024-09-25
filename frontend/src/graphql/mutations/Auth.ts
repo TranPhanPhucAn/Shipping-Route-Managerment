@@ -33,6 +33,15 @@ export const REGISTER_USER = gql`
   }
 `;
 
+export const UPDATE_USER = gql`
+  mutation UpdateUser($updateUserInput: UpdateUserInput!) {
+    updateUser(updateUserInput: $updateUserInput) {
+      id
+      email
+    }
+  }
+`;
+
 export const ACTIVATE_ACCOUNT = gql`
   mutation ActivateUser($activationDto: ActivationDto!) {
     activateUser(activationDto: $activationDto) {
@@ -162,4 +171,3 @@ export const DELETE_SCHEDULE = gql`
     removeSchedule(id: $id)
   }
 `;
-

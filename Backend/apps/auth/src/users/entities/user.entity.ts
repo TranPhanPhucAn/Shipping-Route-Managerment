@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
   // UpdateDateColumn,
 } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
@@ -34,6 +35,10 @@ export class User {
 
   @Column({ type: 'text', nullable: true })
   @Field({ nullable: true })
+  gender?: string | null;
+
+  @Column({ type: 'text', nullable: true })
+  @Field({ nullable: true })
   phone_number?: string | null;
 
   @Column({ type: 'text', nullable: true })
@@ -50,4 +55,13 @@ export class User {
   @JoinColumn({ name: 'roleId' })
   @Field()
   role: Role;
+
+  @Field({ nullable: true })
+  @Column({ type: 'text', nullable: true })
+  birthday?: string | null;
+
+  @Field()
+  @Column()
+  @CreateDateColumn()
+  createdAt: Date;
 }
