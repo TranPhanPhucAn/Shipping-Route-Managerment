@@ -19,8 +19,8 @@ const CreateScheduleModal = () => {
   const [visible, setVisible] = useState(false);
   const [vesselId, setVesselId] = useState("");
   const [routeId, setRouteId] = useState("");
-  const [departure_time, setDepartureTime] = useState(null);
-  const [arrival_time, setArrivalTime] = useState(null);
+  const [departure_time, setDepartureTime] = useState<any>(null);
+  const [arrival_time, setArrivalTime] = useState<any>(null);
   const [createSchedule, { loading, error }] = useMutation(CREATE_SCHEDULE);
   const { data: vesselsData } = useQuery<GetVesselsData>(GET_VESSELS);
   const { data: routesData } = useQuery<GetRoutesData>(GET_ROUTES);
@@ -84,7 +84,9 @@ const CreateScheduleModal = () => {
               onChange={(value) => setVesselId(value)}
               placeholder="Select Vessel"
               filterOption={(input, option) =>
-                option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                String(option?.children)
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
               }
             >
               {vessels.map((vessel) => (
@@ -106,7 +108,9 @@ const CreateScheduleModal = () => {
               onChange={(value) => setRouteId(value)}
               placeholder="Select Route"
               filterOption={(input, option) =>
-                option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                String(option?.children)
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
               }
             >
               {routes.map((route) => (

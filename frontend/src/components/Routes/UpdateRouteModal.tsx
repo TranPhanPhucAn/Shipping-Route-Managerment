@@ -87,7 +87,9 @@ const UpdateRouteModal = ({
             onChange={(value) => setDeparturePortId(value)}
             placeholder="Enter Departure Port"
             filterOption={(input, option) =>
-              option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              String(option?.children)
+                .toLowerCase()
+                .indexOf(input.toLowerCase()) >= 0
             }
           >
             {PortsData.map((port) => (
@@ -110,7 +112,9 @@ const UpdateRouteModal = ({
             onChange={(value) => setDestinationPortId(value)}
             placeholder="Enter Destination Port"
             filterOption={(input, option) =>
-              option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              String(option?.children)
+                .toLowerCase()
+                .indexOf(input.toLowerCase()) >= 0
             }
           >
             {PortsData.map((port) => (

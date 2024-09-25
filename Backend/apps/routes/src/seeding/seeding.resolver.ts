@@ -7,7 +7,7 @@ export class SeedingResolver {
   constructor(private readonly seedingService: SeedingService) {}
 
   @Mutation(() => SeedResponse)
-  seed() {
+  seedRoute() {
     return this.seedingService.seed();
   }
 }

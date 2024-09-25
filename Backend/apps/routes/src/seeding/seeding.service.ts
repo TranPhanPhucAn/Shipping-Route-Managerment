@@ -25,7 +25,6 @@ export class SeedingService {
       const routeRepository = queryRunner.manager.getRepository(Route);
       const scheduleRepository = queryRunner.manager.getRepository(Schedule);
       const portRepository = queryRunner.manager.getRepository(Port);
-
       // Clear existing data
       await vesselRepository.clear();
       await routeRepository.clear();
@@ -72,7 +71,6 @@ export class SeedingService {
       // Create and save vessels
       const vesselEntities = vesselRepository.create(vessels);
       await vesselRepository.save(vesselEntities);
-
       // Sample routes data
       const routes = [
         {
