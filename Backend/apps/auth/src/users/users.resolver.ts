@@ -62,7 +62,8 @@ export class UsersResolver {
   @SetMetadata('permissions', ['get:user'])
   @UseGuards(PermissionsGuard)
   @Query(() => User, { name: 'user' })
-  findOne(@Args('id') id: string) {
+  async findOne(@Args('id') id: string) {
+    console.log('user: ', await this.usersService.findOneById(id));
     return this.usersService.findOneById(id);
   }
 

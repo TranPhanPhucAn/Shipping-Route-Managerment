@@ -32,17 +32,13 @@ export class User {
   @Field()
   address: string;
 
-  @Column({
-    nullable: true,
-  })
-  @Field()
-  phone_number: string;
+  @Column({ type: 'text', nullable: true })
+  @Field({ nullable: true })
+  phone_number?: string | null;
 
-  @Column({
-    nullable: true,
-  })
-  @Field()
-  image_url: string;
+  @Column({ type: 'text', nullable: true })
+  @Field({ nullable: true })
+  image_url: string | null;
 
   @Column({
     type: 'text',

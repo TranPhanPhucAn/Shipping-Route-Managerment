@@ -7,6 +7,12 @@ export const QUERY_USER = gql`
       email
       username
       address
+      image_url
+      phone_number
+      role {
+        id
+        name
+      }
     }
   }
 `;
