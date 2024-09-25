@@ -26,10 +26,10 @@ export class SeedingService {
       const scheduleRepository = queryRunner.manager.getRepository(Schedule);
       const portRepository = queryRunner.manager.getRepository(Port);
       // Clear existing data
-      await vesselRepository.clear();
-      await routeRepository.clear();
-      await scheduleRepository.clear();
-      await portRepository.clear();
+      // await vesselRepository.clear();
+      // await routeRepository.clear();
+      // await scheduleRepository.clear();
+      // await portRepository.clear();
 
       // Sample ports data
       const ports = [
