@@ -38,20 +38,23 @@ const UpdateUserModal = (props: any) => {
         address: props.userProfile.address,
         phoneNumber: props.userProfile.phone_number,
         gender: props.userProfile.gender,
-        birthday: dayjs(props.userProfile.birthday),
       });
       setEmail(props.userProfile.email);
       setUsername(props.userProfile.username);
       setPhoneNumber(props.userProfile.phone_number);
       setAddress(props.userProfile.address);
-      setBirthday(dayjs(props.userProfile.birthday));
       setGender(props.userProfile.gender);
+      if (props.userProfile.birthday) {
+        form.setFieldsValue({ birthday: dayjs(props.userProfile.birthday) });
+        setBirthday(dayjs(props.userProfile.birthday));
+      }
     }
   }, [props.userProfile, form]);
   const handleUpdateUser = async () => {
+    console.log("???: ", username, email);
     let re =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!re.test(email) || !username || !address) {
+    if (!re.test(email) || !username) {
       if (!re.test(email)) message.error("Email is not valid!");
       else {
         message.error("Username is required");
@@ -123,12 +126,12 @@ const UpdateUserModal = (props: any) => {
           </Form.Item>
           <Form.Item
             name="phoneNumber"
-            rules={[
-              {
-                required: true,
-                message: "Please input your phone!",
-              },
-            ]}
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: "Please input your phone!",
+            //   },
+            // ]}
           >
             <Input
               prefix={<PhoneOutlined />}
@@ -161,12 +164,12 @@ const UpdateUserModal = (props: any) => {
           </Form.Item>
           <Form.Item
             name="address"
-            rules={[
-              {
-                required: true,
-                message: "Please input your address!",
-              },
-            ]}
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: "Please input your address!",
+            //   },
+            // ]}
           >
             <Input
               prefix={<HomeOutlined />}
