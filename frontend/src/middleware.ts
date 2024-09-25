@@ -65,7 +65,6 @@ export async function middleware(request: NextRequest) {
             path: "/",
             httpOnly: true,
           });
-          token.isLogin = false;
           const newEncodedToken = await encode({
             token: token,
             secret: process.env.NEXTAUTH_SECRET!,
@@ -129,10 +128,10 @@ export async function middleware(request: NextRequest) {
   }
   // Redirect to home if trying to access auth paths with a token
   if (token && authPaths.some((path) => pathname.startsWith(path))) {
-    if (token.isLogin === false && pathname === "/login") {
-      console.log("get middleware err");
-      return NextResponse.next();
-    }
+    // if (pathname === "/login") {
+    //   console.log("get middleware err");
+    //   return NextResponse.next();
+    // }
     return NextResponse.redirect(new URL("/", request.url));
   }
   return NextResponse.next();

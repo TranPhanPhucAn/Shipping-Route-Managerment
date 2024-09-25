@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation"; // Import the useRouter hook
 import { signOut, useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
 import { LOGOUT_USER } from "@/src/graphql/mutations/Auth";
-import { UserOutlined } from "@ant-design/icons";
+import { LogoutOutlined, ProfileFilled, UserOutlined } from "@ant-design/icons";
 
 const ProfileDropUser: React.FC = () => {
   const handleMenuClick: MenuProps["onClick"] = async (e) => {
@@ -32,16 +32,38 @@ const ProfileDropUser: React.FC = () => {
     }
   };
   const items: MenuProps["items"] = [
+    // {
+    //   label: <Link href={"/profile"}>{session?.user?.username}</Link>,
+    //   key: "1",
+    // },
     {
-      label: <Link href={"/profile"}>{session?.user?.username}</Link>,
-      key: "1",
-    },
-    {
-      label: <Link href={"/profile"}>My Profile</Link>,
+      label: (
+        <Link href={"/profile"}>
+          <ProfileFilled
+            style={{
+              color: "#334155",
+              marginRight: "5px",
+              fontSize: "17px",
+            }}
+          />
+          My Profile
+        </Link>
+      ),
       key: "2",
     },
     {
-      label: <span>Log Out</span>,
+      label: (
+        <span>
+          <LogoutOutlined
+            style={{
+              color: "#334155",
+              marginRight: "5px",
+              fontSize: "17px",
+            }}
+          />
+          Log Out
+        </span>
+      ),
       key: "3",
     },
   ];
@@ -54,27 +76,35 @@ const ProfileDropUser: React.FC = () => {
     router.push(route);
   };
   return (
-    <div>
-      {session ? (
-        <Dropdown menu={menuProps} trigger={["click"]} placement="bottomRight">
-          <span className="icon">
+    <div style={{ display: "flex" }}>
+      <div className="icon">
+        {session ? (
+          <Dropdown
+            menu={menuProps}
+            trigger={["click"]}
+            placement="bottomRight"
+          >
+            {/* <span className="icon"> */}
             {/* <UserIcon /> */}
-            <Avatar
-              size={50}
-              src={
-                // "https://lh3.googleusercontent.com/a/ACg8ocKiM0UBkOMdSqXTKoS9FlLPYPbZHT8AvLxLF9egAQHNYzmOWA=s96-c"
-                "https://shippingroutes.blob.core.windows.net/fileupload/4bb564f9-623c-466b-bc5c-578d98aa3aa0.jpg"
-              }
-            ></Avatar>
-          </span>
-        </Dropdown>
-      ) : (
-        <>
-          <span className="icon" onClick={() => handleClick("/login")}>
-            <UserIcon />
-          </span>
-        </>
-      )}
+            {session?.user?.avatar_url ? (
+              <Avatar size={45} src={session.user?.avatar_url}></Avatar>
+            ) : (
+              <Avatar size={45} style={{ backgroundColor: "#334155" }}>
+                <UserOutlined />
+              </Avatar>
+            )}
+            {/* </span> */}
+          </Dropdown>
+        ) : (
+          <>
+            <span className="icon" onClick={() => handleClick("/login")}>
+              <UserIcon />
+            </span>
+          </>
+        )}
+      </div>
+
+      <div style={{ paddingLeft: "5px" }}>{session?.user?.username}</div>
     </div>
   );
 };

@@ -43,6 +43,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
                       id
                       email
                       username
+                      image_url
                     }
                     expAccessToken
                   }
@@ -105,7 +106,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
     ],
     callbacks: {
       async jwt({ token, user }) {
-        console.log("get jwt: ", user);
+        // console.log("get jwt: ", user);
         // console.log("get token jwt: ", token);
 
         if (user) {
@@ -114,14 +115,14 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
           token.username = user.username;
           token.address = user.address;
           token.expAccessToken = user.expAccessToken * 1000;
-          token.isLogin = true;
+          token.avatar_url = user.image_url;
           console.log("get token jwt: ", token);
         }
         return token;
       },
 
       async session({ token, user, session }) {
-        console.log("get session: ", token);
+        // console.log("get session: ", token);
 
         if (token) {
           // console.log("islogin: ", token.isLogin);
@@ -132,7 +133,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
               id: token.id,
               username: token.username,
               address: token.address,
-              isLogin: token.isLogin,
+              avatar_url: token.avatar_url,
             },
           };
         }
@@ -156,6 +157,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
                       id
                       email
                       username
+                      image_url
                     }
                     expAccessToken
                   }
@@ -196,6 +198,8 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
             user.id = userBackend.id;
             user.username = userBackend.username;
             user.address = userBackend.address;
+            user.image_url = userBackend.image_url;
+
             return true;
           } catch (err: any) {
             throw new Error(err?.message || "Login failed");
