@@ -6,7 +6,7 @@ import { UPDATE_SCHEDULE } from "../../graphql/mutations/Auth";
 import { Schedule, Vessel, Route } from "../../graphql/types";
 import { GET_VESSELS, GET_ROUTES } from "../../graphql/queries/query";
 import { useQuery } from "@apollo/client";
-import moment from "moment";
+// import moment from "moment";
 
 const { Option } = Select;
 
@@ -24,11 +24,6 @@ const UpdateScheduleModal = ({
   const [form] = Form.useForm();
   const [status, setStatus] = useState("");
   const [updateSchedule, { loading, error }] = useMutation(UPDATE_SCHEDULE);
-
-  // const { data: vesselsData } = useQuery(GET_VESSELS);
-  // const { data: routesData } = useQuery(GET_ROUTES);
-  // const vessels: Vessel[] = vesselsData?.vessels || [];
-  // const routes: Route[] = routesData?.routes || [];
 
   useEffect(() => {
     if (schedule) {

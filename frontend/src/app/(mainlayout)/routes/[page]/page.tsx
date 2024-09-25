@@ -6,10 +6,17 @@ import {
   message,
   Popconfirm,
   TablePaginationConfig,
-  Divider
+  Divider,
+  Input,
+  Select,
 } from "antd";
-import { GET_ROUTES } from "../../../../graphql/queries/query";
-import { GetRoutesData, Route } from "../../../../graphql/types";
+import { GET_ROUTES, GET_PORTS } from "../../../../graphql/queries/query";
+import {
+  GetRoutesData,
+  Route,
+  GetPortsData,
+  Port,
+} from "../../../../graphql/types";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import CreateRouteModal from "../../../../components/Routes/CreateRouteModal";
 import UpdateRouteModal from "../../../../components/Routes/UpdateRouteModal";
@@ -23,13 +30,16 @@ const getUniqueValues = (data: any[], key: string) => {
     new Set(data.map((item) => key.split(".").reduce((o, i) => o[i], item)))
   );
 };
-
+const { Option } = Select;
 const RoutesList = () => {
   const { loading, error, data, refetch } = useQuery<GetRoutesData>(GET_ROUTES);
+  const routesData = data?.routes || [];
+  // const { data } = useQuery<GetPortsData>(GET_PORTS);
+  // const PortsData: Port[] = data?.ports || [];
   const [removeRoute, { loading: deleteLoading }] = useMutation(DELETE_ROUTE);
   const [selectedRoute, setSelectedRoute] = useState<Route | null>(null);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
-  const routesData = data?.routes || [];
+  const [searchText, setSearchText] = useState<string>("");
   const params = useParams();
   const page = params?.page ? Number(params.page) : 1;
   const router = useRouter();
@@ -68,6 +78,15 @@ const RoutesList = () => {
     setIsUpdateModalVisible(false);
     setSelectedRoute(null);
   };
+  // const filteredRoutes = routesData.filter((route) => {
+  //   const departurePortName = route.departurePort.name.toLowerCase();
+  //   const destinationPortName = route.destinationPort.name.toLowerCase();
+  //   const search = searchText.toLowerCase();
+
+  //   return (
+  //     departurePortName.includes(search) || destinationPortName.includes(search)
+  //   );
+  // });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -180,10 +199,28 @@ const RoutesList = () => {
 
   return (
     <div className={styles.body}>
-      <h1 className={styles.Title}>ROUTES</h1>
+      <div className={styles.Title}>Routes</div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
       <CreateRouteModal />
-
+      {/* <Input.Search>
+        <Select
+          showSearch
+          placeholder="Search by Departure Port or Destination Port"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          filterOption={(input, option) =>
+            String(option?.children)
+              .toLowerCase()
+              .indexOf(input.toLowerCase()) >= 0
+          }
+        >
+          {PortsData.map((port) => (
+            <Option key={port.id} value={port.id}>
+              {port.name}
+            </Option>
+          ))}
+        </Select>
+      </Input.Search> */}
       <div className={styles.container}>
         <Table
           dataSource={routesData}
@@ -201,7 +238,6 @@ const RoutesList = () => {
             route={selectedRoute}
             visible={isUpdateModalVisible}
             onClose={handleUpdateModalClose}
-            // refetch={refetch}
           />
         )}
       </div>

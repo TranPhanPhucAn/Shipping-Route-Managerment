@@ -1,9 +1,13 @@
 "use client";
 import { useState } from "react";
-import { Button, Form, Input, Modal, message, Select, DatePicker } from "antd";
+import { Button, Form, Modal, message, Select, DatePicker } from "antd";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_SCHEDULE } from "../../graphql/mutations/Auth";
-import { GET_VESSELS, GET_ROUTES } from "../../graphql/queries/query";
+import {
+  GET_VESSELS,
+  GET_ROUTES,
+  GET_SCHEDULES,
+} from "../../graphql/queries/query";
 import styles from "../../styles/Auth.module.css";
 import {
   GetVesselsData,
@@ -11,7 +15,7 @@ import {
   Vessel,
   Route,
 } from "../../graphql/types";
-import moment from "moment";
+// import moment from "moment";
 
 const { Option } = Select;
 
@@ -21,7 +25,9 @@ const CreateScheduleModal = () => {
   const [routeId, setRouteId] = useState("");
   const [departure_time, setDepartureTime] = useState(null);
   const [arrival_time, setArrivalTime] = useState(null);
-  const [createSchedule, { loading, error }] = useMutation(CREATE_SCHEDULE);
+  const [createSchedule, { loading, error }] = useMutation(CREATE_SCHEDULE, {
+    refetchQueries: [{ query: GET_SCHEDULES }],
+  });
   const { data: vesselsData } = useQuery<GetVesselsData>(GET_VESSELS);
   const { data: routesData } = useQuery<GetRoutesData>(GET_ROUTES);
   const [form] = Form.useForm();
@@ -41,8 +47,8 @@ const CreateScheduleModal = () => {
           createScheduleInput: {
             vesselId,
             routeId,
-            departure_time: departure_time.toISOString(),
-            arrival_time: arrival_time.toISOString(),
+            departure_time,
+            arrival_time,
             status: "SCHEDULED",
           },
         },
@@ -84,7 +90,9 @@ const CreateScheduleModal = () => {
               onChange={(value) => setVesselId(value)}
               placeholder="Select Vessel"
               filterOption={(input, option) =>
-                option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                String(option?.children)
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
               }
             >
               {vessels.map((vessel) => (
@@ -106,7 +114,9 @@ const CreateScheduleModal = () => {
               onChange={(value) => setRouteId(value)}
               placeholder="Select Route"
               filterOption={(input, option) =>
-                option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                String(option?.children)
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
               }
             >
               {routes.map((route) => (
@@ -128,7 +138,7 @@ const CreateScheduleModal = () => {
               showTime
               value={departure_time}
               onChange={(value) => setDepartureTime(value)}
-              format="YYYY-MM-DD HH:mm"
+              format="DD-MM-YYYY HH:mm"
             />
           </Form.Item>
 
@@ -141,7 +151,7 @@ const CreateScheduleModal = () => {
               showTime
               value={arrival_time}
               onChange={(value) => setArrivalTime(value)}
-              format="YYYY-MM-DD HH:mm"
+              format="DD-MM-YYYY HH:mm"
             />
           </Form.Item>
 

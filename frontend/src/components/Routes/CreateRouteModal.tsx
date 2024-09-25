@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button, Form, Input, Modal, message, Select } from "antd";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_ROUTE } from "../../graphql/mutations/Auth";
-import { GET_PORTS } from "../../graphql/queries/query";
+import { GET_PORTS, GET_ROUTES } from "../../graphql/queries/query";
 import styles from "../../styles/Auth.module.css";
 import { GetPortsData, Port } from "../../graphql/types";
 
@@ -14,7 +14,9 @@ const CreateRouteModal = () => {
   const [departurePortId, setDeparturePortId] = useState("");
   const [destinationPortId, setDestinationPortId] = useState("");
   const [distance, setDistance] = useState("");
-  const [createRoute, { loading, error }] = useMutation(CREATE_ROUTE);
+  const [createRoute, { loading, error }] = useMutation(CREATE_ROUTE, {
+    refetchQueries: [{ query: GET_ROUTES }], 
+  });
   const { data } = useQuery<GetPortsData>(GET_PORTS);
   const [form] = Form.useForm();
 
@@ -74,7 +76,9 @@ const CreateRouteModal = () => {
               onChange={(value) => setDeparturePortId(value)}
               placeholder="Enter Departure Port"
               filterOption={(input, option) =>
-                option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                String(option?.children)
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
               }
             >
               {PortsData.map((port) => (
@@ -97,11 +101,13 @@ const CreateRouteModal = () => {
               onChange={(value) => setDestinationPortId(value)}
               placeholder="Enter Destination Port"
               filterOption={(input, option) =>
-                option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                String(option?.children)
+                  .toLowerCase()
+                  .indexOf(input.toLowerCase()) >= 0
               }
             >
               {PortsData.map((port) => (
-                <Option key={port.id} value={port.id}>
+                <Option key={port.name} value={port.id}>
                   {port.name}
                 </Option>
               ))}

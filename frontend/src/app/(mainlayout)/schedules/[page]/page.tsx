@@ -11,7 +11,7 @@ import {
 } from "antd";
 import { GET_SCHEDULES } from "../../../../graphql/queries/query";
 import { GetSchedulesData, Schedule } from "../../../../graphql/types";
-import { DeleteOutlined, EditOutlined, EyeOutlined} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import CreateScheduleModal from "../../../../components/Schedules/CreateScheduleModal";
 import UpdateScheduleModal from "../../../../components/Schedules/UpdateScheduleModal";
 import { DELETE_SCHEDULE } from "@/src/graphql/mutations/Auth";
@@ -53,7 +53,6 @@ const SchedulesList = () => {
   const handleTableChange = (pagination: TablePaginationConfig) => {
     setPagination(pagination);
     router.push(`/schedules/${pagination.current}`);
-    refetch();
   };
 
   const handleRemove = async (id: string) => {
