@@ -191,9 +191,9 @@ const UpdateUserModal = (props: any) => {
               onChange={(value: string) => setGender(value)}
               placeholder="Select Gender"
             >
-              <Option value="MALE">Male</Option>
-              <Option value="FEMALE">Female</Option>
-              <Option value="OTHER">Other</Option>
+              <Option value="Male">Male</Option>
+              <Option value="Female">Female</Option>
+              <Option value="Other">Other</Option>
             </Select>
           </Form.Item>
 

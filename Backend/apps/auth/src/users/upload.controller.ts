@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Delete,
+  Param,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -25,5 +27,15 @@ export class UserHttpController {
     const upload = await this.fileService.uploadFileHttp(file, containerName);
     this.userService.saveUrl(id, upload, containerName);
     return { upload, message: 'uploaded successfully' };
+  }
+
+  @Delete('remove-image/:id')
+  async remove(@Param('id') id: string) {
+    const containerName = 'fileupload';
+    const user = await this.userService.remove(id, containerName);
+    return {
+      user,
+      message: 'deleted successfully',
+    };
   }
 }

@@ -9,7 +9,7 @@ import { QUERY_USER } from "@/src/graphql/queries/query";
 import { useQuery } from "@apollo/client";
 import "./profile.scss";
 import Image from "next/image";
-import imageDefalt from "../../../../public/profiledefault.jpg";
+import imageDefault from "../../../../public/profiledefault.jpg";
 import {
   CalendarFilled,
   HomeFilled,
@@ -34,9 +34,7 @@ const Profile = () => {
   const birthDate = userInfor.birthday
     ? new Date(userInfor.birthday).toLocaleDateString("en-GB")
     : "";
-  // return <>{data ? data?.user?.username : ""}</>;
   if (loading) return <p>Loading...</p>;
-  // const fileInput = useRef<HTMLInputElement>(null);
 
   return (
     <>
@@ -46,7 +44,7 @@ const Profile = () => {
           <div className="avatar">
             <Image
               alt="profile default"
-              src={userInfor.image_url ?? imageDefalt}
+              src={userInfor.image_url ? userInfor.image_url : imageDefault}
               width={320}
               height={270}
               style={{
@@ -57,13 +55,6 @@ const Profile = () => {
               }}
             />
             <UpdateAvatarModal userProfile={userInfor} refetchUser={refetch} />
-            {/* <input
-              type="file"
-              ref={fileInput}
-              onChange={() => {
-                console.log("file: ", fileInput?.current?.files?.[0]);
-              }}
-            /> */}
           </div>
           <div className="user-information-left">
             <div className="detail">

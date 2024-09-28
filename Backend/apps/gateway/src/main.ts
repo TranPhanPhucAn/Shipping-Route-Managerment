@@ -31,7 +31,7 @@ async function bootstrap() {
   // );
 
   app.use((req, _, next) => {
-    console.log(`Got invoked: '${req.originalUrl}'`);
+    // console.log(`Got invoked: '${req.originalUrl}'`);
     next();
   });
 
