@@ -130,4 +130,7 @@ export class DeleteRoleResponse {
 export class UploadResponse {
   @Field()
   message?: string;
+
+  @Field()
+  img_url?: string;
 }

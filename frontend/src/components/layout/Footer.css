@@ -1,0 +1,61 @@
+.footerbound {
+  margin-top: auto;
+  background: #f5f5f5;
+}
+.footerbound .footer {
+  display: flex;
+  align-items: center;
+  width: 86vw;
+  margin: 0 auto;
+}
+.footerbound .logo-com-footer {
+  margin-right: auto;
+}
+.footerbound .list-logo {
+  margin-left: auto;
+  margin-right: auto;
+}
+.footerbound .contact-infor-footer {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.footerbound .logofooter {
+  width: 80;
+  height: 40;
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.footerbound .logofooter :hover {
+  cursor: pointer;
+}
+.footerbound .logomedia {
+  color: black;
+  margin-right: 20px;
+}
+.footerbound .logomedia :hover {
+  color: #40a9ff;
+  transition: 0.3s;
+}
+
+@media (max-width: 720px) {
+  .footerbound .footer {
+    padding: 20px 0;
+    flex-direction: column;
+  }
+  .footerbound .logo-com-footer {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+  .footerbound .list-logo {
+    margin-bottom: 15px;
+  }
+  .footerbound .contact-infor-footer {
+    margin-bottom: 5px;
+  }
+}/*# sourceMappingURL=Footer.css.map */

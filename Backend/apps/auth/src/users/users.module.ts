@@ -14,6 +14,7 @@ import { Role } from '../roles/entities/role.entity';
 import { Permission } from '../permissions/entities/permission.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { FilesService } from '../files/files.service';
+import { UserHttpController } from './upload.controller';
 
 @Module({
   imports: [
@@ -53,7 +54,9 @@ import { FilesService } from '../files/files.service';
     JwtService,
     UserGrpcServiceController,
     FilesService,
+    UserHttpController,
   ],
   exports: [UsersService],
+  controllers: [UserHttpController],
 })
 export class UsersModule {}

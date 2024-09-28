@@ -105,7 +105,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
       }),
     ],
     callbacks: {
-      async jwt({ token, user }) {
+      async jwt({ token, trigger, user, session }) {
         // console.log("get jwt: ", user);
         // console.log("get token jwt: ", token);
 
@@ -118,10 +118,15 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
           token.avatar_url = user.image_url;
           console.log("get token jwt: ", token);
         }
+        if (trigger === "update" && session?.user) {
+          // Note, that `session` can be any arbitrary object, remember to validate it!
+          token.username = session.user.username;
+          token.avatar_url = session.user.avatar_url;
+        }
         return token;
       },
 
-      async session({ token, user, session }) {
+      async session({ token, session, trigger, newSession }) {
         // console.log("get session: ", token);
 
         if (token) {

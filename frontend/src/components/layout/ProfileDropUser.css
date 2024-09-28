@@ -1,0 +1,9 @@
+.icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.icon :hover {
+  cursor: pointer;
+}/*# sourceMappingURL=ProfileDropUser.css.map */

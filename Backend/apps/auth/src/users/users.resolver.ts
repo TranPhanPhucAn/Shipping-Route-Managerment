@@ -136,6 +136,7 @@ export class UsersResolver {
     this.usersService.saveUrl(id, upload, containerName);
     return {
       message: 'Upload image successfull',
+      img_url: upload,
     };
   }
 }

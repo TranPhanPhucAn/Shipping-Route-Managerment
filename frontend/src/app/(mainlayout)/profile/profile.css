@@ -1,0 +1,30 @@
+.container-profile {
+  width: 80vw;
+  margin: 0 auto;
+}
+.container-profile .header-profile {
+  font-size: 30px;
+  font-weight: 500;
+  padding-top: 20px;
+  border-bottom: 2px solid black;
+  padding-bottom: 10px;
+  margin-bottom: 25px;
+}
+.container-profile .content-infor {
+  display: flex;
+}
+.container-profile .content-infor .avatar {
+  overflow: hidden;
+  padding-right: 30px;
+}
+.container-profile .content-infor .detail {
+  margin-bottom: 15px;
+}
+.container-profile .content-infor .user-information-left {
+  font-size: 20px;
+  width: 50%;
+}
+.container-profile .content-infor .user-information-right {
+  font-size: 20px;
+  width: 50%;
+}/*# sourceMappingURL=profile.css.map */

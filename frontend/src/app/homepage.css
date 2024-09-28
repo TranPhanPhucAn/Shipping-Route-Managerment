@@ -1,0 +1,79 @@
+.home {
+  height: calc(100vh - 86px);
+  margin-bottom: 30px;
+}
+.home .background-image {
+  width: 100vw;
+  z-index: -1;
+  opacity: 1;
+  background-size: cover;
+}
+.home .content-home {
+  width: 86vw;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  margin-top: -3%;
+  color: white;
+}
+.home .content-home .title {
+  font-size: 50px;
+  font-weight: 300;
+  margin: 0;
+}
+.home .content-home p {
+  margin-top: 1.5%;
+  width: 40%;
+  font-size: 18px;
+}
+
+.content {
+  width: 86vw;
+  margin: 0 auto;
+}
+.content .logistics-home-heading {
+  width: 70%;
+  margin-bottom: 30px;
+}
+.content .logistics-home-heading .sub-header-logistics {
+  font-size: 16px;
+}
+.content .header-content {
+  font-size: 40px;
+  font-weight: 300;
+}
+
+@media (max-width: 768px) {
+  .home .content-home .title {
+    font-size: 38px;
+  }
+  .home .content-home p {
+    width: 80%;
+    margin-top: 8%;
+  }
+  .content .header-content {
+    font-size: 26px;
+  }
+}
+@media (max-width: 480px) {
+  .home .content-home .title {
+    font-size: 38px;
+  }
+  .home .content-home p {
+    width: 100%;
+    margin-top: 8%;
+  }
+  .content .header-content {
+    font-size: 26px;
+  }
+  .content .logistics-home-heading {
+    width: 100%;
+  }
+  .content .logistics-home-heading .sub-header-logistics {
+    font-size: 14px;
+  }
+}/*# sourceMappingURL=homepage.css.map */
