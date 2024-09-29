@@ -292,4 +292,28 @@ export class UsersService {
     });
     await this.fileService.deleteFile(getfile, containerName);
   }
+
+  async remove(id: string, containerName: string): Promise<User> {
+    try {
+      const user = await this.usersRepository.findOne({
+        where: { id },
+      });
+      const file_url = user?.image_url;
+      if (file_url) {
+        await this.usersRepository.update(id, {
+          ...user,
+          image_url: '',
+        });
+
+        const file_ = file_url.split('/').pop();
+
+        await this.fileService.deleteFile(file_, containerName);
+      }
+
+      return user;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
 }

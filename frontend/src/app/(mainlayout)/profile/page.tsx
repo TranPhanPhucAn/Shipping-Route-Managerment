@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 
 // import { getServerSession } from "next-auth/next";
@@ -9,7 +9,7 @@ import { QUERY_USER } from "@/src/graphql/queries/query";
 import { useQuery } from "@apollo/client";
 import "./profile.scss";
 import Image from "next/image";
-import imageDefalt from "../../../../public/profiledefault.jpg";
+import imageDefault from "../../../../public/profiledefault.jpg";
 import {
   CalendarFilled,
   HomeFilled,
@@ -20,23 +20,20 @@ import {
 } from "@ant-design/icons";
 import { FaBirthdayCake, FaTransgender } from "react-icons/fa";
 import UpdateUserModal from "@/src/components/UserProfile/UpdateUserModal";
+import UpdateAvatarModal from "@/src/components/UserProfile/UpdateAvatarModal";
 
 const Profile = () => {
   const { data: session, status, update } = useSession();
   const id = session?.user?.id;
-  const { loading, error, data } = useQuery(QUERY_USER, {
+  const { loading, error, data, refetch } = useQuery(QUERY_USER, {
     variables: { id: id },
   });
-
-  console.log("id: ", id);
   // console.log("data: ", data);
   const userInfor = data?.user || {};
   const joiningDate = new Date(userInfor.createdAt).toLocaleDateString("en-GB");
   const birthDate = userInfor.birthday
     ? new Date(userInfor.birthday).toLocaleDateString("en-GB")
     : "";
-  console.log("birth: ", birthDate);
-  // return <>{data ? data?.user?.username : ""}</>;
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -47,7 +44,7 @@ const Profile = () => {
           <div className="avatar">
             <Image
               alt="profile default"
-              src={userInfor.image_url ?? imageDefalt}
+              src={userInfor.image_url ? userInfor.image_url : imageDefault}
               width={320}
               height={270}
               style={{
@@ -57,6 +54,7 @@ const Profile = () => {
                 // borderRadius: "50%",
               }}
             />
+            <UpdateAvatarModal userProfile={userInfor} refetchUser={refetch} />
           </div>
           <div className="user-information-left">
             <div className="detail">

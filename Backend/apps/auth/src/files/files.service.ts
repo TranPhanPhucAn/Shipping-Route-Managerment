@@ -47,6 +47,24 @@ export class FilesService {
 
     return fileUrl;
   }
+
+  public async uploadFileHttp(
+    file: Express.Multer.File,
+    containerName: string,
+  ) {
+    this.containerName = containerName;
+    const extension = file.originalname.split('.').pop().toLowerCase();
+    const file_name = uuid() + '.' + extension;
+    const blockBlobClient = await this.getBlobClient(file_name);
+    const fileUrl = blockBlobClient.url;
+    const blobOptions = {
+      blobHTTPHeaders: { blobContentType: file.mimetype },
+    };
+    await blockBlobClient.uploadData(file.buffer, blobOptions);
+
+    return fileUrl;
+  }
+
   async deleteFile(file_name: string, containerName: string) {
     try {
       this.containerName = containerName;

@@ -1,0 +1,62 @@
+.headerbound {
+  border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+  box-shadow: none;
+  background: white !important;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.headerbound .header {
+  display: flex;
+  align-items: center;
+  width: 86vw;
+  height: 86px;
+  margin: 0 auto;
+  background: white;
+}
+.headerbound .header .logo {
+  width: 120;
+  height: 60;
+  display: flex;
+  align-items: center;
+}
+.headerbound .header .logo :hover {
+  cursor: pointer;
+}
+.headerbound .header .header-menu {
+  flex: 1;
+}
+.headerbound .header .right-header {
+  display: flex;
+  justify-content: flex-end;
+}
+.headerbound .header .right-header .icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.headerbound .header .right-header .icon :hover {
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .headerbound .header {
+    padding: 0;
+  }
+  .headerbound .header .right-header {
+    margin-left: auto;
+    margin-right: 15px;
+  }
+  .headerbound .header .header-menu {
+    display: none;
+  }
+}
+@media (min-width: 480px) {
+  .headerbound .header {
+    padding: 0;
+  }
+  .headerbound .header .menu-icon {
+    display: none;
+  }
+}/*# sourceMappingURL=Header.css.map */

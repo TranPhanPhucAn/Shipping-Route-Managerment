@@ -75,6 +75,7 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
       'forgotPassword',
       'resetPassword',
       'loginWithGoogle',
+      'uploadImage',
     ];
     if (notCheckLogin.includes(typeQuery)) {
       return {};
@@ -117,10 +118,6 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
         });
       }
     }
-    return {
-      userid: userId,
-      email: email,
-    };
   } catch (err) {
     throw err;
   }

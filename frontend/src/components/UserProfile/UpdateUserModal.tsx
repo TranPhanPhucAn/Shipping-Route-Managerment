@@ -13,10 +13,12 @@ import {
 import dayjs from "dayjs";
 import { client } from "@/src/graphql/Provider";
 import { QUERY_USER } from "@/src/graphql/queries/query";
+import { useSession } from "next-auth/react";
 
 const { Option } = Select;
 
 const UpdateUserModal = (props: any) => {
+  const { data: session, status, update } = useSession();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState(props);
@@ -30,7 +32,6 @@ const UpdateUserModal = (props: any) => {
   });
   useEffect(() => {
     // console.log("alo: ", props);
-    console.log(new Date(props.userProfile.birthday));
     if (props.userProfile) {
       form.setFieldsValue({
         email: props.userProfile.email,
@@ -81,7 +82,9 @@ const UpdateUserModal = (props: any) => {
           },
         ],
       });
-
+      await update({
+        user: { ...session?.user, username: res?.data.updateUser.username },
+      });
       form.resetFields();
       setVisible(false);
       message.success("Update user successfully");
@@ -189,9 +192,9 @@ const UpdateUserModal = (props: any) => {
               onChange={(value: string) => setGender(value)}
               placeholder="Select Gender"
             >
-              <Option value="MALE">Male</Option>
-              <Option value="FEMALE">Female</Option>
-              <Option value="OTHER">Other</Option>
+              <Option value="Male">Male</Option>
+              <Option value="Female">Female</Option>
+              <Option value="Other">Other</Option>
             </Select>
           </Form.Item>
 

@@ -38,6 +38,16 @@ export const UPDATE_USER = gql`
     updateUser(updateUserInput: $updateUserInput) {
       id
       email
+      username
+    }
+  }
+`;
+
+export const UPDATE_AVATAR = gql`
+  mutation UploadImage($file: Upload!, $id: String!) {
+    uploadImage(file: $file, id: $id) {
+      message
+      img_url
     }
   }
 `;

@@ -3,6 +3,10 @@ import {
   RemoteGraphQLDataSource,
 } from '@apollo/gateway';
 import { GraphQLDataSourceRequestKind } from '@apollo/gateway/dist/datasources/types';
+// import {
+//   GraphQLRequestContext,
+//   GraphQLResponse,
+// } from '@apollo/server-gateway-interface';
 
 export class GraphQLDataSource extends RemoteGraphQLDataSource {
   didReceiveResponse({ response, context }): typeof response {
