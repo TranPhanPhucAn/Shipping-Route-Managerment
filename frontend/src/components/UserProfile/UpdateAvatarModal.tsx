@@ -8,24 +8,10 @@ import { Upload } from "antd";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 import ImgCrop from "antd-img-crop";
 import { useSession } from "next-auth/react";
-
+import "./UpdateAvatarModal.scss";
 const UpdateAvatarModal = (props: any) => {
   const [visible, setVisible] = useState(false);
   const { data: session, status, update } = useSession();
-
-  const [uploadImage, { loading, error }] = useMutation(UPDATE_AVATAR, {
-    fetchPolicy: "no-cache",
-  });
-  //   useEffect(() => {
-  //     // console.log("alo: ", props);
-  //     console.log(new Date(props.userProfile.birthday));
-  //     if (props.userProfile) {
-  //       form.setFieldsValue({
-  //         email: props.userProfile.email,
-  //       });
-  //       setEmail(props.userProfile.email);
-  //     }
-  //   }, [props.userProfile, form]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   useEffect(() => {
     if (props.userProfile?.image_url) {
@@ -39,16 +25,6 @@ const UpdateAvatarModal = (props: any) => {
       ]);
     }
   }, [props?.userInfor?.image_url]);
-  // if (props.userProfile?.image_url) {
-  //   setFileList([
-  // {
-  //   uid: "-1",
-  //   name: "image.png",
-  //   status: "done",
-  //   url: props.userProfile?.image_url,
-  // },
-  //   ]);
-  // }
 
   const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     console.log("new list: ", newFileList[0]);
@@ -69,6 +45,7 @@ const UpdateAvatarModal = (props: any) => {
         {
           body: formData,
           method: "POST",
+          credentials: "include",
         }
       );
       const res = await resFetch.json();
@@ -90,6 +67,7 @@ const UpdateAvatarModal = (props: any) => {
         `http://localhost:5000/api/v1/auth-api/remove-image/${props.userProfile.id}`,
         {
           method: "DELETE",
+          credentials: "include",
         }
       );
       const res = await resFetch.json();
@@ -127,23 +105,36 @@ const UpdateAvatarModal = (props: any) => {
         >
           <ImgCrop rotationSlider>
             <Upload
-              // action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
               listType="picture-card"
               fileList={fileList}
               onChange={onChange}
-              // onPreview={onPreview}
-              // showUploadList={{ showRemoveIcon: false }}
+              className="large-upload"
+              showUploadList={{
+                showPreviewIcon: false,
+              }}
             >
               {fileList.length < 1 && "+ Upload"}
             </Upload>
           </ImgCrop>
         </div>
-        <Button type="primary" loading={loading} onClick={handleUpdateAvatar}>
-          Update
-        </Button>
-        <Button type="primary" loading={loading} onClick={handleRemoveAvatar}>
-          Remove
-        </Button>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginTop: "10px",
+          }}
+        >
+          <Button
+            type="primary"
+            onClick={handleUpdateAvatar}
+            style={{ marginRight: "10px" }}
+          >
+            Update
+          </Button>
+          <Button type="primary" onClick={handleRemoveAvatar}>
+            Remove
+          </Button>
+        </div>
       </Modal>
     </>
   );
