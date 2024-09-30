@@ -1,0 +1,65 @@
+.contact {
+  width: 86vw;
+  margin: 0 auto;
+}
+.contact .header-contact {
+  font-size: 50px;
+  font-weight: 300;
+  text-align: center;
+  margin: 20px 0;
+}
+.contact .sub-header-contact {
+  width: 70%;
+  text-align: center;
+  margin: 0 auto;
+  margin-bottom: 35px;
+}
+.contact .contact-content {
+  display: flex;
+}
+.contact .contact-content .contact-content-left {
+  width: 50%;
+}
+.contact .contact-content .contact-content-right {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 50px;
+  margin-bottom: 10px;
+}
+.contact .contact-content .contact-content-right .title-contact {
+  display: flex;
+  flex-direction: column;
+  font-size: 38px;
+  font-weight: 300;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.contact .contact-content .contact-content-right .icon-contact-infor {
+  margin-bottom: 5px;
+}
+
+@media (max-width: 800px) {
+  .contact .header-contact {
+    font-size: 38px;
+  }
+  .contact .sub-header-contact {
+    width: 100%;
+  }
+  .contact .contact-content {
+    display: inline;
+  }
+  .contact .contact-content .contact-content-left {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .contact .contact-content .contact-content-right {
+    width: 100%;
+    padding-left: 0;
+  }
+  .contact .contact-content .contact-content-right .title-contact {
+    font-size: 30px;
+    margin-bottom: 7px;
+  }
+}/*# sourceMappingURL=contact.css.map */

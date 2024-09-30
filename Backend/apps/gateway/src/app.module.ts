@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { handleAuth } from './auth.context';
 import { AuthService } from './auth/auth.service';
 import { GraphQLDataSource } from './graphql-datasource';
+import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 dotenv.config();
 // import { CacheModule } from '@nestjs/cache-manager';
 // import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -119,6 +120,10 @@ interface OriginalError {
     // }),
   ],
   controllers: [AppController],
-  providers: [AppService, AuthService],
+  providers: [
+    AppService,
+    AuthService,
+    { provide: 'Upload', useValue: GraphQLUpload },
+  ],
 })
 export class AppModule {}
