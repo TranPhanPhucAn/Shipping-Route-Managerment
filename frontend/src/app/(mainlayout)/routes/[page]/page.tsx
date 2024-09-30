@@ -22,7 +22,7 @@ import CreateRouteModal from "../../../../components/Routes/CreateRouteModal";
 import UpdateRouteModal from "../../../../components/Routes/UpdateRouteModal";
 import { DELETE_ROUTE } from "@/src/graphql/mutations/Auth";
 import { useState, useEffect } from "react";
-import styles from "../../../../styles/Route.module.css";
+import styles from "../../../../styles/Listpage.module.css";
 import { useParams, useRouter } from "next/navigation";
 
 const getUniqueValues = (data: any[], key: string) => {
@@ -162,7 +162,7 @@ const RoutesList = () => {
         <>
           <Button
             type="link"
-            onClick={() => handleEdit(record)}
+            onClick={() => router.push(`/route/${record.id}`)}
             icon={<EyeOutlined />}
           >
             View
@@ -200,6 +200,10 @@ const RoutesList = () => {
   return (
     <div className={styles.body}>
       <div className={styles.Title}>Routes</div>
+      <div className={styles.subtitle}>
+        Search our extensive routes to find the schedule which fits your supply
+        chain.
+      </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
       <CreateRouteModal />
       {/* <Input.Search>

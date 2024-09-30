@@ -1,0 +1,39 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+.body {
+  margin: 1rem 6rem;
+}
+.container {
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  width: 100%;
+  margin: 0 auto;
+  align-items: center;
+  text-align: center;
+  flex-wrap: wrap;
+}
+.Title {
+  font-family: Playfair Dislay;
+  font-weight: 600;
+  font-size: 2rem;
+  margin: 0 auto;
+}
+.infortext {
+  font-family: Playfair Dislay;
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+.infor{
+  text-align: left;
+}
+.maps {
+  width: 100%;
+  max-width: 700px;
+}
+.backButton {
+  display: flex;
+  justify-content: right;
+  background-color: #334155;
+  color: White;
+  align-items: center;
+}

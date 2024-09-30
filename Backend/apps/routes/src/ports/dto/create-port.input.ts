@@ -16,5 +16,5 @@ export class CreatePortInput {
   @Field()
   @IsNotEmpty()
   @IsString()
-  location: string;
+  country: string;
 }

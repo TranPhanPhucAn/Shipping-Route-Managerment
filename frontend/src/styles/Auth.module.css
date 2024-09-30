@@ -1,19 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+.body {
+  margin: 3rem 6rem;
+}
 .container {
   display: flex;
   justify-content: space-evenly;
   background-color: white;
   width: 100%;
   margin: 0 auto;
-  font-family: Arial, sans-serif;
+  font-family: Playfair Display !important;
   align-items: center;
   text-align: center;
-  min-height: 100vh;
+  min-height: 90vh;
   padding: 1rem;
   flex-wrap: wrap;
 }
 
 .mainBox,
 .spBox {
+  font-family: Playfair Display !important;
   margin: 0 auto;
   width: 400px;
   max-width: 400px;
@@ -45,13 +50,21 @@
 .title {
   margin: 0 auto;
   font-size: 2rem;
-  font-weight: bold;
+  font-weight: 800;
   color: #334155;
   text-align: center;
 }
-
+.homeButton {
+  padding: 0.6rem 0;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  background-color: #334155 !important;
+  color: white !important;
+  cursor: pointer;
+}
 .subtitle {
-  font-size: 16px;
+  font-size: 1rem;
+  font-weight: 400;
   color: #334155;
   text-align: center;
   margin-bottom: 20px;
@@ -62,18 +75,18 @@
   padding: 0.7rem;
   border-radius: 0.2rem;
 }
-
+.forgotPS {
+  display: flex;
+  justify-content: end;
+}
 .forgotLink {
   text-decoration: none;
-  display: block;
-  text-align: right;
   color: #333;
 }
 .forgotLink:hover {
   text-decoration: underline !important;
 }
 .mainButton {
-  width: 90%;
   padding: 0.6rem 0;
   font-size: 1rem;
   border-radius: 0.5rem;
@@ -85,18 +98,16 @@
 
 .socialLogin {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  text-align: center;
 }
 
 .socialButton {
-  width: 90%;
-  padding: 0 5.5rem !important;
+  padding: 0.6rem 0;
   font-size: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   border-radius: 0.5rem;
-  background-color: #f0f0f0;
+  color: #334155 !important;
+  background-color: white !important;
   cursor: pointer;
 }
 

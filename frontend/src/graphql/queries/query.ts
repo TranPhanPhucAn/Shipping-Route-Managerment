@@ -37,6 +37,23 @@ export const GET_ROUTES = gql`
     }
   }
 `;
+export const GET_ROUTE = gql`
+  query route($id: String!) {
+    route(id: $id) {
+      id
+      departurePort {
+        id
+        name
+      }
+      destinationPort {
+        id
+        name
+      }
+      distance
+      createdAt
+    }
+  }
+`;
 
 export const GET_PORTS = gql`
   query GetPorts {

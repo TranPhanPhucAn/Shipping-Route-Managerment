@@ -1,25 +1,11 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../../graphql/mutations/Auth";
 import { useRouter } from "next/navigation";
-import {
-  Input,
-  Button,
-  message,
-  Divider,
-  Row,
-  Col,
-  Form,
-  Checkbox,
-  Flex,
-} from "antd";
-import {
-  GoogleOutlined,
-  FacebookOutlined,
-  LockOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { Input, Button, message, Divider, Row, Col, Form } from "antd";
+import { FcGoogle } from "react-icons/fc";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { LoginInput } from "../../../graphql/types";
 import styles from "../../../styles/Auth.module.css";
 import RegisterImage from "./Register.png";
@@ -138,42 +124,31 @@ const Login: React.FC = () => {
                 className={styles.input}
               />
             </Form.Item>
-            <Form.Item>
-              <Flex justify="space-between" align="center">
-                <Form.Item name="remember" valuePropName="checked" noStyle>
-                  <Checkbox>Remember me</Checkbox>
-                </Form.Item>
-                <Link href={"/forgot-password"} className={styles.forgotLink}>
-                  Forgot Password!
-                </Link>
-              </Flex>
+            <Form.Item className={styles.forgotPS}>
+              <Link href={"/forgot-password"} className={styles.forgotLink}>
+                Forgot Password!
+              </Link>
             </Form.Item>
             <Form.Item>
-              <Button
-                loading={loading}
-                className={styles.mainButton}
-                onClick={handleLogin}
-              >
-                Login
-              </Button>
-            </Form.Item>
-            {error && <p className={styles.error}>{error.message}</p>}
-            <Divider style={{ borderColor: "#334155" }}>Or</Divider>
-            <Row className={styles.socialLogin}>
-              <Col>
+              <div className={styles.socialLogin}>
                 <Button
-                  icon={<GoogleOutlined />}
+                  loading={loading}
+                  className={styles.mainButton}
+                  style={{ width: "42%" }}
+                  onClick={handleLogin}
+                >
+                  Login
+                </Button>
+                <Button
+                  icon={<FcGoogle />}
                   className={styles.socialButton}
                   onClick={handleLoginGoogle}
-                />
-              </Col>
-              {/* <Col>
-                <Button
-                  icon={<FacebookOutlined />}
-                  className={styles.socialButton}
-                />
-              </Col> */}
-            </Row>
+                >
+                  Login with Google
+                </Button>
+              </div>
+            </Form.Item>
+            {error && <p className={styles.error}>{error.message}</p>}
           </div>
         </Form>
       </Col>
@@ -199,6 +174,7 @@ const Login: React.FC = () => {
               fontSize: "0.8rem",
               marginBottom: "1rem",
             }}
+            className={styles.subtitle}
           >
             Get Started By Creating Your Account
           </a>

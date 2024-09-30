@@ -12,7 +12,7 @@ export class RouteUserResponse {
   email: string;
 }
 @ObjectType()
-export class SeedResponse {
+export class seedRouteResponse {
   @Field()
   message?: string;
 }

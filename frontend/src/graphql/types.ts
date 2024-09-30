@@ -38,7 +38,7 @@ export interface ResetPasswordDto {
 export interface Port {
   id: string;
   name: string;
-  location: string;
+  country: string;
   departureRoutes: Route;
   destinationRoutes: Route;
   createdAt: string;

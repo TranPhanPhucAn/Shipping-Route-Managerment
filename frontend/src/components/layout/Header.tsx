@@ -6,7 +6,7 @@ import Link from "next/link";
 import { MenuOutlined } from "@ant-design/icons";
 import SvgComponent from "./Logo";
 import "./Header.scss";
-import { useRouter, usePathname } from "next/navigation"; // Import the useRouter hook
+import { useRouter, usePathname } from "next/navigation"; 
 import ProfileDropUser from "./ProfileDropUser";
 import { useSession } from "next-auth/react";
 
@@ -28,10 +28,6 @@ const items: MenuItem[] = [
   {
     label: <Link href={"/schedules/1"}>Schedules</Link>,
     key: "/schedules/1",
-  },
-  {
-    label: <Link href={"/vessels/1"}>Vessels</Link>,
-    key: "/vessels/1",
   },
 ];
 const Header: React.FC = () => {

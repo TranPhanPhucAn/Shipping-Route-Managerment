@@ -22,7 +22,7 @@ export class Port {
 
   @Field(() => String)
   @Column()
-  location: string;
+  country: string;
 
   @Field(() => [Route])
   @OneToMany(() => Route, (route) => route.departurePort)

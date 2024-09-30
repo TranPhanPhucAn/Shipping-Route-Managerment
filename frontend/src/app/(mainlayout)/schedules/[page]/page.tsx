@@ -16,7 +16,7 @@ import CreateScheduleModal from "../../../../components/Schedules/CreateSchedule
 import UpdateScheduleModal from "../../../../components/Schedules/UpdateScheduleModal";
 import { DELETE_SCHEDULE } from "@/src/graphql/mutations/Auth";
 import { useState, useEffect } from "react";
-import styles from "../../../../styles/Route.module.css";
+import styles from "../../../../styles/Listpage.module.css";
 import { useParams, useRouter } from "next/navigation";
 
 const getUniqueValues = (data: any[], key: string) => {
@@ -166,13 +166,13 @@ const SchedulesList = () => {
       key: "id",
       render: (text: string, record: Schedule) => (
         <>
-          <Button
+          {/* <Button
             type="link"
             onClick={() => handleEdit(record)}
             icon={<EyeOutlined />}
           >
             View
-          </Button>
+          </Button> */}
           <Button
             type="link"
             onClick={() => handleEdit(record)}
