@@ -235,13 +235,23 @@ export class UsersService {
   }
 
   async paginationUser(paginationUser: PaginationUserDto) {
-    const { limit, offset } = paginationUser;
+    const { limit, offset, sort } = paginationUser;
     const skip = limit * offset;
+    const order: Record<string, 'ASC' | 'DESC'> = {};
+    if (sort) {
+      sort.split(',').forEach((sortParam: string) => {
+        const [field, direction] = sortParam.split(' ');
+        order[field] = direction.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+      });
+    }
     const [result, total] = await this.usersRepository.findAndCount({
       take: limit,
       skip: skip,
+      relations: { role: true },
+      order,
     });
-    const totalCount = Math.ceil(total / limit);
+    // const totalCount = Math.ceil(total / limit);
+    const totalCount = total;
 
     return {
       users: result,

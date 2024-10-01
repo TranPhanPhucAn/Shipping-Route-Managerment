@@ -31,7 +31,7 @@ const ProfileDropUser: React.FC = () => {
       console.log("error: ", e);
     }
   };
-  console.log("session: ", session);
+  // console.log("session: ", session);
   const items: MenuProps["items"] = [
     // {
     //   label: <Link href={"/profile"}>{session?.user?.username}</Link>,

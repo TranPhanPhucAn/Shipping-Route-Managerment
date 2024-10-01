@@ -44,6 +44,9 @@ export class PaginationUserDto {
   @Field()
   @IsNotEmpty({ message: 'Offset is required' })
   offset: number;
+
+  @Field({ nullable: true })
+  sort: string | null;
 }
 
 @InputType()

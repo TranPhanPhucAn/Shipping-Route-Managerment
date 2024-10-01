@@ -20,6 +20,27 @@ export const QUERY_USER = gql`
   }
 `;
 
+export const GET_USER_PAGINATION = gql`
+  query paginationUser($paginationUser: PaginationUserDto!) {
+    paginationUser(paginationUser: $paginationUser) {
+      users {
+        id
+        email
+        username
+        address
+        image_url
+        gender
+        birthday
+        role {
+          id
+          name
+        }
+      }
+      totalCount
+    }
+  }
+`;
+
 export const GET_ROUTES = gql`
   query {
     routes {
