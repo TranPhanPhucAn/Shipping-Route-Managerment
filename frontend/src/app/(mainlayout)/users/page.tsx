@@ -19,9 +19,8 @@ import {
   SearchOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { DELETE_SCHEDULE } from "@/src/graphql/mutations/Auth";
 import { useState, useEffect } from "react";
-import styles from "@/src/styles/Route.module.css";
+import styles from "@/src/styles/Listpage.module.css";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { GET_USER_PAGINATION } from "@/src/graphql/queries/query";
 import { useSearchParams } from "next/navigation";
