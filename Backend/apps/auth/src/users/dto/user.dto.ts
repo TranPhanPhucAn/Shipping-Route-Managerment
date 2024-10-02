@@ -44,6 +44,18 @@ export class PaginationUserDto {
   @Field()
   @IsNotEmpty({ message: 'Offset is required' })
   offset: number;
+
+  @Field({ nullable: true })
+  sort: string | null;
+
+  @Field({ nullable: true })
+  genderFilter: string | null;
+
+  @Field({ nullable: true })
+  roleFilter: string | null;
+
+  @Field({ nullable: true })
+  search: string | null;
 }
 
 @InputType()

@@ -85,6 +85,7 @@ const SchedulesList = () => {
       title: "Vessel",
       dataIndex: ["vessel", "name"],
       key: "vessel",
+      sorter: (a: any, b: any) => a.vessel.name.localeCompare(b.vessel.name),
     },
     {
       title: "Route",

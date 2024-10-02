@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ActivationDto, CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, In, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bycypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -235,13 +235,44 @@ export class UsersService {
   }
 
   async paginationUser(paginationUser: PaginationUserDto) {
-    const { limit, offset } = paginationUser;
+    const { limit, offset, sort, genderFilter, roleFilter, search } =
+      paginationUser;
     const skip = limit * offset;
-    const [result, total] = await this.usersRepository.findAndCount({
+    const order: Record<string, 'ASC' | 'DESC'> = {};
+    if (sort) {
+      sort.split(',').forEach((sortParam: string) => {
+        const [field, direction] = sortParam.split(' ');
+        order[field] = direction.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+      });
+    }
+    const genderArray = genderFilter?.split(',');
+    const roleArray = roleFilter?.split(',');
+
+    const queryOptions: any = {
       take: limit,
       skip: skip,
-    });
-    const totalCount = Math.ceil(total / limit);
+      relations: { role: true },
+      order,
+    };
+    const whereCondition: any = {};
+    if (genderArray) {
+      whereCondition.gender = In(genderArray);
+    }
+    if (roleArray) {
+      whereCondition.role = {
+        name: In(roleArray),
+      };
+    }
+    if (search) {
+      whereCondition.username = ILike(`%${search}%`);
+    }
+    if (Object.keys(whereCondition).length > 0) {
+      queryOptions.where = whereCondition;
+    }
+    const [result, total] =
+      await this.usersRepository.findAndCount(queryOptions);
+    // const totalCount = Math.ceil(total / limit);
+    const totalCount = total;
 
     return {
       users: result,
