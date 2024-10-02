@@ -35,6 +35,9 @@ const UserList = () => {
   const limit = 2;
   const pageString = searchParams?.get("page");
   const sortString = searchParams?.get("sort");
+  const genderFilter = searchParams?.get("gender");
+  const roleFilter = searchParams?.get("role");
+
   console.log("alo sort: ", sortString);
   const page = pageString ? +pageString : 1;
   const { loading, error, data, refetch } = useQuery(GET_USER_PAGINATION, {
@@ -43,6 +46,8 @@ const UserList = () => {
         limit: limit,
         offset: page - 1,
         sort: sortString,
+        genderFilter: genderFilter,
+        roleFilter: roleFilter,
       },
     },
   });
@@ -70,17 +75,18 @@ const UserList = () => {
       return;
     }
     if (sorter) {
+      let checkSorter: boolean = true;
       const params = new URLSearchParams(searchParams ?? "");
       let resultUrl = "";
       if (sorter.length) {
         for (let i = 0; i < sorter.length; i++) {
-          const order = sorter[i].order;
+          let order = sorter[i].order;
           if (order === "ascend") {
-            sorter.order = "asc";
-          } else if (order === "desc") {
-            sorter.order = "desc";
+            order = "asc";
+          } else if (order === "descend") {
+            order = "desc";
           }
-          resultUrl = resultUrl + sorter[i].field + " " + sorter[i].order;
+          resultUrl = resultUrl + sorter[i].field + " " + order;
           if (i < sorter.length - 1) {
             resultUrl += ",";
           }
@@ -89,13 +95,20 @@ const UserList = () => {
         if (!sorter.order) {
           params.delete("sort");
           replace(`${pathname}?${params.toString()}`);
-          return;
+          checkSorter = false;
         }
-        resultUrl = sorter.field + " " + sorter.order;
+        let order = sorter.order;
+        if (order === "ascend") {
+          order = "asc";
+        } else if (order === "descend") {
+          order = "desc";
+        }
+        resultUrl = sorter.field + " " + order;
       }
-
-      params.set("sort", resultUrl);
-      replace(`${pathname}?${params.toString()}`);
+      if (checkSorter === true) {
+        params.set("sort", resultUrl);
+        replace(`${pathname}?${params.toString()}`);
+      }
       // if (sorter.order === "ascend") {
       //   sorter.order = "asc";
       // } else if (sorter.order === "desc") {
@@ -139,6 +152,41 @@ const UserList = () => {
       //   params.set("sort", sorter.field + " " + sorter.order);
       // }
       // replace(`${pathname}?${params.toString()}`);
+    }
+
+    if (filters) {
+      const params = new URLSearchParams(searchParams ?? "");
+      if (!filters.gender && !filters.role) {
+        params.delete("gender");
+        params.delete("role");
+        replace(`${pathname}?${params.toString()}`);
+      } else {
+        if (!filters.gender) {
+          params.delete("gender");
+        } else {
+          let genderUrl = "";
+          for (let i = 0; i < filters.gender.length; i++) {
+            genderUrl = genderUrl + filters.gender[i];
+            if (i < filters.gender.length - 1) {
+              genderUrl += ",";
+            }
+          }
+          params.set("gender", genderUrl);
+        }
+        if (!filters.role) {
+          params.delete("role");
+        } else {
+          let roleUrl = "";
+          for (let i = 0; i < filters.role.length; i++) {
+            roleUrl = roleUrl + filters.role[i];
+            if (i < filters.role.length - 1) {
+              roleUrl += ",";
+            }
+          }
+          params.set("role", roleUrl);
+        }
+        replace(`${pathname}?${params.toString()}`);
+      }
     }
   };
   // useEffect(() => {
@@ -204,8 +252,37 @@ const UserList = () => {
       dataIndex: "role",
       key: "role",
       render: (text: string, record: any) => {
-        return record?.role?.name;
+        if (record?.role?.name) {
+          let color = "";
+          if (record?.role?.name === "admin") {
+            color = "blue";
+          } else if (record?.role?.name === "supplier") {
+            color = "red";
+          } else {
+            color = "#58D68D";
+          }
+          return (
+            <Tag color={color} key={record.gender}>
+              {record?.role?.name}
+            </Tag>
+          );
+        }
+        return "";
       },
+      filters: [
+        {
+          text: "user",
+          value: "user",
+        },
+        {
+          text: "supplier",
+          value: "supplier",
+        },
+        {
+          text: "admin",
+          value: "admin",
+        },
+      ],
     },
     {
       title: "Gender",
