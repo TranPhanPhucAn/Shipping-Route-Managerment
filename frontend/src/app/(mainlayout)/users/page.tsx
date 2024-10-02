@@ -9,11 +9,14 @@ import {
   Tag,
   Divider,
   Avatar,
+  Input,
+  Space,
 } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
+  SearchOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { DELETE_SCHEDULE } from "@/src/graphql/mutations/Auth";
@@ -22,6 +25,7 @@ import styles from "@/src/styles/Route.module.css";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { GET_USER_PAGINATION } from "@/src/graphql/queries/query";
 import { useSearchParams } from "next/navigation";
+import { FilterDropdownProps } from "antd/es/table/interface";
 
 const UserList = () => {
   //   const { loading, error, data, refetch } = useQuery(GET_USER_PAGINATION);
@@ -37,6 +41,7 @@ const UserList = () => {
   const sortString = searchParams?.get("sort");
   const genderFilter = searchParams?.get("gender");
   const roleFilter = searchParams?.get("role");
+  const search = searchParams?.get("search");
 
   console.log("alo sort: ", sortString);
   const page = pageString ? +pageString : 1;
@@ -48,6 +53,7 @@ const UserList = () => {
         sort: sortString,
         genderFilter: genderFilter,
         roleFilter: roleFilter,
+        search: search,
       },
     },
   });
@@ -189,6 +195,84 @@ const UserList = () => {
       }
     }
   };
+  const handleSearch = (
+    selectedKeys: string[],
+    confirm: FilterDropdownProps["confirm"],
+    dataIndex: any
+  ) => {
+    confirm();
+    const params = new URLSearchParams(searchParams ?? "");
+    if (selectedKeys.length === 0) {
+      params.delete("search");
+    } else {
+      params.set("search", selectedKeys[0]);
+    }
+    replace(`${pathname}?${params.toString()}`);
+  };
+
+  const handleReset = (clearFilters: () => void) => {
+    clearFilters();
+  };
+  const getColumnSearchProps = (dataIndex: any) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }: any) => (
+      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+        <Input
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            handleSearch(selectedKeys as string[], confirm, dataIndex)
+          }
+          style={{ marginBottom: 8, display: "block" }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() =>
+              handleSearch(selectedKeys as string[], confirm, dataIndex)
+            }
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
+    ),
+    // onFilter: (value, record) =>
+    //   record[dataIndex]
+    //     .toString()
+    //     .toLowerCase()
+    //     .includes((value as string).toLowerCase()),
+  });
   // useEffect(() => {
   //   if (page) {
   //     const params = new URLSearchParams(searchParams ?? "");
@@ -214,7 +298,7 @@ const UserList = () => {
       dataIndex: "username",
       key: "username",
       sorter: { multiple: 1 },
-
+      ...getColumnSearchProps("username"),
       render: (text: string, record: any) => {
         if (record.image_url) {
           return (

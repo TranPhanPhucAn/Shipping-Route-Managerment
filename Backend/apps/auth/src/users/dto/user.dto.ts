@@ -53,6 +53,9 @@ export class PaginationUserDto {
 
   @Field({ nullable: true })
   roleFilter: string | null;
+
+  @Field({ nullable: true })
+  search: string | null;
 }
 
 @InputType()

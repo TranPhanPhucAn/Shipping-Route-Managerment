@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ActivationDto, CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { ILike, In, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bycypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -235,7 +235,8 @@ export class UsersService {
   }
 
   async paginationUser(paginationUser: PaginationUserDto) {
-    const { limit, offset, sort, genderFilter, roleFilter } = paginationUser;
+    const { limit, offset, sort, genderFilter, roleFilter, search } =
+      paginationUser;
     const skip = limit * offset;
     const order: Record<string, 'ASC' | 'DESC'> = {};
     if (sort) {
@@ -261,6 +262,9 @@ export class UsersService {
       whereCondition.role = {
         name: In(roleArray),
       };
+    }
+    if (search) {
+      whereCondition.username = ILike(`%${search}%`);
     }
     if (Object.keys(whereCondition).length > 0) {
       queryOptions.where = whereCondition;
