@@ -71,7 +71,7 @@ const UpdateRouteModal = ({
   return (
     <Modal
       title="Update Route"
-      visible={visible}
+      open={visible}
       onCancel={handleCancel}
       footer={null}
     >

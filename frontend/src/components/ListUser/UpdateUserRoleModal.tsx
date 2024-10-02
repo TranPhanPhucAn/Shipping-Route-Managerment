@@ -62,7 +62,7 @@ const UpdateUserRoleModal = ({ user, visible, onClose }: any) => {
   return (
     <Modal
       title="Update Role User"
-      visible={visible}
+      open={visible}
       onCancel={handleCancel}
       footer={null}
     >
@@ -80,7 +80,11 @@ const UpdateUserRoleModal = ({ user, visible, onClose }: any) => {
             {roles &&
               roles.length > 0 &&
               roles.map((item: any, index: any) => {
-                return <Option value={item.id}>{item.name}</Option>;
+                return (
+                  <Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Option>
+                );
               })}
           </Select>
         </Form.Item>

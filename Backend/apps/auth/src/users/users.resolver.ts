@@ -34,7 +34,7 @@ import * as Upload from 'graphql-upload/Upload.js';
 
 import { FilesService } from '../files/files.service';
 
-@Resolver((of) => User)
+@Resolver(() => User)
 export class UsersResolver {
   constructor(
     private readonly usersService: UsersService,
@@ -81,6 +81,7 @@ export class UsersResolver {
 
   @Mutation(() => DeleteUserResponse)
   @UseGuards(PermissionsGuard)
+  @SetMetadata('permissions', ['delete:user'])
   removeUser(@Args('id') id: string) {
     return this.usersService.delete(id);
   }

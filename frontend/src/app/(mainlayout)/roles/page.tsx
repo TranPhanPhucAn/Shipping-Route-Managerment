@@ -10,7 +10,6 @@ import {
   Avatar,
   Input,
   Space,
-  message,
 } from "antd";
 import {
   DeleteOutlined,
@@ -25,9 +24,8 @@ import { GET_USER_PAGINATION } from "@/src/graphql/queries/query";
 import { useSearchParams } from "next/navigation";
 import { FilterDropdownProps } from "antd/es/table/interface";
 import UpdateUserRoleModal from "@/src/components/ListUser/UpdateUserRoleModal";
-import { DELETE_USER } from "@/src/graphql/mutations/Auth";
 
-const UserList = () => {
+const Roles = () => {
   const { replace } = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -41,7 +39,6 @@ const UserList = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   console.log("alo sort: ", sortString);
   const page = pageString ? +pageString : 1;
-  const [removeUser, { loading: deleteLoading }] = useMutation(DELETE_USER);
   const { loading, error, data, refetch } = useQuery(GET_USER_PAGINATION, {
     variables: {
       paginationUser: {
@@ -112,49 +109,6 @@ const UserList = () => {
         params.set("sort", resultUrl);
         replace(`${pathname}?${params.toString()}`);
       }
-      // if (sorter.order === "ascend") {
-      //   sorter.order = "asc";
-      // } else if (sorter.order === "desc") {
-      //   sorter.order = "desc";
-      // }
-      // if (sortString) {
-      //   if (sortString.includes(sorter.field)) {
-      //     console.log("hey bro: ", sortString);
-      //     let resultUrl = "";
-      //     sortString.split(",").forEach((sortParam: string) => {
-      //       const [field, direction] = sortParam.split(" ");
-      //       if (field === sorter.field) {
-      //         if (sorter.order) {
-      //           if (resultUrl) {
-      //             resultUrl =
-      //               resultUrl + "," + sorter.field + " " + sorter.order;
-      //           } else {
-      //             console.log("here: ", field, direction);
-      //             resultUrl = sorter.field + " " + sorter.order;
-      //           }
-      //         }
-      //       } else {
-      //         if (resultUrl) {
-      //           resultUrl = resultUrl + "," + field + " " + direction;
-      //         } else {
-      //           resultUrl = field + " " + direction;
-      //         }
-      //       }
-      //     });
-      //     params.set("sort", resultUrl);
-      //     replace(`${pathname}?${params.toString()}`);
-
-      //     return;
-      //   }
-      //   params.set(
-      //     "sort",
-      //     sortString + "," + sorter.field + " " + sorter.order
-      //   );
-      //   replace(`${pathname}?${params.toString()}`);
-      // } else {
-      //   params.set("sort", sorter.field + " " + sorter.order);
-      // }
-      // replace(`${pathname}?${params.toString()}`);
     }
 
     if (filters) {
@@ -273,17 +227,7 @@ const UserList = () => {
     setIsUpdateModalVisible(false);
     setSelectedUser(null);
   };
-  const handleRemove = async (id: string) => {
-    try {
-      await removeUser({
-        variables: { id },
-      });
-      message.success("User removed successfully");
-      refetch();
-    } catch (error) {
-      message.error("Failed to remove user");
-    }
-  };
+  const handleRemove = async (record: any) => {};
   const columns = [
     {
       title: "Id",
@@ -478,4 +422,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default Roles;

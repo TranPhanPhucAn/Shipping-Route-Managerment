@@ -69,7 +69,7 @@ const CreateScheduleModal = () => {
       </Button>
       <Modal
         title="Create New Schedule"
-        visible={visible}
+        open={visible}
         onCancel={() => setVisible(false)}
         footer={null}
       >

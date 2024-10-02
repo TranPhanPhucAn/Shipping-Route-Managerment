@@ -58,7 +58,7 @@ const UpdateScheduleModal = ({
   return (
     <Modal
       title="Update Schedule"
-      visible={visible}
+      open={visible}
       onCancel={handleCancel}
       footer={null}
     >

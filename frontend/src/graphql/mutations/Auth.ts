@@ -43,6 +43,14 @@ export const UPDATE_USER = gql`
   }
 `;
 
+export const DELETE_USER = gql`
+  mutation removeUser($id: String!) {
+    removeUser(id: $id) {
+      message
+    }
+  }
+`;
+
 export const ASSIGN_ROLE_FOR_USER = gql`
   mutation assignRoleForUser($assignRoleDto: AssignRoleDto!) {
     assignRoleForUser(assignRoleDto: $assignRoleDto) {
