@@ -41,6 +41,16 @@ export const GET_USER_PAGINATION = gql`
   }
 `;
 
+export const QUERY_ROLES = gql`
+  query {
+    roles {
+      id
+      name
+      description
+    }
+  }
+`;
+
 export const GET_ROUTES = gql`
   query {
     routes {

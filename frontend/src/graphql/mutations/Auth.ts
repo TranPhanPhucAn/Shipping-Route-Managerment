@@ -43,6 +43,20 @@ export const UPDATE_USER = gql`
   }
 `;
 
+export const ASSIGN_ROLE_FOR_USER = gql`
+  mutation assignRoleForUser($assignRoleDto: AssignRoleDto!) {
+    assignRoleForUser(assignRoleDto: $assignRoleDto) {
+      id
+      email
+      username
+      role {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const UPDATE_AVATAR = gql`
   mutation UploadImage($file: Upload!, $id: String!) {
     uploadImage(file: $file, id: $id) {

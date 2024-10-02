@@ -3,7 +3,6 @@ import { useMutation, useQuery } from "@apollo/client";
 import {
   Table,
   Button,
-  message,
   Popconfirm,
   TablePaginationConfig,
   Tag,
@@ -15,33 +14,29 @@ import {
 import {
   DeleteOutlined,
   EditOutlined,
-  EyeOutlined,
   SearchOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import styles from "@/src/styles/Listpage.module.css";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { GET_USER_PAGINATION } from "@/src/graphql/queries/query";
 import { useSearchParams } from "next/navigation";
 import { FilterDropdownProps } from "antd/es/table/interface";
+import UpdateUserRoleModal from "@/src/components/ListUser/UpdateUserRoleModal";
 
 const UserList = () => {
-  //   const { loading, error, data, refetch } = useQuery(GET_USER_PAGINATION);
-  //   const schedulesData = data?.schedules || [];
   const { replace } = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const [filterField, setFilterField] = useState("");
-
-  // console.log("search: ", searchParams?.get("page"));
   const limit = 2;
   const pageString = searchParams?.get("page");
   const sortString = searchParams?.get("sort");
   const genderFilter = searchParams?.get("gender");
   const roleFilter = searchParams?.get("role");
   const search = searchParams?.get("search");
-
+  const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
   console.log("alo sort: ", sortString);
   const page = pageString ? +pageString : 1;
   const { loading, error, data, refetch } = useQuery(GET_USER_PAGINATION, {
@@ -266,25 +261,16 @@ const UserList = () => {
     filterIcon: (filtered: boolean) => (
       <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
     ),
-    // onFilter: (value, record) =>
-    //   record[dataIndex]
-    //     .toString()
-    //     .toLowerCase()
-    //     .includes((value as string).toLowerCase()),
   });
-  // useEffect(() => {
-  //   if (page) {
-  //     const params = new URLSearchParams(searchParams ?? "");
-  //     params.set("page", page.toString());
-  //     replace(`${pathname}?${params.toString()}`);
-  //   }
-  // }, [page]);
-
-  //   if (loading) return <p>Loading...</p>;
-  //   if (error) return <p>Error: {error.message}</p>;
-  const getFilteredData = (value: string) => {
-    console.log("??? alo: ", value);
+  const handleEdit = async (record: any) => {
+    setSelectedUser(record);
+    setIsUpdateModalVisible(true);
   };
+  const handleUpdateModalClose = () => {
+    setIsUpdateModalVisible(false);
+    setSelectedUser(null);
+  };
+  const handleRemove = async (record: any) => {};
   const columns = [
     {
       title: "Id",
@@ -404,6 +390,40 @@ const UserList = () => {
       //   return true;
       // },
     },
+    {
+      title: "Action",
+      dataIndex: "id",
+      key: "id",
+      render: (text: string, record: any) => (
+        <>
+          <Button
+            type="link"
+            onClick={() => handleEdit(record)}
+            icon={<EditOutlined />}
+          >
+            Edit
+          </Button>
+          <Popconfirm
+            placement="topLeft"
+            title={"Are you sure to delete this user?"}
+            description={"Delete the user"}
+            okText="Yes"
+            cancelText="No"
+            onConfirm={() => handleRemove(record.id)}
+            onCancel={() => console.log("Delete canceled")}
+          >
+            <Button
+              type="link"
+              danger
+              // loading={deleteLoading}
+              icon={<DeleteOutlined />}
+            >
+              Delete
+            </Button>
+          </Popconfirm>
+        </>
+      ),
+    },
   ];
 
   return (
@@ -433,6 +453,13 @@ const UserList = () => {
           }}
           onChange={handleTableChange}
         />
+        {selectedUser && (
+          <UpdateUserRoleModal
+            user={selectedUser}
+            visible={isUpdateModalVisible}
+            onClose={handleUpdateModalClose}
+          />
+        )}
       </div>
     </div>
   );
