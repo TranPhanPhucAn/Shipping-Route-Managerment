@@ -41,11 +41,35 @@ export const GET_USER_PAGINATION = gql`
   }
 `;
 
+export const QUERY_ROLE = gql`
+  query role($id: String!) {
+    role(id: $id) {
+      id
+      name
+      description
+      permissions {
+        id
+      }
+    }
+  }
+`;
+
 export const QUERY_ROLES = gql`
   query {
     roles {
       id
       name
+      description
+      createdAt
+    }
+  }
+`;
+
+export const QUERY_PERMISSIONS = gql`
+  query {
+    permissions {
+      id
+      permission
       description
     }
   }

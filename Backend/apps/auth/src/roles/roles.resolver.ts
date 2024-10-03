@@ -46,7 +46,7 @@ export class RolesResolver {
   @Mutation(() => Role)
   @UseGuards(PermissionsGuard)
   @SetMetadata('permissions', ['assginPer:role'])
-  AssignPerForRole(
+  assignPerForRole(
     @Args('assignPermissionDto') assignPermissionDto: AssignPermissionDto,
   ) {
     return this.rolesService.assginPerForRole(assignPermissionDto);

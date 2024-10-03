@@ -37,6 +37,10 @@ const items: MenuItem[] = [
     label: <Link href={"/users"}>Users</Link>,
     key: "/users",
   },
+  {
+    label: <Link href={"/roles"}>Roles</Link>,
+    key: "/roles",
+  },
 ];
 const Header: React.FC = () => {
   const [current, setCurrent] = useState("/");

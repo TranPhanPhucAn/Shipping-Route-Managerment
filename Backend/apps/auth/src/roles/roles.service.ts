@@ -16,10 +16,16 @@ export class RolesService {
     private readonly permissionssRepository: Repository<Permission>,
   ) {}
   async create(createRoleInput: CreateRoleInput) {
+    const userRole = await this.rolesRepository.findOne({
+      where: { name: 'user' },
+      relations: ['permissions'], // Make sure to fetch the permissions relationship
+    });
+
     const roleNew = this.rolesRepository.create();
     const newRole = {
       ...roleNew,
       ...createRoleInput,
+      permissions: userRole.permissions,
     };
     const role: Role | undefined = await this.rolesRepository.save(newRole);
     return role;
@@ -31,6 +37,7 @@ export class RolesService {
 
   async findOne(id: string) {
     return await this.rolesRepository.findOne({
+      relations: ['permissions'],
       where: { id: id },
     });
   }

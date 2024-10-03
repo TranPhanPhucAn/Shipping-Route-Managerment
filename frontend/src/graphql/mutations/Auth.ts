@@ -51,6 +51,23 @@ export const DELETE_USER = gql`
   }
 `;
 
+export const CREATE_ROLE = gql`
+  mutation createRole($createRoleInput: CreateRoleInput!) {
+    createRole(createRoleInput: $createRoleInput) {
+      name
+      description
+    }
+  }
+`;
+
+export const DELETE_ROLE = gql`
+  mutation removeRole($id: String!) {
+    removeRole(id: $id) {
+      message
+    }
+  }
+`;
+
 export const ASSIGN_ROLE_FOR_USER = gql`
   mutation assignRoleForUser($assignRoleDto: AssignRoleDto!) {
     assignRoleForUser(assignRoleDto: $assignRoleDto) {
@@ -61,6 +78,15 @@ export const ASSIGN_ROLE_FOR_USER = gql`
         id
         name
       }
+    }
+  }
+`;
+
+export const ASSIGN_PER_FOR_ROLE = gql`
+  mutation assignPerForRole($assignPermissionDto: AssignPermissionDto!) {
+    assignPerForRole(assignPermissionDto: $assignPermissionDto) {
+      id
+      name
     }
   }
 `;
