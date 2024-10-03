@@ -19,6 +19,14 @@ export class SchedulesResolver {
   findAll(): Promise<Schedule[]> {
     return this.schedulesService.findAll();
   }
+  @Query(() => [Schedule], { name: 'schedulesByPort' })
+  schedulesByPort(
+    @Args('country', { type: () => String }) country: string,
+    @Args('portName', { type: () => String }) portName: string,
+    @Args('date', { type: () => String }) date: string,
+  ): Promise<Schedule[]> {
+    return this.schedulesService.findByPort(country, portName, date);
+  }
 
   @Query(() => Schedule, { name: 'schedule' })
   findOne(@Args('id', { type: () => String }) id: string): Promise<Schedule> {
