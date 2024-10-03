@@ -110,6 +110,7 @@ export const GET_SCHEDULES = gql`
     }
   }
 `;
+
 export const GET_VESSELS = gql`
   query GetVessels {
     vessels {
@@ -117,6 +118,37 @@ export const GET_VESSELS = gql`
       name
       type
       capacity
+      status
+    }
+  }
+`;
+
+export const SEARCH_BY_PORT = gql`
+  query schedulesByPort(
+    $country: String!
+    $portName: String!
+    $date: String!
+  ) {
+    schedulesByPort(country: $country, portName: $portName, date: $date) {
+      id
+      vessel {
+        id
+        name
+        type
+      }
+      route {
+        id
+        departurePort {
+          id
+          name
+        }
+        destinationPort {
+          id
+          name
+        }
+      }
+      departure_time
+      arrival_time
       status
     }
   }

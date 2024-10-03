@@ -15,7 +15,7 @@ import {
   Vessel,
   Route,
 } from "../../graphql/types";
-// import moment from "moment";
+
 
 const { Option } = Select;
 
@@ -63,7 +63,7 @@ const CreateScheduleModal = () => {
   };
 
   return (
-    <>
+    <div>
       <Button type="primary" onClick={() => setVisible(true)}>
         Add Schedule
       </Button>
@@ -163,7 +163,7 @@ const CreateScheduleModal = () => {
           {error && <p style={{ color: "red" }}>{error.message}</p>}
         </Form>
       </Modal>
-    </>
+    </div>
   );
 };
 
