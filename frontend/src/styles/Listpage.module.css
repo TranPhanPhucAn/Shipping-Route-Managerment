@@ -73,19 +73,21 @@
   font-family:Playfair Display;
   font-weight: 500;
   font-size: 1rem;
+  border: 2px solid black;
 }
 .input {
   width: 80%;
   border: 1px solid #d9d9d9;
   border-radius: 4px;
-  padding: 0.8rem 12px !important;
+  padding: 0.6rem 12px !important;
 }
 .datePicker {
   width: 100%;
+  padding: 0.6rem 12px !important;
 }
 .searchButton {
   width: 100%;
-  padding: 0.8rem 12px !important;
+  padding: 0.6rem 12px !important;
   background-color: #334155 !important;
   color: white !important;
   border: none;
