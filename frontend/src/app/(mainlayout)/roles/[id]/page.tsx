@@ -9,9 +9,9 @@ import {
   QUERY_ROLE,
   QUERY_ROLES,
 } from "@/src/graphql/queries/query";
-import CreateRoleModal from "@/src/components/Role/CreateRoleModal";
 import { useParams, useRouter } from "next/navigation";
 import { ASSIGN_PER_FOR_ROLE } from "@/src/graphql/mutations/Auth";
+import UpdatePermissionModal from "@/src/components/Permission/UpdatePermissionModal";
 
 const RolePermission = () => {
   const { loading, error, data, refetch } = useQuery(QUERY_PERMISSIONS);
@@ -31,9 +31,10 @@ const RolePermission = () => {
     { loading: loadingUpdatePerRole, error: errorPerRole },
   ] = useMutation(ASSIGN_PER_FOR_ROLE);
   const permissions = data?.permissions;
-  const router = useRouter();
   const permissionRole = dataRole?.role.permissions;
   const [listPer, setListPer] = useState<string[]>([]);
+  const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
+  const [selectedPermission, setSelectedPermission] = useState(null);
   useEffect(() => {
     if (permissionRole) {
       let temp = [];
@@ -45,7 +46,12 @@ const RolePermission = () => {
   }, [permissionRole]);
 
   const handleEdit = async (record: any) => {
-    router.push(`/roles/${record.id}`);
+    setSelectedPermission(record);
+    setIsUpdateModalVisible(true);
+  };
+  const handleUpdateModalClose = () => {
+    setIsUpdateModalVisible(false);
+    setSelectedPermission(null);
   };
   const onChangeCheckbox = (checkedValues: any) => {
     console.log("checked = ", checkedValues);
@@ -120,13 +126,20 @@ const RolePermission = () => {
               rowKey={"id"}
               pagination={false}
             />
+            {selectedPermission && (
+              <UpdatePermissionModal
+                permission={selectedPermission}
+                visible={isUpdateModalVisible}
+                onClose={handleUpdateModalClose}
+              />
+            )}
           </Checkbox.Group>
         )}
       </div>
       <div
         style={{
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "center",
           paddingTop: "50px",
         }}
       >

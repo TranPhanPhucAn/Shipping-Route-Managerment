@@ -69,6 +69,10 @@ export class SeedingService {
         permission: 'delete:role',
         description: 'Delete a role',
       });
+      const permission12 = permissionsRepository.create({
+        permission: 'update:permission',
+        description: 'Update permission description',
+      });
       await permissionsRepository.save([
         permission1,
         permission2,
@@ -81,6 +85,7 @@ export class SeedingService {
         permission9,
         permission10,
         permission11,
+        permission12,
       ]);
 
       const role1 = rolesRepository.create({

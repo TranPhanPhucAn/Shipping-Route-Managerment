@@ -91,6 +91,14 @@ export const ASSIGN_PER_FOR_ROLE = gql`
   }
 `;
 
+export const UPDATE_PERMISSION = gql`
+  mutation UpdatePermission($updatePermissionInput: UpdatePermissionInput!) {
+    updatePermission(updatePermissionInput: $updatePermissionInput) {
+      id
+      permission
+    }
+  }
+`;
 export const UPDATE_AVATAR = gql`
   mutation UploadImage($file: Upload!, $id: String!) {
     uploadImage(file: $file, id: $id) {

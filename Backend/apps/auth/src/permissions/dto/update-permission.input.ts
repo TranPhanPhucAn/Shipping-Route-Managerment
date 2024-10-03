@@ -1,8 +1,10 @@
-import { CreatePermissionInput } from './create-permission.input';
-import { InputType, Field, PartialType } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
-export class UpdatePermissionInput extends PartialType(CreatePermissionInput) {
+export class UpdatePermissionInput {
   @Field()
   id: string;
+
+  @Field()
+  description: string;
 }
