@@ -89,6 +89,12 @@ export interface Vessel {
 export interface GetVesselsData {
   vessels: Vessel[];
 }
+export enum ScheduleStatus {
+  SCHEDULED = "Scheduled",
+  IN_TRANSIT = "In Transit",
+  COMPLETED = "Completed",
+  CANCELLED = "Cancelled",
+}
 export interface Schedule {
   id: string;
   vessel: Vessel;
@@ -99,4 +105,10 @@ export interface Schedule {
 }
 export interface GetSchedulesData {
   schedules: Schedule[];
+}
+
+export interface SearchByPortVariables {
+  country: string;
+  portName: string;
+  date: string;
 }

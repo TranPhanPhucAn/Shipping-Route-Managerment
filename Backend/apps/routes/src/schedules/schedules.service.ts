@@ -1,14 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, MoreThanOrEqual, ILike, In } from 'typeorm';
 import { Schedule, ScheduleStatus } from './entities/schedule.entity';
 import { CreateScheduleInput } from './dto/create-schedule.input';
 import { UpdateScheduleInput } from './dto/update-schedule.input';
 import { Vessel, VesselStatus } from '../vessels/entities/vessel.entity';
 import { Route } from '../routes/entities/route.entity';
 
+
 @Injectable()
 export class SchedulesService {
+  convertDateString(dateString: string): string {
+    const [day, month, year] = dateString.split('/').map(Number);
+    const date = new Date(Date.UTC(year, month - 1, day));
+    return date.toISOString();
+  }
   constructor(
     @InjectRepository(Schedule)
     private schedulesRepository: Repository<Schedule>,
@@ -52,6 +58,36 @@ export class SchedulesService {
     return this.schedulesRepository.find({
       relations: ['vessel', 'route'],
     });
+  }
+
+  async findByPort(
+    country: string,
+    portName: string,
+    date: string,
+  ): Promise<any[]> {
+    const dateObject = this.convertDateString(date);
+    console.log('Search parameters:', { country, portName, date: dateObject });
+
+    const schedules = await this.schedulesRepository.find({
+      where: [
+        {
+          route: {
+            departurePort: {
+              country: ILike(`%${country}%`),
+              name: ILike(`%${portName}%`),
+            },
+          },
+          departure_time: MoreThanOrEqual(dateObject),
+          status: In([ScheduleStatus.IN_TRANSIT, ScheduleStatus.SCHEDULED]),
+        },
+      ],
+      relations: ['vessel', 'route'],
+    });
+
+    console.log('Schedules found:', schedules.length);
+    return schedules.map((schedule) => ({
+      ...schedule,
+    }));
   }
 
   async findOne(id: string): Promise<Schedule> {

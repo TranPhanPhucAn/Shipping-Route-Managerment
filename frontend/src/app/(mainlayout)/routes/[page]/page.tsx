@@ -159,7 +159,7 @@ const RoutesList = () => {
       dataIndex: "id",
       key: "id",
       render: (text: string, record: Route) => (
-        <>
+        <div>
           <Button
             type="link"
             onClick={() => router.push(`/route/${record.id}`)}
@@ -192,7 +192,7 @@ const RoutesList = () => {
               Delete
             </Button>
           </Popconfirm>
-        </>
+        </div>
       ),
     },
   ];
