@@ -77,9 +77,11 @@ const UserList = () => {
       replace(`${pathname}?${params.toString()}`);
       return;
     }
+
+    const params = new URLSearchParams(searchParams ?? "");
+
     if (sorter) {
       let checkSorter: boolean = true;
-      const params = new URLSearchParams(searchParams ?? "");
       let resultUrl = "";
       if (sorter.length) {
         for (let i = 0; i < sorter.length; i++) {
@@ -96,10 +98,11 @@ const UserList = () => {
         }
       } else {
         if (!sorter.order) {
+          console.log("a");
           params.delete("sort");
-          replace(`${pathname}?${params.toString()}`);
           checkSorter = false;
         }
+        console.log("b");
         let order = sorter.order;
         if (order === "ascend") {
           order = "asc";
@@ -110,7 +113,7 @@ const UserList = () => {
       }
       if (checkSorter === true) {
         params.set("sort", resultUrl);
-        replace(`${pathname}?${params.toString()}`);
+        // replace(`${pathname}?${params.toString()}`);
       }
       // if (sorter.order === "ascend") {
       //   sorter.order = "asc";
@@ -158,11 +161,10 @@ const UserList = () => {
     }
 
     if (filters) {
-      const params = new URLSearchParams(searchParams ?? "");
       if (!filters.gender && !filters.role) {
         params.delete("gender");
         params.delete("role");
-        replace(`${pathname}?${params.toString()}`);
+        // replace(`${pathname}?${params.toString()}`);
       } else {
         if (!filters.gender) {
           params.delete("gender");
@@ -188,9 +190,10 @@ const UserList = () => {
           }
           params.set("role", roleUrl);
         }
-        replace(`${pathname}?${params.toString()}`);
+        // replace(`${pathname}?${params.toString()}`);
       }
     }
+    replace(`${pathname}?${params.toString()}`);
   };
   const handleSearch = (
     selectedKeys: string[],

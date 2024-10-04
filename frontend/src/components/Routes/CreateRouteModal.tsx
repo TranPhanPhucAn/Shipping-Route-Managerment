@@ -53,7 +53,7 @@ const CreateRouteModal = () => {
       </Button>
       <Modal
         title="Create New Route"
-        visible={visible}
+        open={visible}
         onCancel={() => setVisible(false)}
         footer={null}
       >
