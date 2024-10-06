@@ -1,56 +1,67 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, Modal, message, Select, Input } from "antd";
 import { useMutation } from "@apollo/client";
-import { CREATE_ROLE } from "../../graphql/mutations/Auth";
+import { UPDATE_ROLE } from "../../graphql/mutations/Auth";
+import { Role } from "@/src/graphql/types";
 
-interface CreateRoleModalProps {
-  refetchRoles: () => void;
+interface UpdateRoleModalProps {
+  role: Role;
+  refetchRole: () => void;
 }
-
-const CreateRoleModal = ({ refetchRoles }: CreateRoleModalProps) => {
+const UpdateRoleModal = ({ role, refetchRole }: UpdateRoleModalProps) => {
   const [visible, setVisible] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [createRole, { loading, error }] = useMutation(CREATE_ROLE);
+  const [updateRole, { loading, error }] = useMutation(UPDATE_ROLE);
   const [form] = Form.useForm();
-  const handleCreateRole = async () => {
+  const handleUpdateRole = async () => {
     if (!name || !description) {
       message.error("Please fill out all fields.");
       return;
     }
 
     try {
-      await createRole({
+      await updateRole({
         variables: {
-          createRoleInput: {
+          updateRoleInput: {
+            id: role.id,
             name: name,
             description: description,
           },
         },
       });
-      refetchRoles();
+      refetchRole();
       form.resetFields();
       setVisible(false);
-      message.success("Schedule created successfully");
+      message.success("Role update successfully");
     } catch (error) {
-      console.error("Error creating schedule:", error);
-      message.error("Failed to create schedule");
+      console.error("Error update role:", error);
+      message.error("Failed to update role");
     }
   };
-
+  useEffect(() => {
+    if (role) {
+      form.setFieldsValue({
+        name: role.name,
+        description: role.description,
+      });
+      setName(role.name);
+      setDescription(role.description);
+    }
+  }, [role, form]);
   return (
     <>
       <Button type="primary" onClick={() => setVisible(true)}>
-        Add Role
+        Edit Role
       </Button>
       <Modal
-        title="Create New Role"
+        title="Update Role"
         open={visible}
         onCancel={() => setVisible(false)}
         footer={null}
       >
-        <Form form={form} onFinish={handleCreateRole} layout="vertical">
+        <Form form={form} onFinish={handleUpdateRole} layout="vertical">
           <Form.Item
             name="name"
             rules={[
@@ -93,4 +104,4 @@ const CreateRoleModal = ({ refetchRoles }: CreateRoleModalProps) => {
   );
 };
 
-export default CreateRoleModal;
+export default UpdateRoleModal;

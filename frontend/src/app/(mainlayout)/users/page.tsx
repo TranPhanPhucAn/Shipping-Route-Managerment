@@ -39,7 +39,6 @@ const UserList = () => {
   const search = searchParams?.get("search");
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  console.log("alo sort: ", sortString);
   const page = pageString ? +pageString : 1;
   const [removeUser, { loading: deleteLoading }] = useMutation(DELETE_USER);
   const { loading, error, data, refetch } = useQuery(GET_USER_PAGINATION, {
@@ -67,9 +66,6 @@ const UserList = () => {
     sorter: any,
     extra: any
   ) => {
-    console.log("params", filters);
-    console.log("sort", sorter);
-
     if (pagination && pagination.current != paginationTable.current) {
       const params = new URLSearchParams(searchParams ?? "");
       params.set("page", pagination.current);

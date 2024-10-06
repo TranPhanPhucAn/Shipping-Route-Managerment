@@ -7,16 +7,21 @@ import {
   UPDATE_SCHEDULE,
 } from "../../graphql/mutations/Auth";
 import { QUERY_ROLES } from "@/src/graphql/queries/query";
+import { User } from "@/src/graphql/types";
 
 const { Option } = Select;
 
-// interface UpdateScheduleModalProps {
-//   schedule: Schedule;
-//   visible: boolean;
-//   onClose: () => void;
-// }
+interface UpdateUserRoleModalProps {
+  user: User;
+  visible: boolean;
+  onClose: () => void;
+}
 
-const UpdateUserRoleModal = ({ user, visible, onClose }: any) => {
+const UpdateUserRoleModal = ({
+  user,
+  visible,
+  onClose,
+}: UpdateUserRoleModalProps) => {
   const [form] = Form.useForm();
   const [role, setRole] = useState("");
   const [assignRoleForUser, { loading, error }] =
@@ -27,7 +32,6 @@ const UpdateUserRoleModal = ({ user, visible, onClose }: any) => {
     data,
     refetch,
   } = useQuery(QUERY_ROLES);
-  console.log("data role: ", data);
   const roles = data ? data.roles : [];
   useEffect(() => {
     if (user) {

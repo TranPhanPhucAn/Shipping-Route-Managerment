@@ -60,6 +60,16 @@ export const CREATE_ROLE = gql`
   }
 `;
 
+export const UPDATE_ROLE = gql`
+  mutation UpdateRole($updateRoleInput: UpdateRoleInput!) {
+    updateRole(updateRoleInput: $updateRoleInput) {
+      id
+      name
+      description
+    }
+  }
+`;
+
 export const DELETE_ROLE = gql`
   mutation removeRole($id: String!) {
     removeRole(id: $id) {

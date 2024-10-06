@@ -1,17 +1,14 @@
 "use client";
 import { useMutation, useQuery } from "@apollo/client";
-import { Table, Button, Popconfirm, Divider, message, Checkbox } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Table, Button, Divider, message, Checkbox } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import styles from "@/src/styles/Listpage.module.css";
-import {
-  QUERY_PERMISSIONS,
-  QUERY_ROLE,
-  QUERY_ROLES,
-} from "@/src/graphql/queries/query";
-import { useParams, useRouter } from "next/navigation";
+import { QUERY_PERMISSIONS, QUERY_ROLE } from "@/src/graphql/queries/query";
+import { useParams } from "next/navigation";
 import { ASSIGN_PER_FOR_ROLE } from "@/src/graphql/mutations/Auth";
 import UpdatePermissionModal from "@/src/components/Permission/UpdatePermissionModal";
+import UpdateRoleModal from "@/src/components/Role/UpdateRoleModal";
 
 const RolePermission = () => {
   const { loading, error, data, refetch } = useQuery(QUERY_PERMISSIONS);
@@ -26,13 +23,21 @@ const RolePermission = () => {
       id: params?.id,
     },
   });
+  const { data: dataRoleBase } = useQuery(QUERY_ROLE, {
+    variables: {
+      id: "24",
+    },
+  });
   const [
     assignPerForRole,
     { loading: loadingUpdatePerRole, error: errorPerRole },
   ] = useMutation(ASSIGN_PER_FOR_ROLE);
   const permissions = data?.permissions;
   const permissionRole = dataRole?.role.permissions;
+  const permissionRoleBase = dataRoleBase?.role.permissions;
   const [listPer, setListPer] = useState<string[]>([]);
+  const [listPerBase, setListPerBase] = useState<string[]>([]);
+
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const [selectedPermission, setSelectedPermission] = useState(null);
   useEffect(() => {
@@ -43,7 +48,16 @@ const RolePermission = () => {
       }
       setListPer(temp);
     }
-  }, [permissionRole]);
+  }, [permissionRole, permissionRoleBase]);
+  useEffect(() => {
+    if (permissionRoleBase) {
+      let temp = [];
+      for (let per of permissionRoleBase) {
+        temp.push(per.id);
+      }
+      setListPerBase(temp);
+    }
+  }, [permissionRoleBase]);
 
   const handleEdit = async (record: any) => {
     setSelectedPermission(record);
@@ -78,9 +92,12 @@ const RolePermission = () => {
     {
       title: "Have",
       render: (text: string, record: any) => (
-        <>
-          <Checkbox value={record.id}></Checkbox>
-        </>
+        // <>
+        //   <Checkbox value={record.id}></Checkbox>
+        // </>
+        <Checkbox value={record.id} disabled={listPerBase?.includes(record.id)}>
+          {record.id}
+        </Checkbox>
       ),
     },
     {
@@ -114,7 +131,13 @@ const RolePermission = () => {
   return (
     <div className={styles.body}>
       <div className={styles.Title}>Role {dataRole?.role.name}</div>
-      <div className={styles.subtitle}>Update permission for role</div>
+      <div className={styles.subtitle} style={{ marginBottom: "10px" }}>
+        Update permission for role
+      </div>
+      {dataRole?.role && (
+        <UpdateRoleModal refetchRole={refetchRole} role={dataRole?.role} />
+      )}
+
       <Divider style={{ borderColor: "#334155" }}></Divider>
       <div className={styles.container}>
         {listPer && listPer.length > 0 && (

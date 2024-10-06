@@ -1,3 +1,16 @@
+export interface User {
+  id: string;
+  email: string;
+  username: string;
+  address: string;
+  gender: string;
+  phone_number: string;
+  image_url?: string;
+  role: Role;
+  birthday?: string;
+  createdAt: string;
+}
+
 export interface LoginInput {
   email: string;
   password: string;
@@ -34,6 +47,21 @@ export interface ForgotPasswordDto {
 export interface ResetPasswordDto {
   password: string;
   forgotPasswordToken: string;
+}
+
+export interface Permission {
+  id: string;
+  permission: string;
+  description: string;
+  roles: Role[];
+}
+
+export interface Role {
+  id: string;
+  name: string;
+  description: string;
+  permissions: Permission[];
+  createdAt: string;
 }
 export interface Port {
   id: string;

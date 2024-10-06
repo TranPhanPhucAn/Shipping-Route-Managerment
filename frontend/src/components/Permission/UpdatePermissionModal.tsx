@@ -1,23 +1,22 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Button, Form, Modal, message, Select, DatePicker, Input } from "antd";
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  ASSIGN_ROLE_FOR_USER,
-  UPDATE_PERMISSION,
-  UPDATE_SCHEDULE,
-} from "../../graphql/mutations/Auth";
-import { QUERY_PERMISSIONS, QUERY_ROLES } from "@/src/graphql/queries/query";
+import { useMutation } from "@apollo/client";
+import { UPDATE_PERMISSION } from "../../graphql/mutations/Auth";
+import { QUERY_PERMISSIONS } from "@/src/graphql/queries/query";
+import { Permission } from "@/src/graphql/types";
 
-const { Option } = Select;
+interface UpdateSPermissionModalProps {
+  permission: Permission;
+  visible: boolean;
+  onClose: () => void;
+}
 
-// interface UpdateScheduleModalProps {
-//   schedule: Schedule;
-//   visible: boolean;
-//   onClose: () => void;
-// }
-
-const UpdatePermissionModal = ({ permission, visible, onClose }: any) => {
+const UpdatePermissionModal = ({
+  permission,
+  visible,
+  onClose,
+}: UpdateSPermissionModalProps) => {
   const [form] = Form.useForm();
   const [description, setDescription] = useState("");
   const [updatePermission, { loading, error }] = useMutation(

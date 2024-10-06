@@ -11,17 +11,20 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { client } from "@/src/graphql/Provider";
 import { QUERY_USER } from "@/src/graphql/queries/query";
 import { useSession } from "next-auth/react";
+import { User } from "@/src/graphql/types";
 
 const { Option } = Select;
+interface UpdateUserModalProps {
+  userProfile: User;
+}
 
-const UpdateUserModal = (props: any) => {
+const UpdateUserModal = ({ userProfile }: UpdateUserModalProps) => {
   const { data: session, status, update } = useSession();
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
-  const [email, setEmail] = useState(props);
+  const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [username, setUsername] = useState("");
   const [address, setAddress] = useState("");
@@ -31,28 +34,26 @@ const UpdateUserModal = (props: any) => {
     fetchPolicy: "no-cache",
   });
   useEffect(() => {
-    // console.log("alo: ", props);
-    if (props.userProfile) {
+    if (userProfile) {
       form.setFieldsValue({
-        email: props.userProfile.email,
-        username: props.userProfile.username,
-        address: props.userProfile.address,
-        phoneNumber: props.userProfile.phone_number,
-        gender: props.userProfile.gender,
+        email: userProfile.email,
+        username: userProfile.username,
+        address: userProfile.address,
+        phoneNumber: userProfile.phone_number,
+        gender: userProfile.gender,
       });
-      setEmail(props.userProfile.email);
-      setUsername(props.userProfile.username);
-      setPhoneNumber(props.userProfile.phone_number);
-      setAddress(props.userProfile.address);
-      setGender(props.userProfile.gender);
-      if (props.userProfile.birthday) {
-        form.setFieldsValue({ birthday: dayjs(props.userProfile.birthday) });
-        setBirthday(dayjs(props.userProfile.birthday));
+      setEmail(userProfile.email);
+      setUsername(userProfile.username);
+      setPhoneNumber(userProfile.phone_number);
+      setAddress(userProfile.address);
+      setGender(userProfile.gender);
+      if (userProfile.birthday) {
+        form.setFieldsValue({ birthday: dayjs(userProfile.birthday) });
+        setBirthday(dayjs(userProfile.birthday));
       }
     }
-  }, [props.userProfile, form]);
+  }, [userProfile, form]);
   const handleUpdateUser = async () => {
-    console.log("???: ", username, email);
     let re =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!re.test(email) || !username) {
@@ -66,7 +67,7 @@ const UpdateUserModal = (props: any) => {
       const res = await updateUser({
         variables: {
           updateUserInput: {
-            id: props.userProfile.id,
+            id: userProfile.id,
             email: email,
             username: username,
             address: address,
@@ -78,7 +79,7 @@ const UpdateUserModal = (props: any) => {
         refetchQueries: [
           {
             query: QUERY_USER,
-            variables: { id: props.userProfile.id },
+            variables: { id: userProfile.id },
           },
         ],
       });
@@ -127,15 +128,7 @@ const UpdateUserModal = (props: any) => {
               onChange={(e: any) => setUsername(e.target.value)}
             />
           </Form.Item>
-          <Form.Item
-            name="phoneNumber"
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: "Please input your phone!",
-            //   },
-            // ]}
-          >
+          <Form.Item name="phoneNumber">
             <Input
               prefix={<PhoneOutlined />}
               // className={styles.input}
@@ -160,20 +153,11 @@ const UpdateUserModal = (props: any) => {
             <Input
               prefix={<MailOutlined />}
               placeholder="Email"
-              // className={styles.input}
               value={email}
               onChange={(e: any) => setEmail(e.target.value)}
             />
           </Form.Item>
-          <Form.Item
-            name="address"
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: "Please input your address!",
-            //   },
-            // ]}
-          >
+          <Form.Item name="address">
             <Input
               prefix={<HomeOutlined />}
               placeholder="Address"
@@ -182,11 +166,7 @@ const UpdateUserModal = (props: any) => {
               onChange={(e: any) => setAddress(e.target.value)}
             />
           </Form.Item>
-          <Form.Item
-            label="Gender"
-            name="gender"
-            // rules={[{ required: true, message: "Please select gender!" }]}
-          >
+          <Form.Item label="Gender" name="gender">
             <Select
               value={gender}
               onChange={(value: string) => setGender(value)}
@@ -198,11 +178,7 @@ const UpdateUserModal = (props: any) => {
             </Select>
           </Form.Item>
 
-          <Form.Item
-            label="Birthday"
-            name="birthday"
-            // rules={[{ required: true, message: "Please select birthday!" }]}
-          >
+          <Form.Item label="Birthday" name="birthday">
             <DatePicker
               // showTime
               value={birthday}

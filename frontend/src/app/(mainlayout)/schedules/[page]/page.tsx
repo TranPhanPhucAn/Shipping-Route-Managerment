@@ -226,7 +226,6 @@ const SchedulesList = () => {
         />
         {selectedSchedule && (
           <UpdateScheduleModal
-            // id={selectedSchedule.id}
             schedule={selectedSchedule}
             visible={isUpdateModalVisible}
             onClose={handleUpdateModalClose}
