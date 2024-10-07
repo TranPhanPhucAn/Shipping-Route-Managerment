@@ -3,6 +3,9 @@ import { SchedulesService } from './schedules.service';
 import { Schedule } from './entities/schedule.entity';
 import { CreateScheduleInput } from './dto/create-schedule.input';
 import { UpdateScheduleInput } from './dto/update-schedule.input';
+import { PaginationScheduleDto } from './dto/pagination-schedules-result';
+import { PaginationScheduleResponse } from '../types/route.types';
+
 
 @Resolver(() => Schedule)
 export class SchedulesResolver {
@@ -44,5 +47,9 @@ export class SchedulesResolver {
   @Mutation(() => String)
   async removeSchedule(@Args('id') id: string): Promise<string> {
     return this.schedulesService.remove(id);
+  }
+  @Query(() => PaginationScheduleResponse, { name: 'paginationSchedule' })
+  paginationSchedule(@Args('paginationSchedule') paginationSchedule: PaginationScheduleDto) {
+    return this.schedulesService.paginationSchedule(paginationSchedule);
   }
 }

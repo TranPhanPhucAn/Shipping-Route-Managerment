@@ -1,26 +1,21 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Schedule } from '../entities/schedule.entity';
+import { Field,  InputType } from '@nestjs/graphql';
+import { IsNotEmpty } from 'class-validator';
 
-@ObjectType()
-class PaginationMeta {
-  @Field(() => Int)
-  totalItems: number;
 
-  @Field(() => Int)
-  itemsPerPage: number;
+@InputType()
+export class PaginationScheduleDto {
+  @Field()
+  @IsNotEmpty({ message: 'Limit is required' })
+  limit: number;
 
-  @Field(() => Int)
-  totalPages: number;
+  @Field()
+  @IsNotEmpty({ message: 'Offset is required' })
+  offset: number;
 
-  @Field(() => Int)
-  currentPage: number;
+  @Field({ nullable: true })
+  sort: string | null;
+
+  @Field({ nullable: true })
+  statusFilter: string | null;
 }
 
-@ObjectType()
-export class PaginatedScheduleResult {
-  @Field(() => [Schedule])
-  items: Schedule[];
-
-  @Field(() => PaginationMeta)
-  meta: PaginationMeta;
-}

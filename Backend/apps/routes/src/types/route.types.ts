@@ -1,4 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Schedule } from '../schedules/entities/schedule.entity';
+
+
 
 @ObjectType()
 export class RouteUserResponse {
@@ -15,4 +18,13 @@ export class RouteUserResponse {
 export class seedRouteResponse {
   @Field()
   message?: string;
+}
+@ObjectType()
+export class PaginationScheduleResponse {
+  @Field()
+  totalCount?: number;
+
+  @Field(() => [Schedule], { nullable: true })
+  schedules?: Schedule[];
+
 }
