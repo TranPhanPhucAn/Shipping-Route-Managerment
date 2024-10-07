@@ -30,49 +30,66 @@ export class SeedingService {
         description: 'Get all users',
       });
       const permission2 = permissionsRepository.create({
+        permission: 'get:usersPag',
+        description: 'Get all users pagination',
+      });
+      const permission3 = permissionsRepository.create({
         permission: 'get:user',
         description: 'Get a user',
       });
-      const permission3 = permissionsRepository.create({
+      const permission4 = permissionsRepository.create({
         permission: 'update:user',
         description: 'Update a user',
       });
-      const permission4 = permissionsRepository.create({
+      const permission5 = permissionsRepository.create({
         permission: 'delete:user',
         description: 'Delete one user',
       });
-      const permission5 = permissionsRepository.create({
+      const permission6 = permissionsRepository.create({
         permission: 'create:permission',
         description: 'Create new permission',
       });
-      const permission6 = permissionsRepository.create({
-        permission: 'delete:permission',
-        description: 'Delete a permission',
-      });
       const permission7 = permissionsRepository.create({
-        permission: 'create:role',
-        description: 'Create new role',
+        permission: 'get:permissions',
+        description: 'Get all permissions',
       });
       const permission8 = permissionsRepository.create({
-        permission: 'update:role',
-        description: 'Update a role',
-      });
-      const permission9 = permissionsRepository.create({
-        permission: 'assginPer:role',
-        description: 'Assign permissions for role',
-      });
-      const permission10 = permissionsRepository.create({
-        permission: 'assignRole:user',
-        description: 'Assign role for user',
-      });
-      const permission11 = permissionsRepository.create({
-        permission: 'delete:role',
-        description: 'Delete a role',
-      });
-      const permission12 = permissionsRepository.create({
         permission: 'update:permission',
         description: 'Update permission description',
       });
+      const permission9 = permissionsRepository.create({
+        permission: 'delete:permission',
+        description: 'Delete a permission',
+      });
+      const permission10 = permissionsRepository.create({
+        permission: 'create:role',
+        description: 'Create new role',
+      });
+      const permission11 = permissionsRepository.create({
+        permission: 'get:roles',
+        description: 'Get all roles',
+      });
+      const permission12 = permissionsRepository.create({
+        permission: 'get:role',
+        description: 'Get a role',
+      });
+      const permission13 = permissionsRepository.create({
+        permission: 'update:role',
+        description: 'Update a role',
+      });
+      const permission14 = permissionsRepository.create({
+        permission: 'assginPer:role',
+        description: 'Assign permissions for role',
+      });
+      const permission15 = permissionsRepository.create({
+        permission: 'assignRole:user',
+        description: 'Assign role for user',
+      });
+      const permission16 = permissionsRepository.create({
+        permission: 'delete:role',
+        description: 'Delete a role',
+      });
+
       await permissionsRepository.save([
         permission1,
         permission2,
@@ -86,6 +103,10 @@ export class SeedingService {
         permission10,
         permission11,
         permission12,
+        permission13,
+        permission14,
+        permission15,
+        permission16,
       ]);
 
       const role1 = rolesRepository.create({
@@ -102,6 +123,12 @@ export class SeedingService {
           permission8,
           permission9,
           permission10,
+          permission11,
+          permission12,
+          permission13,
+          permission14,
+          permission15,
+          permission16,
         ],
       });
       const role2 = rolesRepository.create({

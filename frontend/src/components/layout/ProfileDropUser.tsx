@@ -105,7 +105,9 @@ const ProfileDropUser: React.FC = () => {
         )}
       </div>
 
-      <div style={{ paddingLeft: "5px" }}>{session?.user?.username}</div>
+      <div style={{ paddingLeft: "5px" }} className="responsive-username">
+        {session?.user?.username}
+      </div>
     </div>
   );
 };

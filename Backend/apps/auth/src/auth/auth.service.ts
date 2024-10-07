@@ -14,6 +14,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { GraphQLError } from 'graphql';
 import { Role } from '../roles/entities/role.entity';
 import { OAuth2Client } from 'google-auth-library';
+import { Permission } from '../permissions/entities/permission.entity';
 @Injectable()
 export class AuthService {
   constructor(
@@ -24,6 +25,8 @@ export class AuthService {
     private readonly usersRepository: Repository<User>,
     @InjectRepository(Role)
     private readonly rolesRepository: Repository<Role>,
+    @InjectRepository(Permission)
+    private readonly permissionsRepository: Repository<Permission>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
@@ -51,11 +54,23 @@ export class AuthService {
       const { token, expAccessToken } = this.createAccessToken(user);
       const refreshToken = this.createRefreshToken(user).token;
       this.usersRepository.update(user.id, { refreshToken: refreshToken });
+      const permissions = await this.permissionsRepository.find({
+        where: {
+          roles: {
+            id: user.role.id,
+          },
+        },
+      });
+      const permissionNames = permissions.map(
+        (permission) => permission.permission,
+      );
+
       return {
         user,
         accessToken: token,
         refreshToken: refreshToken,
         expAccessToken: expAccessToken,
+        permissionNames: permissionNames,
       };
     }
     throw new GraphQLError('Invalid email or password', {
@@ -116,11 +131,22 @@ export class AuthService {
         };
         const newUser: User | undefined =
           await this.usersRepository.save(createUser);
+        const permissions = await this.permissionsRepository.find({
+          where: {
+            roles: {
+              id: user.role.id,
+            },
+          },
+        });
+        const permissionNames = permissions.map(
+          (permission) => permission.permission,
+        );
         return {
           user: newUser,
           accessToken: token,
           refreshToken: refreshToken,
           expAccessToken: expAccessToken,
+          permissionNames: permissionNames,
         };
       } else {
         if (user.password) {
@@ -138,11 +164,22 @@ export class AuthService {
           const { token, expAccessToken } = this.createAccessToken(user);
           const refreshToken = this.createRefreshToken(user).token;
           this.usersRepository.update(user.id, { refreshToken: refreshToken });
+          const permissions = await this.permissionsRepository.find({
+            where: {
+              roles: {
+                id: user.role.id,
+              },
+            },
+          });
+          const permissionNames = permissions.map(
+            (permission) => permission.permission,
+          );
           return {
             user: user,
             accessToken: token,
             refreshToken: refreshToken,
             expAccessToken: expAccessToken,
+            permissionNames: permissionNames,
           };
         } catch (err) {
           console.log('err: ', err);

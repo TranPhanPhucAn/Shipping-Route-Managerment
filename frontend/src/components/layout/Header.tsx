@@ -10,7 +10,10 @@ import { useRouter, usePathname } from "next/navigation";
 import ProfileDropUser from "./ProfileDropUser";
 import { useSession } from "next-auth/react";
 
-type MenuItem = Required<MenuProps>["items"][number];
+// type MenuItem = Required<MenuProps>["items"][number];
+type MenuItem = Required<MenuProps>["items"][number] & {
+  permission?: string; // Add optional 'permission' field
+};
 
 const items: MenuItem[] = [
   {
@@ -36,10 +39,12 @@ const items: MenuItem[] = [
   {
     label: <Link href={"/users"}>Users</Link>,
     key: "/users",
+    permission: "get:usersPag",
   },
   {
     label: <Link href={"/roles"}>Roles</Link>,
     key: "/roles",
+    permission: "get:roles",
   },
 ];
 const Header: React.FC = () => {
@@ -53,7 +58,12 @@ const Header: React.FC = () => {
     console.log("click ", e);
     setCurrent(e.key);
   };
-
+  console.log("alo: ", session?.user);
+  const filteredItems = items.filter(
+    (item) =>
+      !item.permission ||
+      session?.user?.permissionNames?.includes(item.permission)
+  );
   const handleClick = (route: string) => {
     router.push(route);
   };
@@ -63,7 +73,8 @@ const Header: React.FC = () => {
         onClick={onClick}
         mode={isInline ? "inline" : "horizontal"}
         selectedKeys={[pathname]}
-        items={items}
+        // items={items}
+        items={filteredItems}
         style={{
           flex: 1,
           minWidth: 0,
@@ -97,9 +108,6 @@ const Header: React.FC = () => {
           </Drawer>
           <div className="right-header">
             <ProfileDropUser />
-            {/* <span className="icon" onClick={() => handleClick("/login")}>
-              <UserIcon />
-            </span> */}
           </div>
           <div className="menu-icon">
             <MenuOutlined

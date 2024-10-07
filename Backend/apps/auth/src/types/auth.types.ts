@@ -23,6 +23,9 @@ export class LoginResponseService {
 
   @Field({ nullable: true })
   expAccessToken?: number;
+
+  @Field(() => [String])
+  permissionNames: string[];
 }
 @ObjectType()
 export class LoginResponse {
@@ -31,6 +34,9 @@ export class LoginResponse {
 
   @Field({ nullable: true })
   expAccessToken?: number;
+
+  @Field(() => [String])
+  permissionNames: string[];
 }
 
 @ObjectType()

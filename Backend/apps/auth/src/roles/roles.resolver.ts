@@ -20,6 +20,8 @@ export class RolesResolver {
   }
 
   @Query(() => [Role], { name: 'roles' })
+  @SetMetadata('permissions', ['get:roles'])
+  @UseGuards(PermissionsGuard)
   findAll() {
     return this.rolesService.findAll();
   }

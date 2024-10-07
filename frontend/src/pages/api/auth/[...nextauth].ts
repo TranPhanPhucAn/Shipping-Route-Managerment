@@ -46,6 +46,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
                       image_url
                     }
                     expAccessToken
+                    permissionNames
                   }
                 }
               `,
@@ -79,9 +80,14 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
 
             const user = data?.login?.user;
             const expAccessToken = data?.login?.expAccessToken;
+            const permissionNames = data?.login?.permissionNames;
 
             console.log("user: ", response);
-            return { ...user, expAccessToken: expAccessToken };
+            return {
+              ...user,
+              expAccessToken: expAccessToken,
+              permissionNames: permissionNames,
+            };
           } catch (err: any) {
             throw new Error(err?.message || "Login failed");
             // throw new Error(err?.graphQLErrors[0]?.message);
@@ -116,7 +122,8 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
           token.address = user.address;
           token.expAccessToken = user.expAccessToken * 1000;
           token.avatar_url = user.image_url;
-          console.log("get token jwt: ", token);
+          token.permissionNames = user.permissionNames;
+          // console.log("get token jwt: ", user);
         }
         if (trigger === "update" && session?.user) {
           // Note, that `session` can be any arbitrary object, remember to validate it!
@@ -127,7 +134,8 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
       },
 
       async session({ token, session, trigger, newSession }) {
-        // console.log("get session: ", token);
+        // console.log("get toekn: ", token);
+        // console.log("get session: ", session);
 
         if (token) {
           // console.log("islogin: ", token.isLogin);
@@ -139,6 +147,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
               username: token.username,
               address: token.address,
               avatar_url: token.avatar_url,
+              permissionNames: token.permissionNames,
             },
           };
         }
@@ -165,6 +174,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
                       image_url
                     }
                     expAccessToken
+                    permissionNames
                   }
                 }
               `,
@@ -199,11 +209,14 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
 
             const userBackend = data?.loginWithGoogle?.user;
             const expAccessToken = data?.loginWithGoogle?.expAccessToken;
+            const permissionNames = data?.loginWithGoogle?.permissionNames;
+
             user.expAccessToken = expAccessToken;
             user.id = userBackend.id;
             user.username = userBackend.username;
             user.address = userBackend.address;
             user.image_url = userBackend.image_url;
+            user.permissionNames = permissionNames;
 
             return true;
           } catch (err: any) {

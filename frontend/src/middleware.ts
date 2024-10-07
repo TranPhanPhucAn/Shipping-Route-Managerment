@@ -2,7 +2,7 @@ import { encode, getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const privatePaths = ["/profile", "/routes", "/schedules"];
+const privatePaths = ["/profile", "/routes", "/schedules", "/users", "/roles"];
 const authPaths = ["/login", "/register"];
 
 // This function can be marked `async` if using `await` inside
@@ -65,10 +65,6 @@ export async function middleware(request: NextRequest) {
             path: "/",
             httpOnly: true,
           });
-          const newEncodedToken = await encode({
-            token: token,
-            secret: process.env.NEXTAUTH_SECRET!,
-          });
           res.cookies.set("next-auth.session-token", "", {
             maxAge: 0,
             path: "/",
@@ -121,9 +117,18 @@ export async function middleware(request: NextRequest) {
         console.log("error: ", e);
       }
     }
+    if (pathname === "/users") {
+      if (!token.permissionNames.includes("get:users")) {
+        return NextResponse.redirect(new URL("/", request.url));
+      }
+    }
+    if (pathname === "/roles") {
+      if (!token.permissionNames.includes("get:roles")) {
+        return NextResponse.redirect(new URL("/", request.url));
+      }
+    }
   }
   if (!token && privatePaths.some((path) => pathname.startsWith(path))) {
-    console.log("alo");
     return NextResponse.redirect(new URL("/login", request.url));
   }
   // Redirect to home if trying to access auth paths with a token

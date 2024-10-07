@@ -26,11 +26,14 @@ import { useSearchParams } from "next/navigation";
 import { FilterDropdownProps } from "antd/es/table/interface";
 import UpdateUserRoleModal from "@/src/components/ListUser/UpdateUserRoleModal";
 import { DELETE_USER } from "@/src/graphql/mutations/Auth";
+import { useSession } from "next-auth/react";
 
 const UserList = () => {
+  const router = useRouter();
   const { replace } = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+
   const limit = 2;
   const pageString = searchParams?.get("page");
   const sortString = searchParams?.get("sort");
@@ -94,11 +97,9 @@ const UserList = () => {
         }
       } else {
         if (!sorter.order) {
-          console.log("a");
           params.delete("sort");
           checkSorter = false;
         }
-        console.log("b");
         let order = sorter.order;
         if (order === "ascend") {
           order = "asc";
@@ -191,6 +192,7 @@ const UserList = () => {
     }
     replace(`${pathname}?${params.toString()}`);
   };
+
   const handleSearch = (
     selectedKeys: string[],
     confirm: FilterDropdownProps["confirm"],
@@ -209,6 +211,7 @@ const UserList = () => {
   const handleReset = (clearFilters: () => void) => {
     clearFilters();
   };
+
   const getColumnSearchProps = (dataIndex: any) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -264,14 +267,17 @@ const UserList = () => {
       <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
     ),
   });
+
   const handleEdit = async (record: any) => {
     setSelectedUser(record);
     setIsUpdateModalVisible(true);
   };
+
   const handleUpdateModalClose = () => {
     setIsUpdateModalVisible(false);
     setSelectedUser(null);
   };
+
   const handleRemove = async (id: string) => {
     try {
       await removeUser({
@@ -283,6 +289,7 @@ const UserList = () => {
       message.error("Failed to remove user");
     }
   };
+
   const columns = [
     {
       title: "Id",

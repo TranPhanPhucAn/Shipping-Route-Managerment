@@ -56,6 +56,7 @@ export class UsersResolver {
   @UseGuards(PermissionsGuard)
   @Query(() => [User], { name: 'users' })
   findAll() {
+    console.log('???');
     return this.usersService.findAll();
   }
 
@@ -104,6 +105,8 @@ export class UsersResolver {
     return this.usersService.changePassword(changePassword);
   }
 
+  @SetMetadata('permissions', ['get:usersPag'])
+  @UseGuards(PermissionsGuard)
   @Query(() => PaginationUserResponse, { name: 'paginationUser' })
   paginationUser(@Args('paginationUser') paginationUser: PaginationUserDto) {
     return this.usersService.paginationUser(paginationUser);

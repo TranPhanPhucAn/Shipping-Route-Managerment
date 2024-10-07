@@ -9,13 +9,13 @@ import UpdateUserRoleModal from "@/src/components/ListUser/UpdateUserRoleModal";
 import CreateRoleModal from "@/src/components/Role/CreateRoleModal";
 import { DELETE_ROLE } from "@/src/graphql/mutations/Auth";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const Roles = () => {
+  const router = useRouter();
   const { loading, error, data, refetch } = useQuery(QUERY_ROLES);
   const [removeUser, { loading: deleteLoading }] = useMutation(DELETE_ROLE);
   const roles = data?.roles;
-  const router = useRouter();
-
   const handleEdit = async (record: any) => {
     router.push(`/roles/${record.id}`);
   };

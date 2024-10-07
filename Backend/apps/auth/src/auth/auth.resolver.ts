@@ -24,7 +24,13 @@ export class AuthResolver {
     try {
       const result = await this.authService.loginUserByPassword(loginInput);
       if (result) {
-        const { user, accessToken, refreshToken, expAccessToken } = result;
+        const {
+          user,
+          accessToken,
+          refreshToken,
+          expAccessToken,
+          permissionNames,
+        } = result;
         const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
         context.res.cookie('access_token', 'Bearer ' + accessToken, {
           httpOnly: true,
@@ -43,6 +49,7 @@ export class AuthResolver {
         return {
           user: user,
           expAccessToken: expAccessToken,
+          permissionNames: permissionNames,
         };
       }
       throw new GraphQLError('Could not login with provided data', {
@@ -63,7 +70,13 @@ export class AuthResolver {
     try {
       const result = await this.authService.loginUserByGoogle(loginInputGoogle);
       if (result) {
-        const { user, accessToken, refreshToken, expAccessToken } = result;
+        const {
+          user,
+          accessToken,
+          refreshToken,
+          expAccessToken,
+          permissionNames,
+        } = result;
         const expires = new Date(Date.now() + 20 * 60 * 60 * 1000);
         context.res.cookie('access_token', 'Bearer ' + accessToken, {
           httpOnly: true,
@@ -82,6 +95,7 @@ export class AuthResolver {
         return {
           user: user,
           expAccessToken: expAccessToken,
+          permissionNames: permissionNames,
         };
       }
       throw new GraphQLError('Could not login with provided data', {
