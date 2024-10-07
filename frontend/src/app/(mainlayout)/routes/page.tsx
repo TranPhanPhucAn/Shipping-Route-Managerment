@@ -10,19 +10,19 @@ import {
   Input,
   Select,
 } from "antd";
-import { GET_ROUTES, GET_PORTS } from "../../../../graphql/queries/query";
+import { GET_ROUTES, GET_PORTS } from "@/src/graphql/queries/query";
 import {
   GetRoutesData,
   Route,
   GetPortsData,
   Port,
-} from "../../../../graphql/types";
+} from "@/src/graphql/types";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import CreateRouteModal from "../../../../components/Routes/CreateRouteModal";
-import UpdateRouteModal from "../../../../components/Routes/UpdateRouteModal";
+import CreateRouteModal from "@/src/components/Routes/CreateRouteModal";
+import UpdateRouteModal from "@/src/components/Routes/UpdateRouteModal";
 import { DELETE_ROUTE } from "@/src/graphql/mutations/Auth";
 import { useState, useEffect } from "react";
-import styles from "../../../../styles/Listpage.module.css";
+import styles from "@/src/styles/Listpage.module.css";
 import { useParams, useRouter } from "next/navigation";
 
 const getUniqueValues = (data: any[], key: string) => {
@@ -41,22 +41,26 @@ const RoutesList = () => {
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const [searchText, setSearchText] = useState<string>("");
   const params = useParams();
-  const page = params?.page ? Number(params.page) : 1;
+  // const page = params?.page ? Number(params.page) : 1;
   const router = useRouter();
-  const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: page,
-    pageSize: 5,
-  });
-  useEffect(() => {
-    setPagination((prev) => ({
-      ...prev,
-      current: page,
-    }));
-  }, [page]);
-  const handleTableChange = (pagination: TablePaginationConfig) => {
-    setPagination(pagination);
-    router.push(`/routes/${pagination.current}`);
-  };
+  // const [pagination, setPagination] = useState<TablePaginationConfig>({
+  //   current: page,
+  //   pageSize: 5,
+  // });
+  // useEffect(() => {
+  //   setPagination((prev) => ({
+  //     ...prev,
+  //     current: page,
+  //   }));
+  // }, [page]);
+  // const handleTableChange = (pagination: TablePaginationConfig) => {
+  //   setPagination(pagination);
+  //   router.push(`/routes/${pagination.current}`);
+  // };
+
+
+
+
   const handleRemove = async (id: string) => {
     try {
       await removeRoute({
@@ -159,10 +163,10 @@ const RoutesList = () => {
       dataIndex: "id",
       key: "id",
       render: (text: string, record: Route) => (
-        <>
+        <div>
           <Button
             type="link"
-            onClick={() => router.push(`/route/${record.id}`)}
+            onClick={() => router.push(`/routedetail/${record.id}`)}
             icon={<EyeOutlined />}
           >
             View
@@ -192,7 +196,7 @@ const RoutesList = () => {
               Delete
             </Button>
           </Popconfirm>
-        </>
+        </div>
       ),
     },
   ];
@@ -205,7 +209,7 @@ const RoutesList = () => {
         chain.
       </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
-      <CreateRouteModal />
+      <CreateRouteModal  />
       {/* <Input.Search>
         <Select
           showSearch
@@ -231,10 +235,10 @@ const RoutesList = () => {
           columns={columns}
           className={styles.Table}
           pagination={{
-            current: pagination.current,
-            pageSize: pagination.pageSize,
+            // current: pagination.current,
+            pageSize: 5,
           }}
-          onChange={handleTableChange}
+          // onChange={handleTableChange}
         />
         {selectedRoute && (
           <UpdateRouteModal

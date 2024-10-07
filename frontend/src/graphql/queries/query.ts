@@ -144,6 +144,7 @@ export const GET_SCHEDULES = gql`
     }
   }
 `;
+
 export const GET_VESSELS = gql`
   query GetVessels {
     vessels {
@@ -152,6 +153,63 @@ export const GET_VESSELS = gql`
       type
       capacity
       status
+    }
+  }
+`;
+
+export const SEARCH_BY_PORT = gql`
+  query schedulesByPort($country: String!, $portName: String!, $date: String!) {
+    schedulesByPort(country: $country, portName: $portName, date: $date) {
+      id
+      vessel {
+        id
+        name
+        type
+      }
+      route {
+        id
+        departurePort {
+          id
+          name
+        }
+        destinationPort {
+          id
+          name
+        }
+      }
+      departure_time
+      arrival_time
+      status
+    }
+  }
+`;
+export const GET_SCHEDULE_PAGINATION = gql`
+  query paginationSchedule($paginationSchedule: PaginationScheduleDto!) {
+    paginationSchedule(paginationSchedule: $paginationSchedule) {
+      schedules {
+        id
+        status
+        vessel{
+        id
+        name
+        }
+        route {
+          id
+          departurePort {
+            id
+            name
+            country
+          }
+          destinationPort {
+            id
+            name
+            country
+          }
+        }
+        departure_time
+        arrival_time
+      }
+      totalCount
     }
   }
 `;

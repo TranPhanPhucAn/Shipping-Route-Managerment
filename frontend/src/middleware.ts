@@ -2,7 +2,7 @@ import { encode, getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const privatePaths = ["/profile", "/routes", "/schedules"];
+const privatePaths = ["/profile", "/routes", "/schedules", "/users"];
 const authPaths = ["/login", "/register"];
 
 // This function can be marked `async` if using `await` inside

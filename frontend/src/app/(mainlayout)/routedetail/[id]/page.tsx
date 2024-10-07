@@ -11,30 +11,31 @@ import styles from "../../../../styles/Detailpage.module.css";
 
 const RouteDetail = () => {
   const router = useRouter();
-  const Param = useParams();
-  const id = Param?.id;
-  console.log(id);
+  const { id } = useParams();
+
   const { loading, error, data } = useQuery<{ route: Route }>(GET_ROUTE, {
     variables: { id },
     skip: !id,
   });
+
   if (!id) {
     message.error("Route ID is missing");
     return <p>Route ID is missing</p>;
   }
-  const departurePort = data?.route.departurePort.name;
-  const destinationPort = data?.route.destinationPort.name;
-  
 
   if (loading) return <p>Loading...</p>;
+
   if (error) {
     message.error("Failed to load route details");
     return <p>Error: {error.message}</p>;
   }
-  if (!data) {
+
+  if (!data || !data.route) {
     message.error("No route data found");
     return <p>No route data found</p>;
   }
+
+  const { route } = data;
 
   return (
     <div className={styles.body}>
@@ -55,15 +56,17 @@ const RouteDetail = () => {
           <p className={styles.infortext}>
             Name: {route.departurePort.id} - {route.destinationPort.id}
           </p>
-          <p className={styles.infortext}>Departure Port: {departurePort}</p>
           <p className={styles.infortext}>
-            Destination Port: {destinationPort}
+            Departure Port: {route.departurePort.name}
+          </p>
+          <p className={styles.infortext}>
+            Destination Port: {route.destinationPort.name}
           </p>
         </Col>
         <Col className={styles.maps}>
           <PortDistanceCalculation
-            departurePort={departurePort}
-            destinationPort={destinationPort}
+            departurePort={route.departurePort.name}
+            destinationPort={route.destinationPort.name}
           />
         </Col>
       </Row>
