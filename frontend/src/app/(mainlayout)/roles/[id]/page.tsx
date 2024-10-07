@@ -92,12 +92,12 @@ const RolePermission = () => {
     {
       title: "Have",
       render: (text: string, record: any) => (
-        // <>
-        //   <Checkbox value={record.id}></Checkbox>
-        // </>
-        <Checkbox value={record.id} disabled={listPerBase?.includes(record.id)}>
-          {record.id}
-        </Checkbox>
+        <Checkbox
+          value={record.id}
+          disabled={
+            dataRole?.role.id !== "24" && listPerBase?.includes(record.id)
+          }
+        ></Checkbox>
       ),
     },
     {
