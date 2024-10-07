@@ -124,11 +124,7 @@ export const GET_VESSELS = gql`
 `;
 
 export const SEARCH_BY_PORT = gql`
-  query schedulesByPort(
-    $country: String!
-    $portName: String!
-    $date: String!
-  ) {
+  query schedulesByPort($country: String!, $portName: String!, $date: String!) {
     schedulesByPort(country: $country, portName: $portName, date: $date) {
       id
       vessel {
@@ -150,6 +146,36 @@ export const SEARCH_BY_PORT = gql`
       departure_time
       arrival_time
       status
+    }
+  }
+`;
+export const GET_SCHEDULE_PAGINATION = gql`
+  query paginationSchedule($paginationSchedule: PaginationScheduleDto!) {
+    paginationSchedule(paginationSchedule: $paginationSchedule) {
+      schedules {
+        id
+        status
+        vessel{
+        id
+        name
+        }
+        route {
+          id
+          departurePort {
+            id
+            name
+            country
+          }
+          destinationPort {
+            id
+            name
+            country
+          }
+        }
+        departure_time
+        arrival_time
+      }
+      totalCount
     }
   }
 `;
