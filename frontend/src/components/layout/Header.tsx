@@ -25,16 +25,33 @@ const items: MenuItem[] = [
     key: "/contact",
   },
   {
-    label: <Link href={"/routes/1"}>Routes</Link>,
-    key: "/routes/1",
+    label: <Link href={"/routes"}>Routes</Link>,
+    key: "/routes",
+    children: [
+      {
+        key: '/maps',
+        label: <Link href={"/maps"}>Search Your Route</Link>
+      },
+      {
+        key: '/routes',
+        label: <Link href={"/routes"}>Routes List</Link>
+      },
+      ],
   },
   {
-    label: <Link href={"/schedules/1"}>Schedules</Link>,
-    key: "/schedules/1",
-  },
-  {
-    label: <Link href={"/vessels/1"}>Vessels</Link>,
-    key: "/vessels/1",
+    label: <Link href={"/schedules"}>Schedules</Link>,
+    key: "/schedules",
+    children: [
+      {
+        key: '/schedules',
+        label: <Link href={"/schedules"}>Search By Port</Link>
+      },
+      {
+        key: '/schedulesList',
+        label: <Link href={"/schedules/list"}>Schedules List</Link>
+      },
+      ],
+
   },
   {
     label: <Link href={"/users"}>Users</Link>,

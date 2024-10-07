@@ -1,13 +1,13 @@
 "use client";
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { LOGIN_USER } from "../../../graphql/mutations/Auth";
+import { LOGIN_USER } from "@/src/graphql/mutations/Auth";
 import { useRouter } from "next/navigation";
 import { Input, Button, message, Divider, Row, Col, Form } from "antd";
 import { FcGoogle } from "react-icons/fc";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { LoginInput } from "../../../graphql/types";
-import styles from "../../../styles/Auth.module.css";
+import { LoginInput } from "@/src/graphql/types";
+import styles from "@/src/styles/Auth.module.css";
 import RegisterImage from "./Register.png";
 import Image from "next/image";
 import Link from "next/link";
@@ -134,19 +134,22 @@ const Login: React.FC = () => {
                 <Button
                   loading={loading}
                   className={styles.mainButton}
-                  style={{ width: "42%" }}
+                  style={{ width: "42%",  padding: "0.6rem !important"}}
                   onClick={handleLogin}
                 >
                   Login
                 </Button>
-                <Button
-                  icon={<FcGoogle />}
-                  className={styles.socialButton}
-                  onClick={handleLoginGoogle}
-                >
-                  Login with Google
-                </Button>
               </div>
+            </Form.Item>
+            <Divider>OR</Divider>
+            <Form.Item>
+              <Button
+                icon={<FcGoogle />}
+                className={styles.socialButton}
+                onClick={handleLoginGoogle}
+              >
+                Login with Google
+              </Button>
             </Form.Item>
             {error && <p className={styles.error}>{error.message}</p>}
           </div>

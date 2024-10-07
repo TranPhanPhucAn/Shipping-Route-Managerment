@@ -1,14 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, MoreThanOrEqual, ILike, In } from 'typeorm';
 import { Schedule, ScheduleStatus } from './entities/schedule.entity';
 import { CreateScheduleInput } from './dto/create-schedule.input';
 import { UpdateScheduleInput } from './dto/update-schedule.input';
 import { Vessel, VesselStatus } from '../vessels/entities/vessel.entity';
 import { Route } from '../routes/entities/route.entity';
+import { PaginationScheduleDto } from './dto/pagination-schedules-result';
+
 
 @Injectable()
 export class SchedulesService {
+  convertDateString(dateString: string): string {
+    const [day, month, year] = dateString.split('/').map(Number);
+    const date = new Date(Date.UTC(year, month - 1, day));
+    return date.toISOString();
+  }
   constructor(
     @InjectRepository(Schedule)
     private schedulesRepository: Repository<Schedule>,
@@ -53,6 +60,78 @@ export class SchedulesService {
       relations: ['vessel', 'route'],
     });
   }
+
+  async findByPort(
+    country: string,
+    portName: string,
+    date: string,
+  ): Promise<any[]> {
+    const dateObject = this.convertDateString(date);
+    console.log('Search parameters:', { country, portName, date: dateObject });
+
+    const schedules = await this.schedulesRepository.find({
+      where: [
+        {
+          route: {
+            departurePort: {
+              country: ILike(`%${country}%`),
+              name: ILike(`%${portName}%`),
+            },
+          },
+          departure_time: MoreThanOrEqual(dateObject),
+          status: In([ScheduleStatus.IN_TRANSIT, ScheduleStatus.SCHEDULED]),
+        },
+      ],
+      relations: ['vessel', 'route'],
+    });
+
+    console.log('Schedules found:', schedules.length);
+    return schedules.map((schedule) => ({
+      ...schedule,
+    }));
+  }
+
+  // async findByPort(
+  //   country: string,
+  //   portName: string,
+  //   date: string,
+  //   page: number = 1,
+  //   limit: number = 10
+  // ): Promise<{ data: any[], total: number, page: number, limit: number }> {
+  //   const dateObject = this.convertDateString(date);
+  //   const skip = (page - 1) * limit;
+  
+  //   console.log('Search parameters:', { country, portName, date: dateObject, page, limit });
+  
+  //   const [schedules, total] = await this.schedulesRepository.findAndCount({
+  //     where: [
+  //       {
+  //         route: {
+  //           departurePort: {
+  //             country: ILike(`%${country}%`),
+  //             name: ILike(`%${portName}%`),
+  //           },
+  //         },
+  //         departure_time: MoreThanOrEqual(dateObject),
+  //         status: In([ScheduleStatus.IN_TRANSIT, ScheduleStatus.SCHEDULED]),
+  //       },
+  //     ],
+  //     relations: ['vessel', 'route'],
+  //     skip: skip,
+  //     take: limit,
+  //   });
+  
+  //   console.log('Schedules found:', schedules.length, 'Total:', total);
+  
+  //   return {
+  //     data: schedules.map((schedule) => ({
+  //       ...schedule,
+  //     })),
+  //     total,
+  //     page,
+  //     limit
+  //   };
+  // }
 
   async findOne(id: string): Promise<Schedule> {
     const schedule = await this.schedulesRepository.findOne({
@@ -106,4 +185,44 @@ export class SchedulesService {
     await this.schedulesRepository.delete(id);
     return id;
   }
+
+  async paginationSchedule(paginationSchedule: PaginationScheduleDto) {
+    const { limit, offset, sort, statusFilter } = paginationSchedule;
+
+    const skips = limit * offset;
+    const order: Record<string, 'ASC' | 'DESC'> = {};
+    if (sort) {
+      sort.split(',').forEach((sortParam: string) => {
+        const [field, direction] = sortParam.split(' ');
+        order[field] = direction.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+      });
+    }
+
+    const queryOptions: any = {
+      take: limit,
+      skip: skips,
+      relations:['route', 'vessel'],
+      order,
+    };
+
+    const whereCondition: any = {};
+    if (statusFilter) {
+      const statusArray = statusFilter.split(',') as ScheduleStatus[];
+      if (statusArray.length > 0) {
+        whereCondition.status = In(statusArray);
+      }
+    }
+
+    if (Object.keys(whereCondition).length > 0) {
+      queryOptions.where = whereCondition;
+    }
+
+    const [result, total] = await this.schedulesRepository.findAndCount(queryOptions);
+    const totalCount = total;
+
+    return {
+      schedules: result,
+      totalCount: totalCount,
+    };
+}
 }
