@@ -5,12 +5,15 @@ import { CreateScheduleInput } from './dto/create-schedule.input';
 import { UpdateScheduleInput } from './dto/update-schedule.input';
 import { PaginationScheduleDto } from './dto/pagination-schedules-result';
 import { PaginationScheduleResponse } from '../types/route.types';
-
+import { SetMetadata, UseGuards } from '@nestjs/common';
+import { PermissionsGuard } from '../guard/permissions.guard';
 
 @Resolver(() => Schedule)
 export class SchedulesResolver {
   constructor(private readonly schedulesService: SchedulesService) {}
 
+  @SetMetadata('permissions', ['create:schedule'])
+  @UseGuards(PermissionsGuard)
   @Mutation(() => Schedule)
   createSchedule(
     @Args('createScheduleInput') createScheduleInput: CreateScheduleInput,
@@ -22,6 +25,7 @@ export class SchedulesResolver {
   findAll(): Promise<Schedule[]> {
     return this.schedulesService.findAll();
   }
+
   @Query(() => [Schedule], { name: 'schedulesByPort' })
   schedulesByPort(
     @Args('country', { type: () => String }) country: string,
@@ -36,6 +40,8 @@ export class SchedulesResolver {
     return this.schedulesService.findOne(id);
   }
 
+  @SetMetadata('permissions', ['update:schedule'])
+  @UseGuards(PermissionsGuard)
   @Mutation(() => Schedule)
   updateSchedule(
     @Args('id', { type: () => String }) id: string,
@@ -44,12 +50,17 @@ export class SchedulesResolver {
     return this.schedulesService.update(id, updateScheduleInput);
   }
 
+  @SetMetadata('permissions', ['remove:schedule'])
+  @UseGuards(PermissionsGuard)
   @Mutation(() => String)
   async removeSchedule(@Args('id') id: string): Promise<string> {
     return this.schedulesService.remove(id);
   }
+
   @Query(() => PaginationScheduleResponse, { name: 'paginationSchedule' })
-  paginationSchedule(@Args('paginationSchedule') paginationSchedule: PaginationScheduleDto) {
+  paginationSchedule(
+    @Args('paginationSchedule') paginationSchedule: PaginationScheduleDto,
+  ) {
     return this.schedulesService.paginationSchedule(paginationSchedule);
   }
 }

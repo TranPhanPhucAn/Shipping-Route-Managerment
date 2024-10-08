@@ -34,7 +34,7 @@ const UserList = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const limit = 2;
+  const limit = 5;
   const pageString = searchParams?.get("page");
   const sortString = searchParams?.get("sort");
   const genderFilter = searchParams?.get("gender");
