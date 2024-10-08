@@ -34,7 +34,8 @@ const UserList = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const limit = 5;
+  // const limit = 5;
+  const pageSizeString = searchParams?.get("limit");
   const pageString = searchParams?.get("page");
   const sortString = searchParams?.get("sort");
   const genderFilter = searchParams?.get("gender");
@@ -43,11 +44,13 @@ const UserList = () => {
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const page = pageString ? +pageString : 1;
+  console.log("page: ", page);
+  const pageSize = pageSizeString ? +pageSizeString : 5;
   const [removeUser, { loading: deleteLoading }] = useMutation(DELETE_USER);
   const { loading, error, data, refetch } = useQuery(GET_USER_PAGINATION, {
     variables: {
       paginationUser: {
-        limit: limit,
+        limit: pageSize,
         offset: page - 1,
         sort: sortString,
         genderFilter: genderFilter,
@@ -60,7 +63,7 @@ const UserList = () => {
   const total = data?.paginationUser?.totalCount;
   const [paginationTable, setPagination] = useState<TablePaginationConfig>({
     current: page,
-    pageSize: limit,
+    pageSize: pageSize,
   });
 
   const handleTableChange = (
@@ -69,15 +72,27 @@ const UserList = () => {
     sorter: any,
     extra: any
   ) => {
-    if (pagination && pagination.current != paginationTable.current) {
-      const params = new URLSearchParams(searchParams ?? "");
-      params.set("page", pagination.current);
-      setPagination({ current: pagination.current });
-      replace(`${pathname}?${params.toString()}`);
-      return;
-    }
+    console.log("pagination: ", pagination);
+    console.log("pagination table: ", paginationTable);
 
     const params = new URLSearchParams(searchParams ?? "");
+
+    if (pagination && pagination.current != paginationTable.current) {
+      params.set("page", pagination.current);
+      setPagination({
+        current: pagination.current,
+        pageSize: pagination.pageSize,
+      });
+      // replace(`${pathname}?${params.toString()}`);
+      // return;
+    }
+    // const params = new URLSearchParams(searchParams ?? "");
+
+    if (pagination && pagination.pageSize != paginationTable.pageSize) {
+      params.set("limit", pagination.pageSize);
+      params.set("page", "1");
+      setPagination({ pageSize: pagination.pageSize, current: 1 });
+    }
 
     if (sorter) {
       let checkSorter: boolean = true;
@@ -110,7 +125,6 @@ const UserList = () => {
       }
       if (checkSorter === true) {
         params.set("sort", resultUrl);
-        // replace(`${pathname}?${params.toString()}`);
       }
       // if (sorter.order === "ascend") {
       //   sorter.order = "asc";
@@ -157,11 +171,12 @@ const UserList = () => {
       // replace(`${pathname}?${params.toString()}`);
     }
 
+    console.log("paginationTable: ", paginationTable);
+    console.log("filter: ", filters);
     if (filters) {
       if (!filters.gender && !filters.role) {
         params.delete("gender");
         params.delete("role");
-        // replace(`${pathname}?${params.toString()}`);
       } else {
         if (!filters.gender) {
           params.delete("gender");
@@ -175,6 +190,7 @@ const UserList = () => {
           }
           params.set("gender", genderUrl);
         }
+
         if (!filters.role) {
           params.delete("role");
         } else {
@@ -187,7 +203,6 @@ const UserList = () => {
           }
           params.set("role", roleUrl);
         }
-        // replace(`${pathname}?${params.toString()}`);
       }
     }
     replace(`${pathname}?${params.toString()}`);
@@ -408,10 +423,6 @@ const UserList = () => {
           value: "Other",
         },
       ],
-      // onFilter: (value: string) => {
-      //   // getFilteredData(value);
-      //   return true;
-      // },
     },
     {
       title: "Action",
@@ -466,13 +477,15 @@ const UserList = () => {
             current: paginationTable.current,
             pageSize: paginationTable.pageSize,
             total: total,
-            showTotal: (total, range) => {
-              return (
-                <div>
-                  {range[0]}-{range[1]} on {total} rows
-                </div>
-              );
-            },
+            pageSizeOptions: ["5", "10", "20"],
+            showSizeChanger: true,
+            // showTotal: (total, range) => {
+            //   return (
+            //     <div>
+            //       {range[0]}-{range[1]} on {total} rows
+            //     </div>
+            //   );
+            // },
           }}
           onChange={handleTableChange}
         />

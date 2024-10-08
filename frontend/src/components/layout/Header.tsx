@@ -29,29 +29,28 @@ const items: MenuItem[] = [
     key: "/routes",
     children: [
       {
-        key: '/maps',
-        label: <Link href={"/maps"}>Search Your Route</Link>
+        key: "/maps",
+        label: <Link href={"/maps"}>Search Your Route</Link>,
       },
       {
-        key: '/routes',
-        label: <Link href={"/routes"}>Routes List</Link>
+        key: "/routes",
+        label: <Link href={"/routes"}>Routes List</Link>,
       },
-      ],
+    ],
   },
   {
     label: <Link href={"/schedules"}>Schedules</Link>,
     key: "/schedules",
     children: [
       {
-        key: '/schedules',
-        label: <Link href={"/schedules"}>Search By Port</Link>
+        key: "/schedules",
+        label: <Link href={"/schedules"}>Search By Port</Link>,
       },
       {
-        key: '/schedulesList',
-        label: <Link href={"/schedules/list"}>Schedules List</Link>
+        key: "/schedulesList",
+        label: <Link href={"/schedules/list"}>Schedules List</Link>,
       },
-      ],
-
+    ],
   },
   {
     label: <Link href={"/users"}>Users</Link>,
@@ -75,7 +74,7 @@ const Header: React.FC = () => {
     console.log("click ", e);
     setCurrent(e.key);
   };
-  console.log("alo: ", session?.user);
+  // console.log("alo: ", session?.user);
   const filteredItems = items.filter(
     (item) =>
       !item.permission ||

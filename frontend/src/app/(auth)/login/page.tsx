@@ -50,13 +50,13 @@ const Login: React.FC = () => {
       //   message.success("Login successful!");
       //   router.push("/");
       // }
-      console.log("alo: ", res?.status);
+      // console.log("alo: ", res?.status);
 
       if (res?.status === 200) {
         message.success("Login successful!");
         router.push("/");
       } else {
-        console.log("alo: ", res);
+        // console.log("alo: ", res);
         message.error(`Login failed: ${res?.error}`);
       }
     } catch (err: any) {
@@ -134,7 +134,7 @@ const Login: React.FC = () => {
                 <Button
                   loading={loading}
                   className={styles.mainButton}
-                  style={{ width: "42%",  padding: "0.6rem !important"}}
+                  style={{ width: "42%", padding: "0.6rem !important" }}
                   onClick={handleLogin}
                 >
                   Login
