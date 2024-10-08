@@ -21,6 +21,8 @@ export class SchedulesResolver {
     return this.schedulesService.create(createScheduleInput);
   }
 
+  @SetMetadata('permissions', ['get:schedules'])
+  @UseGuards(PermissionsGuard)
   @Query(() => [Schedule], { name: 'schedules' })
   findAll(): Promise<Schedule[]> {
     return this.schedulesService.findAll();
@@ -50,13 +52,15 @@ export class SchedulesResolver {
     return this.schedulesService.update(id, updateScheduleInput);
   }
 
-  @SetMetadata('permissions', ['remove:schedule'])
+  @SetMetadata('permissions', ['delete:schedule'])
   @UseGuards(PermissionsGuard)
   @Mutation(() => String)
   async removeSchedule(@Args('id') id: string): Promise<string> {
     return this.schedulesService.remove(id);
   }
 
+  @SetMetadata('permissions', ['get:schedulesPag'])
+  @UseGuards(PermissionsGuard)
   @Query(() => PaginationScheduleResponse, { name: 'paginationSchedule' })
   paginationSchedule(
     @Args('paginationSchedule') paginationSchedule: PaginationScheduleDto,

@@ -95,7 +95,7 @@ const RolePermission = () => {
         <Checkbox
           value={record.id}
           disabled={
-            dataRole?.role.id !== "24" && listPerBase?.includes(record.id)
+            dataRole?.role.id !== "3" && listPerBase?.includes(record.id)
           }
         ></Checkbox>
       ),

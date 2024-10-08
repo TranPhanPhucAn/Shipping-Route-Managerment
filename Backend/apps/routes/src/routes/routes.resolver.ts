@@ -6,6 +6,8 @@ import { CreateRouteInput } from './dto/create-route.input';
 import { UpdateRouteInput } from './dto/update-route.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { SetMetadata, UseGuards } from '@nestjs/common';
+import { PermissionsGuard } from '../guard/permissions.guard';
 
 @Resolver(() => Route)
 export class RoutesResolver {
@@ -15,6 +17,8 @@ export class RoutesResolver {
     private readonly portRepository: Repository<Port>,
   ) {}
 
+  @SetMetadata('permissions', ['create:route'])
+  @UseGuards(PermissionsGuard)
   @Mutation(() => Route)
   async createRoute(
     @Args('createRouteInput') createRouteInput: CreateRouteInput,
@@ -31,6 +35,8 @@ export class RoutesResolver {
     return this.routeService.findOne(id);
   }
 
+  @SetMetadata('permissions', ['update:route'])
+  @UseGuards(PermissionsGuard)
   @Mutation(() => Route)
   async updateRoute(
     @Args('id') id: string,
@@ -39,6 +45,8 @@ export class RoutesResolver {
     return this.routeService.update(id, updateRouteInput);
   }
 
+  @SetMetadata('permissions', ['delete:route'])
+  @UseGuards(PermissionsGuard)
   @Mutation(() => String)
   async removeRoute(@Args('id') id: string): Promise<string> {
     return this.routeService.remove(id);

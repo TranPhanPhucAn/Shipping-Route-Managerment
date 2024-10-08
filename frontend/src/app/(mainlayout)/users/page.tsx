@@ -403,6 +403,10 @@ const UserList = () => {
           text: "Female",
           value: "Female",
         },
+        {
+          text: "Other",
+          value: "Other",
+        },
       ],
       // onFilter: (value: string) => {
       //   // getFilteredData(value);

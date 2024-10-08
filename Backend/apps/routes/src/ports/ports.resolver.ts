@@ -3,11 +3,15 @@ import { PortsService } from './ports.service';
 import { Port } from './entities/port.entity';
 import { CreatePortInput } from './dto/create-port.input';
 import { UpdatePortInput } from './dto/update-port.input';
+import { SetMetadata, UseGuards } from '@nestjs/common';
+import { PermissionsGuard } from '../guard/permissions.guard';
 
 @Resolver(() => Port)
 export class PortsResolver {
   constructor(private readonly portService: PortsService) {}
 
+  @SetMetadata('permissions', ['create:port'])
+  @UseGuards(PermissionsGuard)
   @Mutation(() => Port)
   async createPort(
     @Args('createPortInput') createPortInput: CreatePortInput,
@@ -25,6 +29,8 @@ export class PortsResolver {
     return this.portService.findOne(id);
   }
 
+  @SetMetadata('permissions', ['update:port'])
+  @UseGuards(PermissionsGuard)
   @Mutation(() => Port)
   async updatePort(
     @Args('ID', { type: () => String }) id: string,
@@ -33,6 +39,8 @@ export class PortsResolver {
     return this.portService.update(id, updatePortInput);
   }
 
+  @SetMetadata('permissions', ['delete:port'])
+  @UseGuards(PermissionsGuard)
   @Mutation(() => Port)
   async removePort(
     @Args('ID', { type: () => String }) id: string,
