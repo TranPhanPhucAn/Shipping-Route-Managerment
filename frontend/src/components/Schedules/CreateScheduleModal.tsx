@@ -142,7 +142,7 @@ const CreateScheduleModal = () => {
             />
           </Form.Item>
 
-          {/* <Form.Item
+          <Form.Item
             label="Arrival Time"
             name="arrivalTime"
             rules={[{ required: true, message: "Please select arrival time!" }]}
@@ -153,7 +153,7 @@ const CreateScheduleModal = () => {
               onChange={(value) => setArrivalTime(value)}
               format="DD-MM-YYYY HH:mm"
             />
-          </Form.Item> */}
+          </Form.Item>
 
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={loading}>
