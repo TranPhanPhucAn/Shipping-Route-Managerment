@@ -284,7 +284,7 @@ export class UsersService {
     const { userId, oldPassword, newPassword } = changePassword;
     const user = await this.usersRepository.findOne({ where: { id: userId } });
     let isMatch: boolean = false;
-    isMatch = bycypt.compare(oldPassword, user.password);
+    isMatch = await bycypt.compare(oldPassword, user.password);
     if (isMatch) {
       const newPasswordHass = await this.hassPassword(newPassword);
       await this.usersRepository.update(userId, {
@@ -292,7 +292,11 @@ export class UsersService {
       });
       return { message: 'Change password succeed!' };
     } else {
-      return { message: 'You enter wrong current password' };
+      throw new GraphQLError('Your recent password not correct', {
+        extensions: {
+          errorCode: '5001-17',
+        },
+      });
     }
   }
 

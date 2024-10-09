@@ -23,6 +23,7 @@ declare module "next-auth/jwt" {
     expAccessToken: number;
     avatar_url: string;
     permissionNames: string[];
+    loginMethod: string;
   }
 }
 
@@ -36,6 +37,7 @@ declare module "next-auth" {
       expAccessToken: number;
       avatar_url: string;
       permissionNames: string[];
+      loginMethod: string;
     };
   }
   interface User extends DefaultUser {
@@ -45,5 +47,6 @@ declare module "next-auth" {
     expAccessToken: number;
     image_url: string;
     permissionNames: string[];
+    loginMethod: string;
   }
 }

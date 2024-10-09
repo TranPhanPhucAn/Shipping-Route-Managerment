@@ -21,6 +21,7 @@ import {
 import { FaBirthdayCake, FaTransgender } from "react-icons/fa";
 import UpdateUserModal from "@/src/components/UserProfile/UpdateUserModal";
 import UpdateAvatarModal from "@/src/components/UserProfile/UpdateAvatarModal";
+import UpdatePasswordModal from "@/src/components/UserProfile/UpdatePasswordModal";
 
 const Profile = () => {
   const { data: session, status, update } = useSession();
@@ -50,8 +51,6 @@ const Profile = () => {
               style={{
                 maxWidth: "100%",
                 height: "auto",
-                // objectFit: "cover",ppppp
-                // borderRadius: "50%",
               }}
             />
             <UpdateAvatarModal userProfile={userInfor} refetchUser={refetch} />
@@ -148,6 +147,7 @@ const Profile = () => {
               {birthDate}
             </div>
             {userInfor && <UpdateUserModal userProfile={userInfor} />}
+            <UpdatePasswordModal />
           </div>
         </div>
       </div>

@@ -17,7 +17,7 @@ export class RolesService {
   ) {}
   async create(createRoleInput: CreateRoleInput) {
     const userRole = await this.rolesRepository.findOne({
-      where: { name: 'user' },
+      where: { id: '3' },
       relations: ['permissions'], // Make sure to fetch the permissions relationship
     });
 
