@@ -66,15 +66,7 @@ const UserList = () => {
     pageSize: pageSize,
   });
 
-  const handleTableChange = (
-    pagination: any,
-    filters: any,
-    sorter: any,
-    extra: any
-  ) => {
-    console.log("pagination: ", pagination);
-    console.log("pagination table: ", paginationTable);
-
+  const handleTableChange = (pagination: any, filters: any, sorter: any) => {
     const params = new URLSearchParams(searchParams ?? "");
 
     if (pagination && pagination.current != paginationTable.current) {
@@ -171,8 +163,6 @@ const UserList = () => {
       // replace(`${pathname}?${params.toString()}`);
     }
 
-    console.log("paginationTable: ", paginationTable);
-    console.log("filter: ", filters);
     if (filters) {
       if (!filters.gender && !filters.role) {
         params.delete("gender");

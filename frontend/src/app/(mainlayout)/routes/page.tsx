@@ -11,12 +11,7 @@ import {
   Select,
 } from "antd";
 import { GET_ROUTES, GET_PORTS } from "@/src/graphql/queries/query";
-import {
-  GetRoutesData,
-  Route,
-  GetPortsData,
-  Port,
-} from "@/src/graphql/types";
+import { GetRoutesData, Route, GetPortsData, Port } from "@/src/graphql/types";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import CreateRouteModal from "@/src/components/Routes/CreateRouteModal";
 import UpdateRouteModal from "@/src/components/Routes/UpdateRouteModal";
@@ -24,6 +19,7 @@ import { DELETE_ROUTE } from "@/src/graphql/mutations/Auth";
 import { useState, useEffect } from "react";
 import styles from "@/src/styles/Listpage.module.css";
 import { useParams, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const getUniqueValues = (data: any[], key: string) => {
   return Array.from(
@@ -32,6 +28,8 @@ const getUniqueValues = (data: any[], key: string) => {
 };
 const { Option } = Select;
 const RoutesList = () => {
+  const { data: session, status, update } = useSession();
+  const permissionUser = session?.user?.permissionNames;
   const { loading, error, data, refetch } = useQuery<GetRoutesData>(GET_ROUTES);
   const routesData = data?.routes || [];
   // const { data } = useQuery<GetPortsData>(GET_PORTS);
@@ -57,9 +55,6 @@ const RoutesList = () => {
   //   setPagination(pagination);
   //   router.push(`/routes/${pagination.current}`);
   // };
-
-
-
 
   const handleRemove = async (id: string) => {
     try {
@@ -171,31 +166,35 @@ const RoutesList = () => {
           >
             View
           </Button>
-          <Button
-            type="link"
-            onClick={() => handleEdit(record)}
-            icon={<EditOutlined />}
-          >
-            Edit
-          </Button>
-          <Popconfirm
-            placement="topLeft"
-            title={"Are you sure to delete this route?"}
-            description={"Delete the route"}
-            okText="Yes"
-            cancelText="No"
-            onConfirm={() => handleRemove(record.id)}
-            onCancel={() => console.log("Delete canceled")}
-          >
+          {permissionUser?.includes("update:route") && (
             <Button
               type="link"
-              danger
-              loading={deleteLoading}
-              icon={<DeleteOutlined />}
+              onClick={() => handleEdit(record)}
+              icon={<EditOutlined />}
             >
-              Delete
+              Edit
             </Button>
-          </Popconfirm>
+          )}
+          {permissionUser?.includes("delete:route") && (
+            <Popconfirm
+              placement="topLeft"
+              title={"Are you sure to delete this route?"}
+              description={"Delete the route"}
+              okText="Yes"
+              cancelText="No"
+              onConfirm={() => handleRemove(record.id)}
+              onCancel={() => console.log("Delete canceled")}
+            >
+              <Button
+                type="link"
+                danger
+                loading={deleteLoading}
+                icon={<DeleteOutlined />}
+              >
+                Delete
+              </Button>
+            </Popconfirm>
+          )}
         </div>
       ),
     },
@@ -209,7 +208,8 @@ const RoutesList = () => {
         chain.
       </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
-      <CreateRouteModal  />
+      {permissionUser?.includes("create:route") && <CreateRouteModal />}
+
       {/* <Input.Search>
         <Select
           showSearch

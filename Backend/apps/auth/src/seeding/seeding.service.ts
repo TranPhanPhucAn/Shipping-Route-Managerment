@@ -67,95 +67,12 @@ export class SeedingService {
         { permission: 'delete:port', description: 'Delete a port' }, //24
         { permission: 'create:route', description: 'Create new route' }, //25
         { permission: 'update:route', description: 'Update a route' }, //26
-        { permission: 'get:vessels', description: 'Get all vessels' }, //27
-        { permission: 'create:vessel', description: 'Create new vessel' }, //28
-        { permission: 'update:vessel', description: 'Update a vessel' }, //29
-        { permission: 'delete:vessel', description: 'Delete a vessel' }, //30
+        { permission: 'delete:route', description: 'Delete a route' }, //27
+        { permission: 'get:vessels', description: 'Get all vessels' }, //28
+        { permission: 'create:vessel', description: 'Create new vessel' }, //29
+        { permission: 'update:vessel', description: 'Update a vessel' }, //30
+        { permission: 'delete:vessel', description: 'Delete a vessel' }, //31
       ];
-      // const permission1 = permissionsRepository.create({
-      //   permission: 'get:users',
-      //   description: 'Get all users',
-      // });
-      // const permission2 = permissionsRepository.create({
-      //   permission: 'get:usersPag',
-      //   description: 'Get all users pagination',
-      // });
-      // const permission3 = permissionsRepository.create({
-      //   permission: 'get:user',
-      //   description: 'Get a user',
-      // });
-      // const permission4 = permissionsRepository.create({
-      //   permission: 'update:user',
-      //   description: 'Update a user',
-      // });
-      // const permission5 = permissionsRepository.create({
-      //   permission: 'delete:user',
-      //   description: 'Delete one user',
-      // });
-      // const permission6 = permissionsRepository.create({
-      //   permission: 'create:permission',
-      //   description: 'Create new permission',
-      // });
-      // const permission7 = permissionsRepository.create({
-      //   permission: 'get:permissions',
-      //   description: 'Get all permissions',
-      // });
-      // const permission8 = permissionsRepository.create({
-      //   permission: 'update:permission',
-      //   description: 'Update permission description',
-      // });
-      // const permission9 = permissionsRepository.create({
-      //   permission: 'delete:permission',
-      //   description: 'Delete a permission',
-      // });
-      // const permission10 = permissionsRepository.create({
-      //   permission: 'create:role',
-      //   description: 'Create new role',
-      // });
-      // const permission11 = permissionsRepository.create({
-      //   permission: 'get:roles',
-      //   description: 'Get all roles',
-      // });
-      // const permission12 = permissionsRepository.create({
-      //   permission: 'get:role',
-      //   description: 'Get a role',
-      // });
-      // const permission13 = permissionsRepository.create({
-      //   permission: 'update:role',
-      //   description: 'Update a role',
-      // });
-      // const permission14 = permissionsRepository.create({
-      //   permission: 'assginPer:role',
-      //   description: 'Assign permissions for role',
-      // });
-      // const permission15 = permissionsRepository.create({
-      //   permission: 'assignRole:user',
-      //   description: 'Assign role for user',
-      // });
-      // const permission16 = permissionsRepository.create({
-      //   permission: 'delete:role',
-      //   description: 'Delete a role',
-      // });
-
-      // await permissionsRepository.save([
-      //   permission1,
-      //   permission2,
-      //   permission3,
-      //   permission4,
-      //   permission5,
-      //   permission6,
-      //   permission7,
-      //   permission8,
-      //   permission9,
-      //   permission10,
-      //   permission11,
-      //   permission12,
-      //   permission13,
-      //   permission14,
-      //   permission15,
-      //   permission16,
-      // ]);
-
       const permissionsEntities = permissionsRepository.create(permissions);
       await permissionsRepository.save(permissionsEntities);
       const role1 = rolesRepository.create({
@@ -167,22 +84,25 @@ export class SeedingService {
         name: 'supplier',
         description: 'Supplier manage route',
         permissions: [
+          permissionsEntities[0],
           permissionsEntities[1],
           permissionsEntities[2],
+          permissionsEntities[3],
           permissionsEntities[17],
           permissionsEntities[18],
           permissionsEntities[19],
           permissionsEntities[27],
           permissionsEntities[28],
           permissionsEntities[29],
+          permissionsEntities[30],
         ],
       });
       const role3 = rolesRepository.create({
         name: 'user',
         description: 'User is basic role',
         permissions: [
-          permissionsEntities[1],
           permissionsEntities[2],
+          permissionsEntities[3],
           permissionsEntities[17],
           permissionsEntities[18],
         ],

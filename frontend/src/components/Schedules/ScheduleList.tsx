@@ -18,8 +18,11 @@ import { useState } from "react";
 import styles from "@/src/styles/Listpage.module.css";
 import { usePathname, useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const SchedulesList = () => {
+  const { data: session, status, update } = useSession();
+  const permissionUser = session?.user?.permissionNames;
   const [removeSchedule, { loading: deleteLoading }] =
     useMutation(DELETE_SCHEDULE);
   const [selectedSchedule, setSelectedSchedule] = useState<Schedule | null>(
@@ -226,46 +229,87 @@ const SchedulesList = () => {
         return <span>{formattedDate}</span>;
       },
     },
-    {
-      title: "Action",
-      dataIndex: "id",
-      key: "id",
-      render: (text: string, record: Schedule) => (
-        <div>
-          <Button
-            type="link"
-            onClick={() => handleEdit(record)}
-            icon={<EditOutlined />}
-          >
-            Edit
-          </Button>
-          <Popconfirm
-            placement="topLeft"
-            title={"Are you sure to delete this schedule?"}
-            description={"Delete the schedule"}
-            okText="Yes"
-            cancelText="No"
-            onConfirm={() => handleRemove(record.id)}
-            onCancel={() => console.log("Delete canceled")}
-          >
-            <Button
-              type="link"
-              danger
-              loading={deleteLoading}
-              icon={<DeleteOutlined />}
-            >
-              Delete
-            </Button>
-          </Popconfirm>
-        </div>
-      ),
-    },
+    ...(permissionUser?.includes("update:schedule") ||
+    permissionUser?.includes("delete:schedule")
+      ? [
+          {
+            title: "Action",
+            dataIndex: "id",
+            key: "id",
+            render: (text: string, record: Schedule) => (
+              <div>
+                <Button
+                  type="link"
+                  onClick={() => handleEdit(record)}
+                  icon={<EditOutlined />}
+                >
+                  Edit
+                </Button>
+                {permissionUser?.includes("delete:schedule") && (
+                  <Popconfirm
+                    placement="topLeft"
+                    title={"Are you sure to delete this schedule?"}
+                    description={"Delete the schedule"}
+                    okText="Yes"
+                    cancelText="No"
+                    onConfirm={() => handleRemove(record.id)}
+                    onCancel={() => console.log("Delete canceled")}
+                  >
+                    <Button
+                      type="link"
+                      danger
+                      loading={deleteLoading}
+                      icon={<DeleteOutlined />}
+                    >
+                      Delete
+                    </Button>
+                  </Popconfirm>
+                )}
+              </div>
+            ),
+          },
+        ]
+      : []),
+    // {
+    //   title: "Action",
+    //   dataIndex: "id",
+    //   key: "id",
+    //   render: (text: string, record: Schedule) => (
+    //     <div>
+    //       <Button
+    //         type="link"
+    //         onClick={() => handleEdit(record)}
+    //         icon={<EditOutlined />}
+    //       >
+    //         Edit
+    //       </Button>
+    //       <Popconfirm
+    //         placement="topLeft"
+    //         title={"Are you sure to delete this schedule?"}
+    //         description={"Delete the schedule"}
+    //         okText="Yes"
+    //         cancelText="No"
+    //         onConfirm={() => handleRemove(record.id)}
+    //         onCancel={() => console.log("Delete canceled")}
+    //       >
+    //         <Button
+    //           type="link"
+    //           danger
+    //           loading={deleteLoading}
+    //           icon={<DeleteOutlined />}
+    //         >
+    //           Delete
+    //         </Button>
+    //       </Popconfirm>
+    //     </div>
+    //   ),
+    // },
   ];
 
   return (
     <div className={styles.body}>
       <div style={{ alignItems: "right", margin: "0.5rem" }}>
-        <CreateScheduleModal />
+        {permissionUser?.includes("create:schedule") && <CreateScheduleModal />}
       </div>
 
       <div className={styles.container}>

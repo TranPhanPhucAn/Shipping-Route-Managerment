@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import { ASSIGN_PER_FOR_ROLE } from "@/src/graphql/mutations/Auth";
 import UpdatePermissionModal from "@/src/components/Permission/UpdatePermissionModal";
 import UpdateRoleModal from "@/src/components/Role/UpdateRoleModal";
+import { useSession } from "next-auth/react";
 
 const RolePermission = () => {
   const { loading, error, data, refetch } = useQuery(QUERY_PERMISSIONS);

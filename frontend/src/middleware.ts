@@ -119,7 +119,7 @@ export async function middleware(request: NextRequest) {
       }
     }
     if (pathname === "/users") {
-      if (!token.permissionNames.includes("get:users")) {
+      if (!token.permissionNames.includes("get:usersPag")) {
         return NextResponse.redirect(new URL("/", request.url));
       }
     }
