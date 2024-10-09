@@ -10,8 +10,8 @@ export class PermissionsGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
     const { req } = ctx.getContext();
-    //   console.log('req header: ', req.headers);
     const userPermissions = req.headers.permissions.split(',');
+    console.log('userPermissions', req.headers.permissions);
     const requiredPermissions =
       this.reflector.get('permissions', context.getHandler()) || [];
     const hasAllRequiredPermissions = requiredPermissions.every((permission) =>

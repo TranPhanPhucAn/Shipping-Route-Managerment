@@ -29,7 +29,7 @@ const Profile = () => {
   const { loading, error, data, refetch } = useQuery(QUERY_USER, {
     variables: { id: id },
   });
-  // console.log("data: ", data);
+  console.log("data: ", session?.user?.id);
   const userInfor = data?.user || {};
   const joiningDate = new Date(userInfor.createdAt).toLocaleDateString("en-GB");
   const birthDate = userInfor.birthday
