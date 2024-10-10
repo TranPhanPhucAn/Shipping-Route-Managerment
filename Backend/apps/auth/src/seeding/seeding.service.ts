@@ -72,6 +72,10 @@ export class SeedingService {
         { permission: 'create:vessel', description: 'Create new vessel' }, //29
         { permission: 'update:vessel', description: 'Update a vessel' }, //30
         { permission: 'delete:vessel', description: 'Delete a vessel' }, //31
+        {
+          permission: 'get:inforByOwner',
+          description: 'Get information by ownerId',
+        }, //32
       ];
       const permissionsEntities = permissionsRepository.create(permissions);
       await permissionsRepository.save(permissionsEntities);
@@ -95,6 +99,7 @@ export class SeedingService {
           permissionsEntities[28],
           permissionsEntities[29],
           permissionsEntities[30],
+          permissionsEntities[31],
         ],
       });
       const role3 = rolesRepository.create({

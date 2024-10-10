@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Vessel } from './entities/vessel.entity';
+import { Vessel, VesselStatus } from './entities/vessel.entity';
 import { CreateVesselInput } from './dto/create-vessel.input';
 import { UpdateVesselInput } from './dto/update-vessel.input';
 
@@ -51,5 +51,37 @@ export class VesselsService {
     }
     await this.vesselRepository.remove(vessel);
     return vessel;
+  }
+
+  async getInforByOwner(id: string) {
+    const vesselTotal = this.vesselRepository.count({
+      where: {
+        ownerId: id,
+      },
+    });
+    const available = this.vesselRepository.count({
+      where: {
+        ownerId: id,
+        status: VesselStatus.AVAILABLE,
+      },
+    });
+    const inTransits = this.vesselRepository.count({
+      where: {
+        ownerId: id,
+        status: VesselStatus.IN_TRANSIT,
+      },
+    });
+    const underMaintance = this.vesselRepository.count({
+      where: {
+        ownerId: id,
+        status: VesselStatus.UNDER_MAINTENANCE,
+      },
+    });
+    return {
+      vesselTotal: vesselTotal,
+      available: available,
+      inTransits: inTransits,
+      underMaintance: underMaintance,
+    };
   }
 }

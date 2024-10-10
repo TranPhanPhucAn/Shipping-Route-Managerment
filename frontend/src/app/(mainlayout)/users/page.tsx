@@ -21,7 +21,7 @@ import {
 import { useState, useEffect } from "react";
 import styles from "@/src/styles/Listpage.module.css";
 import { usePathname, useRouter } from "next/navigation";
-import { GET_USER_PAGINATION } from "@/src/graphql/queries/query";
+import { GET_USER_PAGINATION, QUERY_ROLES } from "@/src/graphql/queries/query";
 import { useSearchParams } from "next/navigation";
 import { FilterDropdownProps } from "antd/es/table/interface";
 import UpdateUserRoleModal from "@/src/components/ListUser/UpdateUserRoleModal";
@@ -29,7 +29,8 @@ import { DELETE_USER } from "@/src/graphql/mutations/Auth";
 import { useSession } from "next-auth/react";
 
 const UserList = () => {
-  const router = useRouter();
+  const { data: session, status, update } = useSession();
+  const permissionUser = session?.user?.permissionNames;
   const { replace } = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -65,6 +66,12 @@ const UserList = () => {
     current: page,
     pageSize: pageSize,
   });
+  const {
+    loading: loadingRole,
+    error: errorRole,
+    data: dataRoles,
+  } = useQuery(QUERY_ROLES);
+  const roles = dataRoles?.roles;
 
   const handleTableChange = (pagination: any, filters: any, sorter: any) => {
     const params = new URLSearchParams(searchParams ?? "");
@@ -362,20 +369,10 @@ const UserList = () => {
         }
         return "";
       },
-      filters: [
-        {
-          text: "user",
-          value: "user",
-        },
-        {
-          text: "supplier",
-          value: "supplier",
-        },
-        {
-          text: "admin",
-          value: "admin",
-        },
-      ],
+      filters: roles?.map((role: any) => ({
+        text: role.name,
+        value: role.name,
+      })),
     },
     {
       title: "Gender",
@@ -414,40 +411,83 @@ const UserList = () => {
         },
       ],
     },
-    {
-      title: "Action",
-      dataIndex: "id",
-      key: "id",
-      render: (text: string, record: any) => (
-        <>
-          <Button
-            type="link"
-            onClick={() => handleEdit(record)}
-            icon={<EditOutlined />}
-          >
-            Edit
-          </Button>
-          <Popconfirm
-            placement="topLeft"
-            title={"Are you sure to delete this user?"}
-            description={"Delete the user"}
-            okText="Yes"
-            cancelText="No"
-            onConfirm={() => handleRemove(record.id)}
-            onCancel={() => console.log("Delete canceled")}
-          >
-            <Button
-              type="link"
-              danger
-              // loading={deleteLoading}
-              icon={<DeleteOutlined />}
-            >
-              Delete
-            </Button>
-          </Popconfirm>
-        </>
-      ),
-    },
+    // {
+    //   title: "Action",
+    //   dataIndex: "id",
+    //   key: "id",
+    //   render: (text: string, record: any) => (
+    //     <>
+    //       <Button
+    //         type="link"
+    //         onClick={() => handleEdit(record)}
+    //         icon={<EditOutlined />}
+    //       >
+    //         Edit
+    //       </Button>
+    //       <Popconfirm
+    //         placement="topLeft"
+    //         title={"Are you sure to delete this user?"}
+    //         description={"Delete the user"}
+    //         okText="Yes"
+    //         cancelText="No"
+    //         onConfirm={() => handleRemove(record.id)}
+    //         onCancel={() => console.log("Delete canceled")}
+    //       >
+    //         <Button
+    //           type="link"
+    //           danger
+    //           // loading={deleteLoading}
+    //           icon={<DeleteOutlined />}
+    //         >
+    //           Delete
+    //         </Button>
+    //       </Popconfirm>
+    //     </>
+    //   ),
+    // },
+    ...(permissionUser?.includes("assignRole:user") ||
+    permissionUser?.includes("delete:user")
+      ? [
+          {
+            title: "Action",
+            dataIndex: "id",
+            key: "id",
+            render: (text: string, record: any) => (
+              <>
+                {permissionUser?.includes("assignRole:user") && (
+                  <Button
+                    type="link"
+                    onClick={() => handleEdit(record)}
+                    icon={<EditOutlined />}
+                  >
+                    Edit
+                  </Button>
+                )}
+                {permissionUser?.includes("delete:user") && (
+                  <Popconfirm
+                    placement="topLeft"
+                    title={"Are you sure to delete this user?"}
+                    description={"Delete the user"}
+                    okText="Yes"
+                    cancelText="No"
+                    onConfirm={() => handleRemove(record.id)}
+                    onCancel={() => console.log("Delete canceled")}
+                  >
+                    <Button
+                      type="link"
+                      danger
+                      // loading={deleteLoading}
+                      icon={<DeleteOutlined />}
+                    >
+                      Delete
+                    </Button>
+                  </Popconfirm>
+                )}
+              </>
+            ),
+          },
+        ]
+      : []),
   ];
 
   return (

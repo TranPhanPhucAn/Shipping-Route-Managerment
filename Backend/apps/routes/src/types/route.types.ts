@@ -1,8 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Schedule } from '../schedules/entities/schedule.entity';
 
-
-
 @ObjectType()
 export class RouteUserResponse {
   @Field()
@@ -26,5 +24,19 @@ export class PaginationScheduleResponse {
 
   @Field(() => [Schedule], { nullable: true })
   schedules?: Schedule[];
+}
 
+@ObjectType()
+export class GetInforByOwnerResponse {
+  @Field({ nullable: true })
+  vesselTotal: number;
+
+  @Field({ nullable: true })
+  available: number;
+
+  @Field({ nullable: true })
+  inTransits: number;
+
+  @Field({ nullable: true })
+  underMaintance: number;
 }

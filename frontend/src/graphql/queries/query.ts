@@ -157,6 +157,17 @@ export const GET_VESSELS = gql`
   }
 `;
 
+export const QUERY_INFOR_BY_OWNER = gql`
+  query getInforByOwner($id: String!) {
+    getInforByOwner(id: $id) {
+      vesselTotal
+      available
+      inTransits
+      underMaintance
+    }
+  }
+`;
+
 export const SEARCH_BY_PORT = gql`
   query schedulesByPort($country: String!, $portName: String!, $date: String!) {
     schedulesByPort(country: $country, portName: $portName, date: $date) {
@@ -189,9 +200,9 @@ export const GET_SCHEDULE_PAGINATION = gql`
       schedules {
         id
         status
-        vessel{
-        id
-        name
+        vessel {
+          id
+          name
         }
         route {
           id

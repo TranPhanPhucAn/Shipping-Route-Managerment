@@ -34,6 +34,7 @@ export class JwtAuthGuard implements CanActivate {
       });
 
       if (user.refreshToken !== token) {
+        this.usersRepository.update(user.id, { refreshToken: '' });
         throw new GraphQLError('Please login again', {
           extensions: {
             errorCode: '5001-9',

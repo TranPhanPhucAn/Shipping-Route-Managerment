@@ -270,40 +270,6 @@ const SchedulesList = () => {
           },
         ]
       : []),
-    // {
-    //   title: "Action",
-    //   dataIndex: "id",
-    //   key: "id",
-    //   render: (text: string, record: Schedule) => (
-    //     <div>
-    //       <Button
-    //         type="link"
-    //         onClick={() => handleEdit(record)}
-    //         icon={<EditOutlined />}
-    //       >
-    //         Edit
-    //       </Button>
-    //       <Popconfirm
-    //         placement="topLeft"
-    //         title={"Are you sure to delete this schedule?"}
-    //         description={"Delete the schedule"}
-    //         okText="Yes"
-    //         cancelText="No"
-    //         onConfirm={() => handleRemove(record.id)}
-    //         onCancel={() => console.log("Delete canceled")}
-    //       >
-    //         <Button
-    //           type="link"
-    //           danger
-    //           loading={deleteLoading}
-    //           icon={<DeleteOutlined />}
-    //         >
-    //           Delete
-    //         </Button>
-    //       </Popconfirm>
-    //     </div>
-    //   ),
-    // },
   ];
 
   return (
