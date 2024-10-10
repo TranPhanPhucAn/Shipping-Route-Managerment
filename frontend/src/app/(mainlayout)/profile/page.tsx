@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 // import { getServerSession } from "next-auth/next";
 // import { getServerSessionFromApp } from "@/src/lib/customGetSession";
 // import { client } from "@/src/graphql/Provider";
-import { QUERY_USER } from "@/src/graphql/queries/query";
+import { QUERY_INFOR_BY_OWNER, QUERY_USER } from "@/src/graphql/queries/query";
 import { useQuery } from "@apollo/client";
 import "./profile.scss";
 import Image from "next/image";
@@ -22,14 +22,25 @@ import { FaBirthdayCake, FaTransgender } from "react-icons/fa";
 import UpdateUserModal from "@/src/components/UserProfile/UpdateUserModal";
 import UpdateAvatarModal from "@/src/components/UserProfile/UpdateAvatarModal";
 import UpdatePasswordModal from "@/src/components/UserProfile/UpdatePasswordModal";
+import { Card } from "antd";
+import ListCardVessel from "@/src/components/UserProfile/ListCardVessel";
 
 const Profile = () => {
   const { data: session, status, update } = useSession();
+  const permissionUser = session?.user?.permissionNames;
   const id = session?.user?.id;
   const { loading, error, data, refetch } = useQuery(QUERY_USER, {
     variables: { id: id },
   });
-  console.log("data: ", session?.user?.id);
+  const {
+    loading: loadingInforVessel,
+    error: errorInforVessel,
+    data: dataInforVessel,
+  } = useQuery(QUERY_INFOR_BY_OWNER, {
+    variables: { id: id },
+  });
+
+  console.log("data: ", dataInforVessel);
   const userInfor = data?.user || {};
   const joiningDate = new Date(userInfor.createdAt).toLocaleDateString("en-GB");
   const birthDate = userInfor.birthday
@@ -150,6 +161,14 @@ const Profile = () => {
             <UpdatePasswordModal />
           </div>
         </div>
+        {permissionUser?.includes("get:inforByOwner") && dataInforVessel && (
+          <ListCardVessel
+            vesselTotal={dataInforVessel?.getInforByOwner.vesselTotal}
+            available={dataInforVessel?.getInforByOwner.available}
+            inTransits={dataInforVessel?.getInforByOwner.inTransits}
+            underMaintance={dataInforVessel?.getInforByOwner.underMaintance}
+          />
+        )}
       </div>
     </>
   );

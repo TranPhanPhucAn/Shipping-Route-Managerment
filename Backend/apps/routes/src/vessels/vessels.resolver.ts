@@ -5,6 +5,7 @@ import { CreateVesselInput } from './dto/create-vessel.input';
 import { UpdateVesselInput } from './dto/update-vessel.input';
 import { SetMetadata, UseGuards } from '@nestjs/common';
 import { PermissionsGuard } from '../guard/permissions.guard';
+import { GetInforByOwnerResponse } from '../types/route.types';
 
 @Resolver(() => Vessel)
 export class VesselsResolver {
@@ -46,5 +47,12 @@ export class VesselsResolver {
   @Mutation(() => Vessel)
   removeVessel(@Args('id', { type: () => String }) id: string) {
     return this.vesselService.remove(id);
+  }
+
+  @SetMetadata('permissions', ['get:inforByOwner'])
+  @UseGuards(PermissionsGuard)
+  @Query(() => GetInforByOwnerResponse, { name: 'getInforByOwner' })
+  getInforByOwner(@Args('id', { type: () => String }) id: string) {
+    return this.vesselService.getInforByOwner(id);
   }
 }

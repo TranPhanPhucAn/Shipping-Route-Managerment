@@ -90,7 +90,7 @@ const Login: React.FC = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your Email!",
+                  message: "Please input your email!",
                 },
                 {
                   type: "email",
@@ -104,6 +104,11 @@ const Login: React.FC = () => {
                 className={styles.input}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleLogin();
+                  }
+                }}
               />
             </Form.Item>
             <Form.Item
@@ -122,6 +127,11 @@ const Login: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className={styles.input}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleLogin();
+                  }
+                }}
               />
             </Form.Item>
             <Form.Item className={styles.forgotPS}>
