@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { useSession } from "next-auth/react";
 
 // import { getServerSession } from "next-auth/next";
@@ -21,8 +21,9 @@ import {
 import { FaBirthdayCake, FaTransgender } from "react-icons/fa";
 import UpdateUserModal from "@/src/components/UserProfile/UpdateUserModal";
 import UpdateAvatarModal from "@/src/components/UserProfile/UpdateAvatarModal";
-import { Card } from "antd";
 import ListCardVessel from "@/src/components/UserProfile/ListCardVessel";
+import styles from "@/src/styles/Listpage.module.css";
+import { Divider } from "antd";
 
 const Profile = () => {
   const { data: session, status, update } = useSession();
@@ -50,7 +51,9 @@ const Profile = () => {
   return (
     <>
       <div className="container-profile">
-        <div className="header-profile">Personal Information</div>
+        <div className={styles.Title}>Personal Information</div>
+        <div className={styles.subtitle}>View and update your profile</div>
+        <Divider style={{ borderColor: "#334155" }}></Divider>
         <div className="content-infor">
           <div className="avatar">
             <Image

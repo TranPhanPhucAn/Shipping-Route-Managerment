@@ -2,14 +2,11 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { Table, Button, Popconfirm, Divider, message } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { useState, useEffect } from "react";
 import styles from "@/src/styles/Listpage.module.css";
 import { QUERY_ROLES } from "@/src/graphql/queries/query";
-import UpdateUserRoleModal from "@/src/components/ListUser/UpdateUserRoleModal";
 import CreateRoleModal from "@/src/components/Role/CreateRoleModal";
 import { DELETE_ROLE } from "@/src/graphql/mutations/Auth";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 
 const Roles = () => {
   const router = useRouter();
