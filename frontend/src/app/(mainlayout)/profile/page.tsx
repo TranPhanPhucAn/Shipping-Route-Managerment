@@ -21,6 +21,8 @@ import {
 import { FaBirthdayCake, FaTransgender } from "react-icons/fa";
 import UpdateUserModal from "@/src/components/UserProfile/UpdateUserModal";
 import UpdateAvatarModal from "@/src/components/UserProfile/UpdateAvatarModal";
+import UpdatePasswordModal from "@/src/components/UserProfile/UpdatePasswordModal";
+import { Card } from "antd";
 import ListCardVessel from "@/src/components/UserProfile/ListCardVessel";
 import styles from "@/src/styles/Listpage.module.css";
 import { Divider } from "antd";
@@ -64,8 +66,6 @@ const Profile = () => {
               style={{
                 maxWidth: "100%",
                 height: "auto",
-                // objectFit: "cover",ppppp
-                // borderRadius: "50%",
               }}
             />
             <UpdateAvatarModal userProfile={userInfor} refetchUser={refetch} />
@@ -162,6 +162,7 @@ const Profile = () => {
               {birthDate}
             </div>
             {userInfor && <UpdateUserModal userProfile={userInfor} />}
+            <UpdatePasswordModal />
           </div>
         </div>
         {permissionUser?.includes("get:inforByOwner") && dataInforVessel && (

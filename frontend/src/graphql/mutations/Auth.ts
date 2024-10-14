@@ -43,6 +43,14 @@ export const UPDATE_USER = gql`
   }
 `;
 
+export const CHANGE_PASSWORD = gql`
+  mutation changePassword($changePassword: ChangePasswordDto!) {
+    changePassword(changePassword: $changePassword) {
+      message
+    }
+  }
+`;
+
 export const DELETE_USER = gql`
   mutation removeUser($id: String!) {
     removeUser(id: $id) {

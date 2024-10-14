@@ -33,9 +33,10 @@ export class UserGrpcServiceController implements UserServiceController {
     // };
     const cacheKey = `user-${data.id}`;
     const cachedUser = await this.cacheManager.get(cacheKey);
+
     if (cachedUser) {
       console.log('Returning cached data');
-      return cachedUser;
+      return JSON.parse(cachedUser);
     }
     const result = await this.usersService.findOneByIdService(data.id);
     const userResponse: GetUserResponse = {
@@ -44,7 +45,9 @@ export class UserGrpcServiceController implements UserServiceController {
       email: result.email,
       permissions: result.permissions || [], // Ensure permissions is included
     };
-    await this.cacheManager.set(cacheKey, userResponse, { ttl: 60 });
+    await this.cacheManager.set(cacheKey, JSON.stringify(userResponse), {
+      ttl: 60 * 60 * 10,
+    });
     return userResponse;
     // this.cacheManager.set('test', 'Hello', { ttl: 60 });
     // return await this.usersService.findOneByIdService(data.id);

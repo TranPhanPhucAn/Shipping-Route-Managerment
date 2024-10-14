@@ -196,8 +196,8 @@ export class AuthService {
   logoutUser = async (req: any) => {
     const currentTime = Math.floor(Date.now() / 1000);
     const ttlCache = +req.expirationtime - currentTime;
-    await this.usersRepository.update(req.userid, { refreshToken: '' });
-    await this.cacheManager.set(req.accesstoken, 'true', {
+    await this.usersRepository.update(req.headers.userid, { refreshToken: '' });
+    await this.cacheManager.set(req.cookies['access_token'], 'true', {
       ttl: ttlCache,
     });
     return { message: 'Logout out successfull' };

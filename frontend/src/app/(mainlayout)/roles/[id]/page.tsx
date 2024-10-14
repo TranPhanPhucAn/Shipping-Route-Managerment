@@ -26,7 +26,7 @@ const RolePermission = () => {
   });
   const { data: dataRoleBase } = useQuery(QUERY_ROLE, {
     variables: {
-      id: "32",
+      id: "3",
     },
   });
   const [

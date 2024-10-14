@@ -113,7 +113,7 @@ export class AuthResolver {
   async logout(@Context() context: any) {
     context.res.cookie('access_token', '', { expires: new Date(Date.now()) });
     context.res.cookie('refresh_token', '', { expires: new Date(Date.now()) });
-    return await this.authService.logoutUser(context.req.headers);
+    return await this.authService.logoutUser(context.req);
   }
 
   @Mutation(() => RefreshTokenResponse)

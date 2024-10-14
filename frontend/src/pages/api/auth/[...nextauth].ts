@@ -87,6 +87,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
               ...user,
               expAccessToken: expAccessToken,
               permissionNames: permissionNames,
+              loginMethod: "credentials",
             };
           } catch (err: any) {
             throw new Error(err?.message || "Login failed");
@@ -123,6 +124,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
           token.expAccessToken = user.expAccessToken * 1000;
           token.avatar_url = user.image_url;
           token.permissionNames = user.permissionNames;
+          token.loginMethod = user.loginMethod;
           // console.log("get token jwt: ", user);
         }
         if (trigger === "update" && session?.user) {
@@ -148,6 +150,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
               address: token.address,
               avatar_url: token.avatar_url,
               permissionNames: token.permissionNames,
+              loginMethod: token.loginMethod,
             },
           };
         }
@@ -217,6 +220,7 @@ export const nextAuthOptions: NextAuthOptionsCallback = (req, res) => {
             user.address = userBackend.address;
             user.image_url = userBackend.image_url;
             user.permissionNames = permissionNames;
+            user.loginMethod = "google";
 
             return true;
           } catch (err: any) {
