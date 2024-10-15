@@ -11,8 +11,14 @@ import ProfileDropUser from "./ProfileDropUser";
 import { useSession } from "next-auth/react";
 
 // type MenuItem = Required<MenuProps>["items"][number];
+// type MenuItem = Required<MenuProps>["items"][number] & {
+//   permission?: string; // Add optional 'permission' field
+//   children?: MenuItem[];
+// };
 type MenuItem = Required<MenuProps>["items"][number] & {
-  permission?: string; // Add optional 'permission' field
+  permission?: string;
+  // children?: MenuItem[];
+  children?: any;
 };
 
 const items: MenuItem[] = [
@@ -25,30 +31,37 @@ const items: MenuItem[] = [
     key: "/contact",
   },
   {
-    label: <Link href={"/routes"}>Routes</Link>,
+    // label: <Link href={"/routes"}>Routes</Link>,
+    label: "Routes",
     key: "/routes",
+    permission: "search:route",
     children: [
       {
         key: "/maps",
         label: <Link href={"/maps"}>Search Your Route</Link>,
+        // permission: "search:route",
       },
       {
         key: "/routes",
         label: <Link href={"/routes"}>Routes List</Link>,
+        permission: "get:routes",
       },
     ],
   },
   {
-    label: <Link href={"/schedules"}>Schedules</Link>,
+    label: "Schedules",
     key: "/schedules",
+    permission: "search:schedule",
     children: [
       {
         key: "/schedules",
         label: <Link href={"/schedules"}>Search By Port</Link>,
+        // permission: "search:schedule",
       },
       {
         key: "/schedulesList",
         label: <Link href={"/schedules/list"}>Schedules List</Link>,
+        permission: "get:schedulesPag",
       },
     ],
   },
@@ -63,6 +76,33 @@ const items: MenuItem[] = [
     permission: "get:roles",
   },
 ];
+const filterMenuItemsByPermission = (
+  items: MenuItem[],
+  permissions: string[]
+) => {
+  return (
+    items
+      .map((item) => {
+        // Filter children if present
+        if (item.children) {
+          const filteredChildren = item.children.filter(
+            (child: any) =>
+              !child?.permission || permissions.includes(child.permission)
+          );
+          return {
+            ...item,
+            children:
+              filteredChildren.length > 0 ? filteredChildren : undefined,
+          };
+        }
+        return item;
+      })
+      // Filter parent item if permission is required
+      .filter(
+        (item) => !item.permission || permissions.includes(item.permission)
+      )
+  );
+};
 const Header: React.FC = () => {
   const [current, setCurrent] = useState("/");
   const [openMenu, setOpenMenu] = useState(false);
@@ -74,12 +114,40 @@ const Header: React.FC = () => {
     console.log("click ", e);
     setCurrent(e.key);
   };
+  const userPermissions = session?.user?.permissionNames || [];
+
   // console.log("alo: ", session?.user);
-  const filteredItems = items.filter(
-    (item) =>
-      !item.permission ||
-      session?.user?.permissionNames?.includes(item.permission)
-  );
+  // const filteredItems = items.filter(
+  //   (item) =>
+  //     !item.permission ||
+  //     session?.user?.permissionNames?.includes(item.permission)
+  // );
+  // const filteredItems = items
+  //   .map((item) => {
+  //     // Check if the item has children
+  //     if (item?.children) {
+  //       // Filter the children based on permissions
+  //       const filteredChildren = item?.children.filter(
+  //         (child) =>
+  //           !child?.permission ||
+  //           session?.user?.permissionNames?.includes(child.permission)
+  //       );
+  //       // Return the item with filtered children if any children remain
+  //       return {
+  //         ...item,
+  //         children: filteredChildren.length ? filteredChildren : undefined,
+  //       };
+  //     }
+  //     // Return the item if it doesn't have children or no permission is required
+  //     return item;
+  //   })
+  //   .filter(
+  //     (item) =>
+  //       !item.permission ||
+  //       session?.user?.permissionNames?.includes(item.permission)
+  //   );
+  const filteredItems = filterMenuItemsByPermission(items, userPermissions);
+
   const handleClick = (route: string) => {
     router.push(route);
   };

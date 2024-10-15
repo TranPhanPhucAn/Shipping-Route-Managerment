@@ -11,7 +11,8 @@ import styles from "../../../../styles/Detailpage.module.css";
 
 const RouteDetail = () => {
   const router = useRouter();
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id;
 
   const { loading, error, data } = useQuery<{ route: Route }>(GET_ROUTE, {
     variables: { id },

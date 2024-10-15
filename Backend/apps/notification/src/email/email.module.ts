@@ -22,8 +22,8 @@ dotenv.config();
           from: 'Nhom4',
         },
         template: {
-          dir: join(__dirname, '..', 'email-templates'),
-          // dir: 'apps/auth/src/email-templates',
+          // dir: join(__dirname, '..', 'email-templates'),
+          dir: join(__dirname, 'email-templates'),
           adapter: new EjsAdapter(),
           options: {
             strict: false,

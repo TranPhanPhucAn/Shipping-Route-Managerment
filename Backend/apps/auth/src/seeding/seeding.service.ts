@@ -61,21 +61,24 @@ export class SeedingService {
           permission: 'update:schedule',
           description: 'Update status of schedule',
         }, //20
-        { permission: 'delete:schedule', description: 'Delete a schedule' }, //21
-        { permission: 'create:port', description: 'Create new port' }, //22
-        { permission: 'update:port', description: 'Update a port' }, //23
-        { permission: 'delete:port', description: 'Delete a port' }, //24
-        { permission: 'create:route', description: 'Create new route' }, //25
-        { permission: 'update:route', description: 'Update a route' }, //26
-        { permission: 'delete:route', description: 'Delete a route' }, //27
-        { permission: 'get:vessels', description: 'Get all vessels' }, //28
-        { permission: 'create:vessel', description: 'Create new vessel' }, //29
-        { permission: 'update:vessel', description: 'Update a vessel' }, //30
-        { permission: 'delete:vessel', description: 'Delete a vessel' }, //31
+        { permission: 'search:schedule', description: 'Search a schedule' }, //21
+        { permission: 'delete:schedule', description: 'Delete a schedule' }, //22
+        { permission: 'create:port', description: 'Create new port' }, //23
+        { permission: 'update:port', description: 'Update a port' }, //24
+        { permission: 'delete:port', description: 'Delete a port' }, //25
+        { permission: 'create:route', description: 'Create new route' }, //26
+        { permission: 'get:routes', description: 'Get all routes' }, //27
+        { permission: 'update:route', description: 'Update a route' }, //28
+        { permission: 'search:route', description: 'Search a route' }, //29
+        { permission: 'delete:route', description: 'Delete a route' }, //30
+        { permission: 'get:vessels', description: 'Get all vessels' }, //31
+        { permission: 'create:vessel', description: 'Create new vessel' }, //32
+        { permission: 'update:vessel', description: 'Update a vessel' }, //33
+        { permission: 'delete:vessel', description: 'Delete a vessel' }, //34
         {
           permission: 'get:inforByOwner',
           description: 'Get information by ownerId',
-        }, //32
+        }, //35
       ];
       const permissionsEntities = permissionsRepository.create(permissions);
       await permissionsRepository.save(permissionsEntities);
@@ -95,11 +98,13 @@ export class SeedingService {
           permissionsEntities[17],
           permissionsEntities[18],
           permissionsEntities[19],
-          permissionsEntities[27],
+          permissionsEntities[20],
           permissionsEntities[28],
-          permissionsEntities[29],
           permissionsEntities[30],
           permissionsEntities[31],
+          permissionsEntities[32],
+          permissionsEntities[33],
+          permissionsEntities[34],
         ],
       });
       const role3 = rolesRepository.create({
@@ -108,8 +113,8 @@ export class SeedingService {
         permissions: [
           permissionsEntities[2],
           permissionsEntities[3],
-          permissionsEntities[17],
-          permissionsEntities[18],
+          permissionsEntities[20],
+          permissionsEntities[28],
         ],
       });
       await rolesRepository.save([role1, role2, role3]);

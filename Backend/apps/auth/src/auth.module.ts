@@ -21,7 +21,6 @@ import { PermissionsModule } from './permissions/permissions.module';
 import { SeedingModule } from './seeding/seeding.module';
 import { dataSourceOptions } from './db-migration/data-source';
 import { FilesModule } from './files/files.module';
-import { UserHttpController } from './users/upload.controller';
 
 interface OriginalError {
   message: string[];

@@ -96,10 +96,10 @@ const ScheduleSearch: React.FC = () => {
                   Search results for GLASGOW EXPRESS
                 </h2>
                 <div>
-                  <Button variant="ghost" className="p-2">
+                  <Button className="p-2">
                     <Printer size={20} />
                   </Button>
-                  <Button variant="ghost" className="p-2">
+                  <Button className="p-2">
                     <Download size={20} />
                   </Button>
                 </div>
@@ -141,7 +141,7 @@ const ScheduleSearch: React.FC = () => {
                     <div>
                       {" "}
                       <LuShip />
-                      <LiaShipSolid/>
+                      <LiaShipSolid />
                       Departure - 431E
                     </div>
                     <div>02 Oct 2024 10:00</div>

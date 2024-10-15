@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 // import { getServerSession } from "next-auth/next";
@@ -34,20 +34,27 @@ const Profile = () => {
   const { loading, error, data, refetch } = useQuery(QUERY_USER, {
     variables: { id: id },
   });
-  const {
-    loading: loadingInforVessel,
-    error: errorInforVessel,
-    data: dataInforVessel,
-  } = useQuery(QUERY_INFOR_BY_OWNER, {
-    variables: { id: id },
-  });
+  // const {
+  //   loading: loadingInforVessel,
+  //   error: errorInforVessel,
+  //   data: dataInforVessel,
+  // } = useQuery(QUERY_INFOR_BY_OWNER, {
+  //   variables: { id: id },
+  // });
 
-  console.log("data: ", dataInforVessel);
   const userInfor = data?.user || {};
   const joiningDate = new Date(userInfor.createdAt).toLocaleDateString("en-GB");
   const birthDate = userInfor.birthday
     ? new Date(userInfor.birthday).toLocaleDateString("en-GB")
     : "";
+  const {
+    loading: loadingInforVessel,
+    error: errorInforVessel,
+    data: dataInforVessel,
+  } = useQuery(QUERY_INFOR_BY_OWNER, {
+    variables: { id },
+    skip: !permissionUser?.includes("get:inforByOwner") || !id, // Skip query if permission or id is not present
+  });
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -165,14 +172,16 @@ const Profile = () => {
             <UpdatePasswordModal />
           </div>
         </div>
-        {permissionUser?.includes("get:inforByOwner") && dataInforVessel && (
-          <ListCardVessel
-            vesselTotal={dataInforVessel?.getInforByOwner.vesselTotal}
-            available={dataInforVessel?.getInforByOwner.available}
-            inTransits={dataInforVessel?.getInforByOwner.inTransits}
-            underMaintance={dataInforVessel?.getInforByOwner.underMaintance}
-          />
-        )}
+        {permissionUser &&
+          permissionUser.includes("get:inforByOwner") &&
+          dataInforVessel && (
+            <ListCardVessel
+              vesselTotal={dataInforVessel?.getInforByOwner.vesselTotal}
+              available={dataInforVessel?.getInforByOwner.available}
+              inTransits={dataInforVessel?.getInforByOwner.inTransits}
+              underMaintance={dataInforVessel?.getInforByOwner.underMaintance}
+            />
+          )}
       </div>
     </>
   );

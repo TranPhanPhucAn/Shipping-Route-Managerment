@@ -21,6 +21,7 @@ import { Schedule } from "@/src/graphql/types";
 import { useState, useEffect } from "react";
 import moment from "moment";
 import styles from "@/src/styles/Listpage.module.css";
+import { Dayjs } from "dayjs";
 
 const ScheduleSearch: React.FC = () => {
   const [country, setCountry] = useState("");
@@ -148,11 +149,7 @@ const ScheduleSearch: React.FC = () => {
   ];
 
   return (
-    <Space
-      direction="horizontal"
-      align="start"
-      size="large"
-    >
+    <Space direction="horizontal" align="start" size="large">
       <Card style={{ width: 350 }}>
         <Form layout="vertical" className={styles.inputForm}>
           <Form.Item
@@ -189,7 +186,7 @@ const ScheduleSearch: React.FC = () => {
               format="DD/MM/YYYY"
               placeholder="Select Date"
               suffixIcon={<CalendarOutlined />}
-              onChange={(date) => setDate(date)}
+              onChange={(date: any) => setDate(date)}
               className={styles.datePicker}
             />
           </Form.Item>

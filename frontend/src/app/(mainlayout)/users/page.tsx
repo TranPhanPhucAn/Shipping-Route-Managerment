@@ -303,12 +303,12 @@ const UserList = () => {
   };
 
   const columns = [
-    {
-      title: "Id",
-      dataIndex: "id",
-      key: "id",
-      sorter: { multiple: 2 },
-    },
+    // {
+    //   title: "Id",
+    //   dataIndex: "id",
+    //   key: "id",
+    //   sorter: { multiple: 2 },
+    // },
     {
       title: "Full Name",
       dataIndex: "username",

@@ -10,7 +10,6 @@ interface UpdateRoleModalProps {
   refetchRole: () => void;
 }
 const UpdateRoleModal = ({ role, refetchRole }: UpdateRoleModalProps) => {
-  const [visible, setVisible] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [updateRole, { loading, error }] = useMutation(UPDATE_ROLE);
@@ -32,8 +31,7 @@ const UpdateRoleModal = ({ role, refetchRole }: UpdateRoleModalProps) => {
         },
       });
       refetchRole();
-      form.resetFields();
-      setVisible(false);
+      // form.resetFields();
       message.success("Role update successfully");
     } catch (error) {
       console.error("Error update role:", error);
@@ -52,16 +50,8 @@ const UpdateRoleModal = ({ role, refetchRole }: UpdateRoleModalProps) => {
   }, [role, form]);
   return (
     <>
-      <Button type="primary" onClick={() => setVisible(true)}>
-        Edit Role
-      </Button>
-      <Modal
-        title="Update Role"
-        open={visible}
-        onCancel={() => setVisible(false)}
-        footer={null}
-      >
-        <Form form={form} onFinish={handleUpdateRole} layout="vertical">
+      <Form form={form} onFinish={handleUpdateRole} layout="vertical">
+        <div style={{ display: "flex" }}>
           <Form.Item
             name="name"
             rules={[
@@ -70,6 +60,11 @@ const UpdateRoleModal = ({ role, refetchRole }: UpdateRoleModalProps) => {
                 message: "Please input role name!",
               },
             ]}
+            style={{
+              flex: "1",
+              marginRight: "20px",
+              marginBottom: "10px",
+            }}
           >
             <Input
               placeholder="Role name"
@@ -85,6 +80,7 @@ const UpdateRoleModal = ({ role, refetchRole }: UpdateRoleModalProps) => {
                 message: "Please input role description!",
               },
             ]}
+            style={{ flex: "1", marginBottom: "10px" }}
           >
             <Input
               placeholder="Role description"
@@ -92,14 +88,15 @@ const UpdateRoleModal = ({ role, refetchRole }: UpdateRoleModalProps) => {
               onChange={(e: any) => setDescription(e.target.value)}
             />
           </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              Submit
-            </Button>
-          </Form.Item>
-          {error && <p style={{ color: "red" }}>{error.message}</p>}
-        </Form>
-      </Modal>
+        </div>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            Update
+          </Button>
+        </Form.Item>
+        {error && <p style={{ color: "red" }}>{error.message}</p>}
+      </Form>
     </>
   );
 };

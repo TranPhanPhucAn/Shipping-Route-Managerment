@@ -41,6 +41,9 @@ services:
   #     routes:
   #       condition: service_healthy
   #       restart: true
+  #     redis:
+  #       condition: service_healthy
+  #       restart: true
   # auth:
   #   container_name: auth
   #   build:
@@ -55,6 +58,9 @@ services:
   #     - 5001:5001
   #   depends_on:
   #     db:
+  #       condition: service_healthy
+  #       restart: true
+  #     redis:
   #       condition: service_healthy
   #       restart: true
   #   healthcheck:
@@ -95,6 +101,12 @@ services:
       - redis_volume_data:/data
     ports:
       - 6379:6379
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
   redis_insight:
     container_name: redis_insight
     image: redislabs/redisinsight:1.14.0

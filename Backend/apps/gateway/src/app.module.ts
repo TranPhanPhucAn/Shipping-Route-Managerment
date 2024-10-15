@@ -11,9 +11,6 @@ import { AuthService } from './auth/auth.service';
 import { GraphQLDataSource } from './graphql-datasource';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 dotenv.config();
-// import { CacheModule } from '@nestjs/cache-manager';
-// import { ConfigModule, ConfigService } from '@nestjs/config';
-// import * as redisStore from 'cache-manager-redis-store';
 interface OriginalError {
   message: string[];
 }
@@ -106,18 +103,6 @@ interface OriginalError {
       }),
       inject: [AuthService],
     }),
-    // CacheModule.registerAsync({
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    //   useFactory: async (configService: ConfigService) => ({
-    //     store: redisStore,
-    //     host: configService.get<string>('REDIS_HOST'),
-    //     port: configService.get<number>('REDIS_PORT'),
-    //     username: configService.get<string>('REDIS_USER'),
-    //     password: configService.get<string>('REDIS_PASSWORD'),
-    //     ttl: 60,
-    //   }),
-    // }),
   ],
   controllers: [AppController],
   providers: [

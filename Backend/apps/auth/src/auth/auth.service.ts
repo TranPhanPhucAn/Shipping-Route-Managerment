@@ -111,7 +111,7 @@ export class AuthService {
         }
 
         const roleRegister = await this.rolesRepository.findOne({
-          where: { name: 'user' },
+          where: { id: '3' },
         });
         const userEntity = this.usersRepository.create();
         let createUser = {
@@ -134,7 +134,7 @@ export class AuthService {
         const permissions = await this.permissionsRepository.find({
           where: {
             roles: {
-              id: user.role.id,
+              id: newUser.role.id,
             },
           },
         });

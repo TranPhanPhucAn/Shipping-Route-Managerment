@@ -74,6 +74,7 @@ export const handleAuth = async ({ req }, authService: AuthService) => {
       'activateUser',
       'forgotPassword',
       'loginWithGoogle',
+      'resetPassword',
     ];
     if (notCheckLogin.includes(typeQuery)) {
       return {};

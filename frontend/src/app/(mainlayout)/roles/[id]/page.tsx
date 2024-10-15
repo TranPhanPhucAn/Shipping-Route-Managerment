@@ -1,6 +1,6 @@
 "use client";
 import { useMutation, useQuery } from "@apollo/client";
-import { Table, Button, Divider, message, Checkbox } from "antd";
+import { Table, Button, Divider, message, Checkbox, Form, Input } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import styles from "@/src/styles/Listpage.module.css";
@@ -10,7 +10,7 @@ import { ASSIGN_PER_FOR_ROLE } from "@/src/graphql/mutations/Auth";
 import UpdatePermissionModal from "@/src/components/Permission/UpdatePermissionModal";
 import UpdateRoleModal from "@/src/components/Role/UpdateRoleModal";
 import { useSession } from "next-auth/react";
-
+import "./roledetail.scss";
 const RolePermission = () => {
   const { loading, error, data, refetch } = useQuery(QUERY_PERMISSIONS);
   const params = useParams();
@@ -135,6 +135,31 @@ const RolePermission = () => {
       <div className={styles.subtitle} style={{ marginBottom: "10px" }}>
         Update permission for role
       </div>
+      {/* <div className="updateform">
+        <Input
+          placeholder="Role name"
+          className={styles.input}
+          // value={email}
+          // onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              // handleLogin();
+            }
+          }}
+          style={{ marginRight: "20px" }}
+        />
+        <Input
+          placeholder="Description"
+          className={styles.input}
+          // value={email}
+          // onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              // handleLogin();
+            }
+          }}
+        />
+      </div> */}
       {dataRole?.role && (
         <UpdateRoleModal refetchRole={refetchRole} role={dataRole?.role} />
       )}
