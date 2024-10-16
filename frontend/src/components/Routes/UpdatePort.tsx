@@ -1,12 +1,92 @@
 "use client";
-import React from "react";
-import { UPDATE_PORT } from "@/src/graphql/mutations/Auth";
-import {GET_PORTS} from "@/src/graphql/queries/query";
-import { Form, Input } from "antd";
-import { useQuery } from "@apollo/client";
+import { useState, useEffect } from "react";
+import { Button, Form, Input, Modal, message } from "antd";
+import { useMutation } from "@apollo/client";
+import { UPDATE_PORT } from "../../graphql/mutations/Auth";
+import { Port } from "@/src/graphql/types";
+import styles from "@/src/styles/Listpage.module.css";
 
-const UpdatePortModal = () => {
-  return <div></div>;
+interface UpdatePortModalProps {
+  id: string;
+  port: Port;
+  visible: boolean;
+  onClose: () => void;
+}
+
+const UpdatePortModal = ({ port, visible, onClose }: UpdatePortModalProps) => {
+  const [updatePort, { loading, error }] = useMutation(UPDATE_PORT);
+  const [name, setName] = useState("");
+  const [country, setCountry] = useState("");
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (port) {
+      form.setFieldsValue({
+        name: port.name,
+        country: port.country,
+        latitude: port.latitude,
+        longitude: port.longitude,
+      });
+    }
+  }, [port, form]);
+
+  const handleUpdatePort = async (values: {
+    name: string;
+    country: string;
+    location: string;
+  }) => {
+    try {
+      await updatePort({
+        variables: {
+          id: port.id,
+          updatePortInput: {
+            name: values.name,
+            country: values.country,
+          },
+        },
+      });
+      message.success("Port updated successfully");
+      onClose();
+    } catch (error) {
+      message.error("Failed to update port");
+    }
+  };
+
+  const handleCancel = () => {
+    onClose();
+  };
+
+  return (
+    <Modal
+      title="Update Port"
+      open={visible}
+      onCancel={handleCancel}
+      footer={null}
+    >
+      <Form form={form} onFinish={handleUpdatePort} layout="vertical">
+        <Form.Item
+          label="Port Name"
+          name="name"
+          rules={[{ required: true, message: "Please enter Port Name!" }]}
+        >
+          <Input value={name} onChange={(e) => setName(e.target.value)} />
+        </Form.Item>
+        <Form.Item
+          label="Country"
+          name="country"
+          rules={[{ required: true, message: "Please enter Country!" }]}
+        >
+          <Input value={country} onChange={(e) => setCountry(e.target.value)} />
+        </Form.Item>
+        <Form.Item>
+          <Button htmlType="submit" loading={loading}>
+            Update
+          </Button>
+          {error && <p style={{ color: "red" }}>{error.message}</p>}
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
 };
 
 export default UpdatePortModal;

@@ -177,6 +177,11 @@ export const UPDATE_PORT = gql`
     }
   }
 `;
+export const DELETE_PORT = gql`
+  mutation removePort($id: String!) {
+    removePort(id: $id)
+  }
+`;
 
 // Route
 export const CREATE_ROUTE = gql`
@@ -209,7 +214,7 @@ export const UPDATE_ROUTE = gql`
         name
       }
       distance
-       estimatedTimeDays
+      estimatedTimeDays
     }
   }
 `;
@@ -279,9 +284,10 @@ export const DELETE_SCHEDULE = gql`
 `;
 
 //Vessel
+
 export const CREATE_VESSEL = gql`
-  mutation CreateVessel($createVesselInput: CreateVesselInput!) {
-    CreateVessel(createVesselInput: $createVesselInput) {
+  mutation createVessel($createVesselInput: CreateVesselInput!) {
+    createVessel(createVesselInput: $createVesselInput) {
       id
       name
       type
@@ -293,11 +299,11 @@ export const CREATE_VESSEL = gql`
 `;
 
 export const UPDATE_VESSEL = gql`
-  mutation UpdateSchedule(
+  mutation updateVessel(
     $id: String!
     $updateVesselInput: UpdateVesselInput!
   ) {
-    updateSchedule(id: $id, updateVesselInput: $updateVesselInput) {
+    updateVessel(id: $id, updateVesselInput: $updateVesselInput) {
       id
       name
       type
