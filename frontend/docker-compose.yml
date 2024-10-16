@@ -4,6 +4,6 @@ services:
   app:
     build: .
     ports:
-      - "3000:${UI_PORT}"
+      - "3001:${UI_PORT}"
     environment:
       - NODE_ENV=production

@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import style from "@/src/styles/Listpage.module.css";
-import { Form, Input, Button, Divider, Card , Space} from "antd";
+import { Form, Input, Button, Divider, Card, Space } from "antd";
 
 // Dynamically import MapContainer and other Leaflet components
 const MapContainer = dynamic(
@@ -83,79 +83,76 @@ const PortDistanceMap: React.FC = () => {
 
   return (
     <div className={style.body}>
-    <div className={style.Title}>Routes</div>
+      <div className={style.Title}>Routes</div>
       <div className={style.subtitle}>
         Search our extensive routes to find the schedule which fits your supply
         chain.
       </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
-        <Space
-        direction="horizontal"
-        align="start"
-        size="large">
-      <Card style={{ width: 350 }}>
-      <Form className={style.inputForm} layout="vertical" >
-        <Form.Item label="Departure Port:"
-            name="Departure Port">
-          <Input
-            type="text"
-            value={port1}
-            onChange={(e) => setPort1(e.target.value)}
-            placeholder="Enter Departure Port name"
-            className={style.input}
-          />
-        </Form.Item>
-        <Form.Item label="Destination Port: "
-            name="Destination Port">
-        <Input
-          type="text"
-          value={port2}
-          onChange={(e) => setPort2(e.target.value)}
-          placeholder="Enter Destination port name"
-          className={style.input}
-          />
-          </Form.Item>
-          <Form.Item>
-          <Button onClick={handleSubmit} className={style.searchButton}>
-          Show Path
-        </Button>
-          </Form.Item>
-      </Form>
-      </Card>
-      <Card style={{ width: 950}}>
-      {distance !== null && (
-        <p className="mb-4">Approximate distance: {distance} km</p>
-      )}
-      {typeof window !== "undefined" && (
-        <MapContainer
-          key={mapKey}
-          center={[0, 0]}
-          zoom={2}
-          style={{ height: "400px", width: "100%" }}
-        >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-          {port1Coords && (
-            <Marker position={[port1Coords.lat, port1Coords.lng]} />
+      <Space direction="horizontal" align="start" size="large">
+        <Card style={{ width: 350 }}>
+          <Form className={style.inputForm} layout="vertical">
+            <Form.Item label="Departure Port:" name="Departure Port">
+              <Input
+                type="text"
+                value={port1}
+                onChange={(e) => setPort1(e.target.value)}
+                placeholder="Enter Departure Port name"
+                className={style.input}
+              />
+            </Form.Item>
+            <Form.Item label="Destination Port: " name="Destination Port">
+              <Input
+                type="text"
+                value={port2}
+                onChange={(e) => setPort2(e.target.value)}
+                placeholder="Enter Destination port name"
+                className={style.input}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button onClick={handleSubmit} className={style.searchButton}>
+                Show Path
+              </Button>
+            </Form.Item>
+          </Form>
+        </Card>
+        <Card style={{ width: 950 }}>
+          {distance !== null && (
+            <p className={style.subtitle}>
+              Approximate distance: {distance} km
+            </p>
           )}
-          {port2Coords && (
-            <Marker position={[port2Coords.lat, port2Coords.lng]} />
+          {typeof window !== "undefined" && (
+            <MapContainer
+              key={mapKey}
+              center={[0, 0]}
+              zoom={2}
+              style={{ height: "400px", width: "100%" }}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
+              {port1Coords && (
+                <Marker position={[port1Coords.lat, port1Coords.lng]} />
+              )}
+              {port2Coords && (
+                <Marker position={[port2Coords.lat, port2Coords.lng]} />
+              )}
+              {port1Coords && port2Coords && (
+                <Polyline
+                  positions={[
+                    [port1Coords.lat, port1Coords.lng],
+                    [port2Coords.lat, port2Coords.lng],
+                  ]}
+                  color="red"
+                />
+              )}
+            </MapContainer>
           )}
-          {port1Coords && port2Coords && (
-            <Polyline
-              positions={[
-                [port1Coords.lat, port1Coords.lng],
-                [port2Coords.lat, port2Coords.lng],
-              ]}
-              color="red"
-            />
-          )}
-        </MapContainer>
-      )}
-      </Card>
-    </Space>
+        </Card>
+      </Space>
     </div>
   );
 };

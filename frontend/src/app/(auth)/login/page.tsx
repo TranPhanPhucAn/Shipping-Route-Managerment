@@ -141,7 +141,7 @@ const Login: React.FC = () => {
                 </Button>
               </div>
             </Form.Item>
-            <Divider>OR</Divider>
+            <Divider style={{ borderColor: "#334155" }}>Or</Divider>
             <Form.Item>
               <Button
                 icon={<FcGoogle />}

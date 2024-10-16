@@ -88,6 +88,7 @@ export const GET_ROUTES = gql`
         name
       }
       distance
+      estimatedTimeDays
       createdAt
     }
   }
@@ -115,6 +116,9 @@ export const GET_PORTS = gql`
     ports {
       id
       name
+      country
+      latitude
+      longitude
     }
   }
 `;
@@ -189,9 +193,9 @@ export const GET_SCHEDULE_PAGINATION = gql`
       schedules {
         id
         status
-        vessel{
-        id
-        name
+        vessel {
+          id
+          name
         }
         route {
           id
@@ -208,6 +212,26 @@ export const GET_SCHEDULE_PAGINATION = gql`
         }
         departure_time
         arrival_time
+      }
+      totalCount
+    }
+  }
+`;
+export const GET_ROUTE_PAGINATION = gql`
+  query paginationRoute($paginationRoute: PaginationRoutesDto!) {
+    paginationRoute(paginationRoute: $paginationRoute) {
+      routes {
+        id
+        departurePort {
+          id
+          name
+        }
+        destinationPort {
+          id
+          name
+        }
+        distance
+        createdAt
       }
       totalCount
     }

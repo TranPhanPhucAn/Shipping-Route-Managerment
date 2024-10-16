@@ -16,7 +16,6 @@ import {
   Route,
 } from "../../graphql/types";
 
-
 const { Option } = Select;
 
 const CreateScheduleModal = () => {
@@ -24,7 +23,6 @@ const CreateScheduleModal = () => {
   const [vesselId, setVesselId] = useState("");
   const [routeId, setRouteId] = useState("");
   const [departure_time, setDepartureTime] = useState(null);
-  const [arrival_time, setArrivalTime] = useState(null);
   const [createSchedule, { loading, error }] = useMutation(CREATE_SCHEDULE, {
     refetchQueries: [{ query: GET_SCHEDULES }],
   });
@@ -36,7 +34,7 @@ const CreateScheduleModal = () => {
   const routes: Route[] = routesData?.routes || [];
 
   const handleCreateSchedule = async () => {
-    if (!vesselId || !routeId || !departure_time || !arrival_time) {
+    if (!vesselId || !routeId || !departure_time) {
       message.error("Please fill out all fields.");
       return;
     }
@@ -48,7 +46,6 @@ const CreateScheduleModal = () => {
             vesselId,
             routeId,
             departure_time,
-            arrival_time,
             status: "SCHEDULED",
           },
         },
@@ -64,7 +61,7 @@ const CreateScheduleModal = () => {
 
   return (
     <div>
-      <Button type="primary" onClick={() => setVisible(true)}>
+      <Button className={styles.mainButton} onClick={() => setVisible(true)}>
         Add Schedule
       </Button>
       <Modal
@@ -138,19 +135,6 @@ const CreateScheduleModal = () => {
               showTime
               value={departure_time}
               onChange={(value) => setDepartureTime(value)}
-              format="DD-MM-YYYY HH:mm"
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Arrival Time"
-            name="arrivalTime"
-            rules={[{ required: true, message: "Please select arrival time!" }]}
-          >
-            <DatePicker
-              showTime
-              value={arrival_time}
-              onChange={(value) => setArrivalTime(value)}
               format="DD-MM-YYYY HH:mm"
             />
           </Form.Item>

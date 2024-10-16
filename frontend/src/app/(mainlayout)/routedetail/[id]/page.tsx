@@ -5,13 +5,14 @@ import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
 import { GET_ROUTE } from "../../../../graphql/queries/query";
 import { Route } from "../../../../graphql/types";
-import { Button, Divider, message, Row, Col } from "antd";
+import { Button, Divider, message, Row, Col, Card } from "antd";
 import PortDistanceCalculation from "../../../../components/Routes/PortDistanceCalculator";
 import styles from "../../../../styles/Detailpage.module.css";
 
 const RouteDetail = () => {
   const router = useRouter();
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id;
 
   const { loading, error, data } = useQuery<{ route: Route }>(GET_ROUTE, {
     variables: { id },
@@ -40,35 +41,57 @@ const RouteDetail = () => {
   return (
     <div className={styles.body}>
       <Row className={styles.container}>
-        <Col>
-          <p className={styles.Title}>Route detail / {id}</p>
-        </Col>
-        <Col>
+        <Card
+          title={
+            <div className={styles.Title} style={{ textAlign: "center" }}>
+              Route Detail
+            </div>
+          }
+          bordered={true}
+          className={styles.card}
+        >
+          <Col className={styles.infor}>
+            <table style={{ marginBottom: "0.5rem" }}>
+              <tr className={styles.infortext}>
+                <td>
+                  <b>Route:</b>
+                </td>
+                <td>
+                  {route.departurePort.id} - {route.destinationPort.id}
+                </td>
+              </tr>
+              <tr className={styles.infortext}>
+                <td>
+                  <b> Departure Port: </b>
+                </td>
+                <td>{route.departurePort.name}</td>
+              </tr>
+              <tr className={styles.infortext}>
+                <td>
+                  <b> Destination Port:&nbsp; </b>
+                </td>
+                <td>{route.destinationPort.name}</td>
+              </tr>
+              <tr className={styles.infortext}>
+                <td>
+                  <b>Estimated Distance:&nbsp; </b>
+                </td>
+                <td>{route.distance} Km</td>
+              </tr>
+            </table>
+          </Col>
           <Button onClick={() => router.back()} className={styles.backButton}>
             Back to Routes
           </Button>
-        </Col>
-      </Row>
-      <Divider />
-      <Row className={styles.container}>
-        <Col className={styles.infor}>
-          <p className={styles.Title}>Information</p>
-          <p className={styles.infortext}>
-            Name: {route.departurePort.id} - {route.destinationPort.id}
-          </p>
-          <p className={styles.infortext}>
-            Departure Port: {route.departurePort.name}
-          </p>
-          <p className={styles.infortext}>
-            Destination Port: {route.destinationPort.name}
-          </p>
-        </Col>
-        <Col className={styles.maps}>
-          <PortDistanceCalculation
-            departurePort={route.departurePort.name}
-            destinationPort={route.destinationPort.name}
-          />
-        </Col>
+        </Card>
+        <Card style={{ width: 850 }}>
+          <Col className={styles.maps}>
+            <PortDistanceCalculation
+              departurePort={route.departurePort.name}
+              destinationPort={route.destinationPort.name}
+            />
+          </Col>
+        </Card>
       </Row>
     </div>
   );

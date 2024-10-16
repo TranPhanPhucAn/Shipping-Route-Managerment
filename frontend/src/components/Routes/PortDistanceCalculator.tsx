@@ -1,5 +1,5 @@
 "use client";
-// import styles from "../../styles/Detailpage.module.css";
+import styles from "../../styles/Detailpage.module.css";
 import React, { useState, useEffect } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -14,7 +14,7 @@ async function geocodePort(portName: string): Promise<[number, number] | null> {
     const response = await fetch(
       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
         portName
-      )}&limit=1`
+      )}` //&limit=1 optional`
     );
     const data = await response.json();
     if (data.length > 0) {
@@ -143,7 +143,7 @@ const PortDistanceCalculator: React.FC<PortDistanceCalculatorProps> = ({
     };
 
     if (map) {
-      calculateRoute(); 
+      calculateRoute();
     }
   }, [departurePort, destinationPort, map]);
 
@@ -151,13 +151,13 @@ const PortDistanceCalculator: React.FC<PortDistanceCalculatorProps> = ({
     <div>
       <div
         id="map"
-        style={{ height: "400px", maxWidth: "600px" }}
+        style={{ height: "400px", maxWidth: "800px" }}
         className="mb-4"
       ></div>
       {loading && <p>Loading route...</p>}
       {distance !== null && (
-        <p className="font-bold">
-          Approximate distance: {distance.toFixed(2)} km
+        <p className={styles.infortext}>
+          Approximate distance: {distance.toFixed(1)} km
         </p>
       )}
       {error && <p className="text-red-500">{error}</p>}

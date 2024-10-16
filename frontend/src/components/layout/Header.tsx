@@ -48,9 +48,13 @@ const items: MenuItem[] = [
       },
       {
         key: "/schedulesList",
-        label: <Link href={"/schedules/list"}>Schedules List</Link>,
+        label: <Link href={"/schedulesList"}>Schedules List</Link>,
       },
     ],
+  },
+  {
+    label: <Link href={"/ports"}>Ports</Link>,
+    key: "/ports",
   },
   {
     label: <Link href={"/users"}>Users</Link>,

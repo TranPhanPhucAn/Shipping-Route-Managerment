@@ -13,9 +13,8 @@ const CreateRouteModal = () => {
   const [visible, setVisible] = useState(false);
   const [departurePortId, setDeparturePortId] = useState("");
   const [destinationPortId, setDestinationPortId] = useState("");
-  const [distance, setDistance] = useState("");
   const [createRoute, { loading, error }] = useMutation(CREATE_ROUTE, {
-    refetchQueries: [{ query: GET_ROUTES }], 
+    refetchQueries: [{ query: GET_ROUTES }],
   });
   const { data } = useQuery<GetPortsData>(GET_PORTS);
   const [form] = Form.useForm();
@@ -23,7 +22,7 @@ const CreateRouteModal = () => {
   const PortsData: Port[] = data?.ports || [];
 
   const handleCreateRoute = async () => {
-    if (!departurePortId || !destinationPortId || !distance) {
+    if (!departurePortId || !destinationPortId) {
       message.error("Please fill out all fields.");
       return;
     }
@@ -33,7 +32,6 @@ const CreateRouteModal = () => {
           createRouteInput: {
             departurePortId,
             destinationPortId,
-            distance: Number(distance),
           },
         },
       });
@@ -48,7 +46,7 @@ const CreateRouteModal = () => {
 
   return (
     <>
-      <Button type="primary" onClick={() => setVisible(true)}>
+      <Button className={styles.mainButton} onClick={() => setVisible(true)}>
         Add Route
       </Button>
       <Modal
@@ -112,16 +110,6 @@ const CreateRouteModal = () => {
                 </Option>
               ))}
             </Select>
-          </Form.Item>
-          <Form.Item
-            label="Distance"
-            name="distance"
-            rules={[{ required: true, message: "Please enter Distance!" }]}
-          >
-            <Input
-              value={distance}
-              onChange={(e) => setDistance(e.target.value)}
-            />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={loading}>
