@@ -1,22 +1,70 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Port } from './entities/port.entity';
 import { CreatePortInput } from './dto/create-port.input';
 import { UpdatePortInput } from './dto/update-port.input';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class PortsService {
   constructor(
     @InjectRepository(Port)
     private portRepository: Repository<Port>,
+    private readonly httpService: HttpService,
   ) {}
 
   async create(createPortInput: CreatePortInput): Promise<Port> {
-    const newPort = this.portRepository.create(createPortInput);
-    return this.portRepository.save(newPort);
-  }
 
+    try {
+      let latitude = null;
+      let longitude =null;
+      if (!latitude || !longitude) {
+        const geoData = await this.fetchCoordinatesFromGeocodingAPI(createPortInput.name, createPortInput.country);
+        latitude = geoData.latitude;
+        longitude = geoData.longitude;
+    }
+      const id = await this.portRepository.findOne({
+        where: {id: createPortInput.id}
+      }
+      );
+      if(id){
+        throw new BadRequestException(`This Port was exited!`)
+      }else{
+
+        const newPort = this.portRepository.create({
+          ...createPortInput,
+          latitude,
+          longitude,
+        });
+        return await this.portRepository.save(newPort);
+      }
+  } catch (error) {
+      console.error('Error creating port:', error);
+      throw new BadRequestException(error.message || 'Failed to create port');
+  }
+  }
+  private async fetchCoordinatesFromGeocodingAPI(name: string, country: string): Promise<{ latitude: number, longitude: number }> {
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(`https://nominatim.openstreetmap.org/search?format=json&q=${name},${country}`),
+      );
+    
+      const location = response.data[0];
+
+      if (!location) {
+        throw new Error('No location found from geocoding API');
+      }
+      return {
+        latitude: parseFloat(location.lat),
+        longitude: parseFloat(location.lon),
+      };
+    } catch (error) {
+      console.error('Error fetching coordinates from geocoding API:', error);
+      throw new BadRequestException('Failed to fetch coordinates from geocoding API');
+    }
+  }
   async findAll(): Promise<Port[]> {
     return this.portRepository.find();
   }
@@ -41,10 +89,9 @@ export class PortsService {
 
     return this.portRepository.save(port);
   }
-
-  async remove(id: string) {
-    const port = await this.findOne(id);
-    await this.portRepository.remove(port);
-    return port;
+ 
+  async remove(id: string): Promise<string> {
+    await this.portRepository.delete(id);
+    return id;
   }
 }

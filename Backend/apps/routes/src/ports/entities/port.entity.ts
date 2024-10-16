@@ -20,6 +20,14 @@ export class Port {
   @Column()
   name: string;
 
+  @Field()
+  @Column({ type: 'decimal', precision: 10, scale: 6 })
+  latitude: number;
+
+  @Field()
+  @Column({ type: 'decimal', precision: 10, scale: 6 })
+  longitude: number;
+
   @Field(() => String)
   @Column()
   country: string;
