@@ -16,12 +16,13 @@ export class PermissionsGuard implements CanActivate {
     const hasAllRequiredPermissions = requiredPermissions.every((permission) =>
       userPermissions.includes(permission),
     );
+
     if (requiredPermissions.length === 0 || hasAllRequiredPermissions) {
       return true;
     }
     throw new GraphQLError('Insufficient permissions', {
       extensions: {
-        errorCode: '5001-10',
+        errorCode: '5002-1',
       },
     });
   }

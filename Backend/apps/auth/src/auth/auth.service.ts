@@ -200,6 +200,8 @@ export class AuthService {
     await this.cacheManager.set(req.cookies['access_token'], 'true', {
       ttl: ttlCache,
     });
+    const cacheKey = `user-${req.headers.userid}`;
+    await this.cacheManager.del(cacheKey);
     return { message: 'Logout out successfull' };
   };
 

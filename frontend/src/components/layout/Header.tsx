@@ -61,7 +61,7 @@ const items: MenuItem[] = [
       {
         key: "/schedulesList",
         label: <Link href={"/schedules/list"}>Schedules List</Link>,
-        permission: "get:schedulesPag",
+        permission: "get:schedules",
       },
     ],
   },

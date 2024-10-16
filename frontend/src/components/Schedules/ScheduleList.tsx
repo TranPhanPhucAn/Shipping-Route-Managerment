@@ -8,7 +8,10 @@ import {
   TablePaginationConfig,
   Tag,
 } from "antd";
-import { GET_SCHEDULE_PAGINATION } from "@/src/graphql/queries/query";
+import {
+  GET_SCHEDULE_PAGINATION,
+  GET_SCHEDULE_PAGINATION_BY_ID,
+} from "@/src/graphql/queries/query";
 import { Schedule } from "@/src/graphql/types";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import CreateScheduleModal from "@/src/components/Schedules/CreateScheduleModal";
@@ -38,7 +41,26 @@ const SchedulesList = () => {
   const sortString = searchParams?.get("sort");
   const statusFilter = searchParams?.get("status");
 
+  // let schedules, total;
   const page = pageString ? +pageString : 1;
+  // if (permissionUser?.includes("get:schedulesPag")) {
+  //   const { loading, error, data, refetch } = useQuery(
+  //     GET_SCHEDULE_PAGINATION,
+  //     {
+  //       variables: {
+  //         paginationSchedule: {
+  //           limit: limit,
+  //           offset: page - 1,
+  //           sort: sortString,
+  //           statusFilter: statusFilter,
+  //         },
+  //       },
+  //     }
+  //   );
+  //   schedules = data?.paginationSchedule?.schedules;
+  //   total = data?.paginationSchedule?.totalCount;
+  // }
+
   const { loading, error, data, refetch } = useQuery(GET_SCHEDULE_PAGINATION, {
     variables: {
       paginationSchedule: {
@@ -48,10 +70,41 @@ const SchedulesList = () => {
         statusFilter: statusFilter,
       },
     },
+    skip: !permissionUser?.includes("get:schedulesPag"),
   });
 
-  const schedules = data?.paginationSchedule?.schedules;
-  const total = data?.paginationSchedule?.totalCount;
+  const {
+    loading: loadingScheduleById,
+    error: errorScheduleById,
+    data: dataById,
+    refetch: refetchById,
+  } = useQuery(GET_SCHEDULE_PAGINATION_BY_ID, {
+    variables: {
+      paginationSchedule: {
+        ownerId: session?.user?.id,
+        limit: limit,
+        offset: page - 1,
+        sort: sortString,
+        statusFilter: statusFilter,
+      },
+    },
+    skip:
+      !permissionUser?.includes("get:schedulesPagById") ||
+      permissionUser?.includes("get:schedulesPag"),
+  });
+
+  let schedules, total;
+  if (permissionUser?.includes("get:schedulesPag")) {
+    schedules = data?.paginationSchedule?.schedules;
+    total = data?.paginationSchedule?.totalCount;
+  } else {
+    if (permissionUser?.includes("get:schedulesPagById")) {
+      schedules = dataById?.paginationScheduleById?.schedules;
+      total = dataById?.paginationScheduleById?.totalCount;
+    }
+  }
+  // const schedules = data?.paginationSchedule?.schedules;
+  // const total = data?.paginationSchedule?.totalCount;
   const [paginationTable, setPagination] = useState<TablePaginationConfig>({
     current: page,
     pageSize: limit,
@@ -131,7 +184,14 @@ const SchedulesList = () => {
         variables: { id },
       });
       message.success("Schedule removed successfully");
-      refetch();
+      if (permissionUser?.includes("get:schedulesPag")) {
+        refetch();
+      } else {
+        if (permissionUser?.includes("get:schedulesPagById")) {
+          refetchById();
+        }
+      }
+      // refetch();
     } catch (error) {
       message.error("Failed to remove schedule");
     }
@@ -151,11 +211,11 @@ const SchedulesList = () => {
   // if (error) return <p>Error: {error.message}</p>;
 
   const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
+    // {
+    //   title: "ID",
+    //   dataIndex: "id",
+    //   key: "id",
+    // },
     {
       title: "Vessel",
       dataIndex: ["vessel", "name"],

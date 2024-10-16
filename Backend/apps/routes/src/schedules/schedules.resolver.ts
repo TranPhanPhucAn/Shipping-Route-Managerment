@@ -3,7 +3,10 @@ import { SchedulesService } from './schedules.service';
 import { Schedule } from './entities/schedule.entity';
 import { CreateScheduleInput } from './dto/create-schedule.input';
 import { UpdateScheduleInput } from './dto/update-schedule.input';
-import { PaginationScheduleDto } from './dto/pagination-schedules-result';
+import {
+  PaginationScheduleByIdDto,
+  PaginationScheduleDto,
+} from './dto/pagination-schedules-result';
 import { PaginationScheduleResponse } from '../types/route.types';
 import { SetMetadata, UseGuards } from '@nestjs/common';
 import { PermissionsGuard } from '../guard/permissions.guard';
@@ -66,5 +69,14 @@ export class SchedulesResolver {
     @Args('paginationSchedule') paginationSchedule: PaginationScheduleDto,
   ) {
     return this.schedulesService.paginationSchedule(paginationSchedule);
+  }
+
+  @SetMetadata('permissions', ['get:schedulesPagById'])
+  @UseGuards(PermissionsGuard)
+  @Query(() => PaginationScheduleResponse, { name: 'paginationScheduleById' })
+  paginationScheduleById(
+    @Args('paginationSchedule') paginationSchedule: PaginationScheduleByIdDto,
+  ) {
+    return this.schedulesService.paginationScheduleById(paginationSchedule);
   }
 }

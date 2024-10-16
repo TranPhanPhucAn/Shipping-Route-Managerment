@@ -84,4 +84,29 @@ export class VesselsService {
       underMaintance: underMaintance,
     };
   }
+
+  async getInforVesselTotal() {
+    const vesselTotal = this.vesselRepository.count();
+    const available = this.vesselRepository.count({
+      where: {
+        status: VesselStatus.AVAILABLE,
+      },
+    });
+    const inTransits = this.vesselRepository.count({
+      where: {
+        status: VesselStatus.IN_TRANSIT,
+      },
+    });
+    const underMaintance = this.vesselRepository.count({
+      where: {
+        status: VesselStatus.UNDER_MAINTENANCE,
+      },
+    });
+    return {
+      vesselTotal: vesselTotal,
+      available: available,
+      inTransits: inTransits,
+      underMaintance: underMaintance,
+    };
+  }
 }

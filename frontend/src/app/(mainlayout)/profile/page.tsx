@@ -5,7 +5,11 @@ import { useSession } from "next-auth/react";
 // import { getServerSession } from "next-auth/next";
 // import { getServerSessionFromApp } from "@/src/lib/customGetSession";
 // import { client } from "@/src/graphql/Provider";
-import { QUERY_INFOR_BY_OWNER, QUERY_USER } from "@/src/graphql/queries/query";
+import {
+  QUERY_INFOR_BY_OWNER,
+  QUERY_INFOR_VESSEL_TOTAL,
+  QUERY_USER,
+} from "@/src/graphql/queries/query";
 import { useQuery } from "@apollo/client";
 import "./profile.scss";
 import Image from "next/image";
@@ -34,27 +38,45 @@ const Profile = () => {
   const { loading, error, data, refetch } = useQuery(QUERY_USER, {
     variables: { id: id },
   });
-  // const {
-  //   loading: loadingInforVessel,
-  //   error: errorInforVessel,
-  //   data: dataInforVessel,
-  // } = useQuery(QUERY_INFOR_BY_OWNER, {
-  //   variables: { id: id },
-  // });
 
   const userInfor = data?.user || {};
   const joiningDate = new Date(userInfor.createdAt).toLocaleDateString("en-GB");
   const birthDate = userInfor.birthday
     ? new Date(userInfor.birthday).toLocaleDateString("en-GB")
     : "";
+
   const {
     loading: loadingInforVessel,
     error: errorInforVessel,
     data: dataInforVessel,
   } = useQuery(QUERY_INFOR_BY_OWNER, {
     variables: { id },
-    skip: !permissionUser?.includes("get:inforByOwner") || !id, // Skip query if permission or id is not present
+    skip:
+      !permissionUser?.includes("get:inforByOwner") ||
+      permissionUser?.includes("get:inforVesselTotal") ||
+      !id, // Skip query if permission or id is not present
   });
+  let vesselTotal, available, inTransits, underMaintance;
+  const {
+    loading: loadingInforVesselTotal,
+    error: errorInforVesselTotal,
+    data: dataInforVesselTotal,
+  } = useQuery(QUERY_INFOR_VESSEL_TOTAL, {
+    skip: !permissionUser?.includes("get:inforVesselTotal") || !id, // Skip query if permission or id is not present
+  });
+  if (permissionUser?.includes("get:inforVesselTotal")) {
+    vesselTotal = dataInforVesselTotal?.getInforVesselTotal.vesselTotal;
+    available = dataInforVesselTotal?.getInforVesselTotal.available;
+    inTransits = dataInforVesselTotal?.getInforVesselTotal.inTransits;
+    underMaintance = dataInforVesselTotal?.getInforVesselTotal.underMaintance;
+  } else {
+    if (permissionUser?.includes("get:inforByOwner")) {
+      vesselTotal = dataInforVessel?.getInforByOwner.vesselTotal;
+      available = dataInforVessel?.getInforByOwner.available;
+      inTransits = dataInforVessel?.getInforByOwner.inTransits;
+      underMaintance = dataInforVessel?.getInforByOwner.underMaintance;
+    }
+  }
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -172,16 +194,21 @@ const Profile = () => {
             <UpdatePasswordModal />
           </div>
         </div>
-        {permissionUser &&
-          permissionUser.includes("get:inforByOwner") &&
-          dataInforVessel && (
-            <ListCardVessel
-              vesselTotal={dataInforVessel?.getInforByOwner.vesselTotal}
-              available={dataInforVessel?.getInforByOwner.available}
-              inTransits={dataInforVessel?.getInforByOwner.inTransits}
-              underMaintance={dataInforVessel?.getInforByOwner.underMaintance}
-            />
-          )}
+        {vesselTotal && available && (
+          // permissionUser &&
+          // permissionUser.includes("get:inforByOwner") &&
+          // dataInforVessel &&
+          <ListCardVessel
+            // vesselTotal={dataInforVessel?.getInforByOwner.vesselTotal}
+            // available={dataInforVessel?.getInforByOwner.available}
+            // inTransits={dataInforVessel?.getInforByOwner.inTransits}
+            // underMaintance={dataInforVessel?.getInforByOwner.underMaintance}
+            vesselTotal={vesselTotal}
+            available={available}
+            inTransits={inTransits}
+            underMaintance={underMaintance}
+          />
+        )}
       </div>
     </>
   );

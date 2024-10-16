@@ -55,4 +55,11 @@ export class VesselsResolver {
   getInforByOwner(@Args('id', { type: () => String }) id: string) {
     return this.vesselService.getInforByOwner(id);
   }
+
+  @SetMetadata('permissions', ['get:inforVesselTotal'])
+  @UseGuards(PermissionsGuard)
+  @Query(() => GetInforByOwnerResponse, { name: 'getInforVesselTotal' })
+  getInforVesselTotal() {
+    return this.vesselService.getInforVesselTotal();
+  }
 }

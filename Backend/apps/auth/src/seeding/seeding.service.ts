@@ -58,27 +58,35 @@ export class SeedingService {
           description: 'Get all schedules pagination',
         }, //19
         {
+          permission: 'get:schedulesPagById',
+          description: 'Get all schedules pagination by owner id',
+        }, //20
+        {
           permission: 'update:schedule',
           description: 'Update status of schedule',
-        }, //20
-        { permission: 'search:schedule', description: 'Search a schedule' }, //21
-        { permission: 'delete:schedule', description: 'Delete a schedule' }, //22
-        { permission: 'create:port', description: 'Create new port' }, //23
-        { permission: 'update:port', description: 'Update a port' }, //24
-        { permission: 'delete:port', description: 'Delete a port' }, //25
-        { permission: 'create:route', description: 'Create new route' }, //26
-        { permission: 'get:routes', description: 'Get all routes' }, //27
-        { permission: 'update:route', description: 'Update a route' }, //28
-        { permission: 'search:route', description: 'Search a route' }, //29
-        { permission: 'delete:route', description: 'Delete a route' }, //30
-        { permission: 'get:vessels', description: 'Get all vessels' }, //31
-        { permission: 'create:vessel', description: 'Create new vessel' }, //32
-        { permission: 'update:vessel', description: 'Update a vessel' }, //33
-        { permission: 'delete:vessel', description: 'Delete a vessel' }, //34
+        }, //21
+        { permission: 'search:schedule', description: 'Search a schedule' }, //222
+        { permission: 'delete:schedule', description: 'Delete a schedule' }, //23
+        { permission: 'create:port', description: 'Create new port' }, //24
+        { permission: 'update:port', description: 'Update a port' }, //25
+        { permission: 'delete:port', description: 'Delete a port' }, //26
+        { permission: 'create:route', description: 'Create new route' }, //27
+        { permission: 'get:routes', description: 'Get all routes' }, //28
+        { permission: 'update:route', description: 'Update a route' }, //29
+        { permission: 'search:route', description: 'Search a route' }, //30
+        { permission: 'delete:route', description: 'Delete a route' }, //31
+        { permission: 'get:vessels', description: 'Get all vessels' }, //32
+        { permission: 'create:vessel', description: 'Create new vessel' }, //33
+        { permission: 'update:vessel', description: 'Update a vessel' }, //34
+        { permission: 'delete:vessel', description: 'Delete a vessel' }, //35
         {
           permission: 'get:inforByOwner',
-          description: 'Get information by ownerId',
-        }, //35
+          description: 'Get vessel information by ownerId',
+        }, //36
+        {
+          permission: 'get:inforVesselTotal',
+          description: 'Get total vessel information',
+        }, //37
       ];
       const permissionsEntities = permissionsRepository.create(permissions);
       await permissionsRepository.save(permissionsEntities);
@@ -99,12 +107,12 @@ export class SeedingService {
           permissionsEntities[18],
           permissionsEntities[19],
           permissionsEntities[20],
-          permissionsEntities[28],
-          permissionsEntities[30],
+          permissionsEntities[29],
           permissionsEntities[31],
           permissionsEntities[32],
           permissionsEntities[33],
           permissionsEntities[34],
+          permissionsEntities[35],
         ],
       });
       const role3 = rolesRepository.create({
@@ -128,16 +136,16 @@ export class SeedingService {
         role: role1,
       });
       const user2 = usersRepository.create({
-        email: 'name@gmail.com',
-        username: 'Nguyen Van A',
+        email: 'dung@gmail.com',
+        username: 'Nguyen Xuan Dung',
         password: passwordHash,
         address: 'Ho Chi Minh',
         refreshToken: '',
         role: role2,
       });
       const user3 = usersRepository.create({
-        email: 'b@gmail.com',
-        username: 'Phan Nguyen B',
+        email: 'huong@gmail.com',
+        username: 'Phan Nguyen Huong',
         password: passwordHash,
         address: 'Ha Noi',
         refreshToken: '',

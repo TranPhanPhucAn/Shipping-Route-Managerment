@@ -168,6 +168,17 @@ export const QUERY_INFOR_BY_OWNER = gql`
   }
 `;
 
+export const QUERY_INFOR_VESSEL_TOTAL = gql`
+  query getInforVesselTotal {
+    getInforVesselTotal {
+      vesselTotal
+      available
+      inTransits
+      underMaintance
+    }
+  }
+`;
+
 export const SEARCH_BY_PORT = gql`
   query schedulesByPort($country: String!, $portName: String!, $date: String!) {
     schedulesByPort(country: $country, portName: $portName, date: $date) {
@@ -197,6 +208,39 @@ export const SEARCH_BY_PORT = gql`
 export const GET_SCHEDULE_PAGINATION = gql`
   query paginationSchedule($paginationSchedule: PaginationScheduleDto!) {
     paginationSchedule(paginationSchedule: $paginationSchedule) {
+      schedules {
+        id
+        status
+        vessel {
+          id
+          name
+        }
+        route {
+          id
+          departurePort {
+            id
+            name
+            country
+          }
+          destinationPort {
+            id
+            name
+            country
+          }
+        }
+        departure_time
+        arrival_time
+      }
+      totalCount
+    }
+  }
+`;
+
+export const GET_SCHEDULE_PAGINATION_BY_ID = gql`
+  query paginationScheduleById(
+    $paginationSchedule: PaginationScheduleByIdDto!
+  ) {
+    paginationScheduleById(paginationSchedule: $paginationSchedule) {
       schedules {
         id
         status

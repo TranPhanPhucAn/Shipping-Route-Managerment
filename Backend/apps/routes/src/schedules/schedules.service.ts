@@ -6,8 +6,10 @@ import { CreateScheduleInput } from './dto/create-schedule.input';
 import { UpdateScheduleInput } from './dto/update-schedule.input';
 import { Vessel, VesselStatus } from '../vessels/entities/vessel.entity';
 import { Route } from '../routes/entities/route.entity';
-import { PaginationScheduleDto } from './dto/pagination-schedules-result';
-
+import {
+  PaginationScheduleByIdDto,
+  PaginationScheduleDto,
+} from './dto/pagination-schedules-result';
 
 @Injectable()
 export class SchedulesService {
@@ -100,9 +102,9 @@ export class SchedulesService {
   // ): Promise<{ data: any[], total: number, page: number, limit: number }> {
   //   const dateObject = this.convertDateString(date);
   //   const skip = (page - 1) * limit;
-  
+
   //   console.log('Search parameters:', { country, portName, date: dateObject, page, limit });
-  
+
   //   const [schedules, total] = await this.schedulesRepository.findAndCount({
   //     where: [
   //       {
@@ -120,9 +122,9 @@ export class SchedulesService {
   //     skip: skip,
   //     take: limit,
   //   });
-  
+
   //   console.log('Schedules found:', schedules.length, 'Total:', total);
-  
+
   //   return {
   //     data: schedules.map((schedule) => ({
   //       ...schedule,
@@ -201,7 +203,7 @@ export class SchedulesService {
     const queryOptions: any = {
       take: limit,
       skip: skips,
-      relations:['route', 'vessel'],
+      relations: ['route', 'vessel'],
       order,
     };
 
@@ -217,12 +219,62 @@ export class SchedulesService {
       queryOptions.where = whereCondition;
     }
 
-    const [result, total] = await this.schedulesRepository.findAndCount(queryOptions);
+    const [result, total] =
+      await this.schedulesRepository.findAndCount(queryOptions);
     const totalCount = total;
 
     return {
       schedules: result,
       totalCount: totalCount,
     };
-}
+  }
+  async paginationScheduleById(paginationSchedule: PaginationScheduleByIdDto) {
+    const { ownerId, limit, offset, sort, statusFilter } = paginationSchedule;
+    const vesselIds = (
+      await this.vesselsRepository.find({
+        select: ['id'],
+        where: { ownerId: ownerId },
+      })
+    ).map((vessel) => vessel.id);
+    const skips = limit * offset;
+    const order: Record<string, 'ASC' | 'DESC'> = {};
+    if (sort) {
+      sort.split(',').forEach((sortParam: string) => {
+        const [field, direction] = sortParam.split(' ');
+        order[field] = direction.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+      });
+    }
+
+    const queryOptions: any = {
+      take: limit,
+      skip: skips,
+      relations: ['route', 'vessel'],
+      order,
+    };
+
+    const whereCondition: any = {};
+    if (statusFilter) {
+      const statusArray = statusFilter.split(',') as ScheduleStatus[];
+      if (statusArray.length > 0) {
+        whereCondition.status = In(statusArray);
+      }
+    }
+
+    if (vesselIds && vesselIds.length > 0) {
+      whereCondition.vessel = { id: In(vesselIds) }; // Add vesselId filtering
+    }
+
+    if (Object.keys(whereCondition).length > 0) {
+      queryOptions.where = whereCondition;
+    }
+
+    const [result, total] =
+      await this.schedulesRepository.findAndCount(queryOptions);
+    const totalCount = total;
+
+    return {
+      schedules: result,
+      totalCount: totalCount,
+    };
+  }
 }
