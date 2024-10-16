@@ -44,11 +44,11 @@ export class Schedule {
   route: Route;
 
   @Field()
-  @Column({type: 'timestamp'})
+  @Column()
   departure_time: string;
 
   @Field()
-  @Column({type: 'timestamp'})
+  @Column()
   arrival_time: string;
 
   @Field(() => ScheduleStatus)

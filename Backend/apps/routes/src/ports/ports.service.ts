@@ -6,12 +6,15 @@ import { CreatePortInput } from './dto/create-port.input';
 import { UpdatePortInput } from './dto/update-port.input';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { Route } from '../routes/entities/route.entity';
 
 @Injectable()
 export class PortsService {
   constructor(
     @InjectRepository(Port)
     private portRepository: Repository<Port>,
+    @InjectRepository(Route)
+    private routesRepository: Repository<Route>,
     private readonly httpService: HttpService,
   ) {}
 
@@ -86,11 +89,22 @@ export class PortsService {
     if (!port) {
       throw new NotFoundException(`Port with Name "${id}" not found`);
     }
-
+    if (!port.latitude || !port.longitude) {
+        const geoData = await this.fetchCoordinatesFromGeocodingAPI(port.name, port.country);
+        port.latitude = geoData.latitude;
+        port.longitude = geoData.longitude;
+    }
     return this.portRepository.save(port);
   }
  
   async remove(id: string): Promise<string> {
+    const port = this.portRepository.findOne(
+      {where: {id},
+      relations: ['route']
+    });
+    if(!port){
+    throw new NotFoundException(`The port with ID ${id} is not found.`)
+   }
     await this.portRepository.delete(id);
     return id;
   }

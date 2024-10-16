@@ -1,6 +1,6 @@
 import { InputType, Field } from '@nestjs/graphql';
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { VesselType } from '../entities/vessel.entity';
+import {  VesselType } from '../entities/vessel.entity';
 
 @InputType()
 export class CreateVesselInput {

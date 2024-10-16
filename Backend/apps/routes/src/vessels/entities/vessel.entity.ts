@@ -49,7 +49,7 @@ export class Vessel {
   @Column()
   capacity: number;
 
-  @Field(() => String)
+  @Field()
   @Column()
   ownerId: string;
 

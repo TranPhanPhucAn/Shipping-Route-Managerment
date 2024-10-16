@@ -55,7 +55,7 @@ export class SchedulesService {
     return arrivalTime;
   }
   async create(createScheduleInput: CreateScheduleInput): Promise<Schedule> {
-
+    const { departure_time, status} = createScheduleInput;
     const vessel = await this.vesselsRepository.findOne({
       where: { id: createScheduleInput.vesselId },
     });
@@ -84,20 +84,18 @@ export class SchedulesService {
       departureTime,
       Travel_Time
     );
-    const NewSchedule = this.schedulesRepository.create({
-      ...CreateScheduleInput,
+    const schedule = this.schedulesRepository.create({
       vessel,
       route,
+      status, 
+      departure_time: departure_time.toISOString(),
       arrival_time: arrival_time.toISOString(),
-    });
-
-    
-    const schedule = await this.schedulesRepository.save(NewSchedule);
-    
+    });  
+    const saveschedule = await this.schedulesRepository.save(schedule);
     vessel.status = VesselStatus.IN_TRANSIT;
     await this.vesselsRepository.save(vessel);
 
-    return schedule;
+    return saveschedule;
   }
 
   findAll(): Promise<Schedule[]> {

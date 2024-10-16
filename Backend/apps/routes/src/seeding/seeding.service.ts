@@ -25,13 +25,7 @@ export class SeedingService {
       const routeRepository = queryRunner.manager.getRepository(Route);
       const scheduleRepository = queryRunner.manager.getRepository(Schedule);
       const portRepository = queryRunner.manager.getRepository(Port);
-      // Clear existing data
-      // await vesselRepository.clear();
-      // await routeRepository.clear();
-      // await scheduleRepository.clear();
-      // await portRepository.clear();
-
-      // Sample ports data
+    
       const ports = [
         { id: 'HN', name: 'Ha Noi', location: 'Vietnam' },
         { id: 'HCM', name: 'Ho Chi Minh', location: 'Vietnam' },
