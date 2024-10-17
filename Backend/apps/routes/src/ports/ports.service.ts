@@ -28,21 +28,13 @@ export class PortsService {
         latitude = geoData.latitude;
         longitude = geoData.longitude;
     }
-      const id = await this.portRepository.findOne({
-        where: {id: createPortInput.id}
-      }
-      );
-      if(id){
-        throw new BadRequestException(`This Port was exited!`)
-      }else{
-
         const newPort = this.portRepository.create({
           ...createPortInput,
           latitude,
           longitude,
         });
         return await this.portRepository.save(newPort);
-      }
+    
   } catch (error) {
       console.error('Error creating port:', error);
       throw new BadRequestException(error.message || 'Failed to create port');

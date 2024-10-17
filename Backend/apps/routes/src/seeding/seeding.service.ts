@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { Port } from '../ports/entities/port.entity';
-import { Vessel, VesselType } from '../vessels/entities/vessel.entity';
+import { Vessel, VesselType, VesselStatus } from '../vessels/entities/vessel.entity';
 import { Route } from '../routes/entities/route.entity';
 import { Schedule, ScheduleStatus } from '../schedules/entities/schedule.entity';
 import { faker } from '@faker-js/faker';
@@ -94,18 +94,22 @@ export class SeedingService {
         });
         schedulefaker.push(scheduleData);
 
+        const vessel = scheduleData.vessel; 
+        vessel.status = VesselStatus.IN_TRANSIT;
+        await vesselRepository.save(vessel);
+
+
       }
       await scheduleRepository.save(schedulefaker);
-
       // Commit the transaction
       await queryRunner.commitTransaction();
-      return 'Seeding done'; 
     } catch (e) {
       await queryRunner.rollbackTransaction();
       console.log('error', e);
       throw e;
     } finally {
       await queryRunner.release();
+      return { message: 'Seeding done' };
     }
   }
 }

@@ -4,7 +4,7 @@
   "sourceRoot": "apps/gateway/src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "webpack": true,
+    "webpack": false,
     "assets": ["**/*.proto", "**/*.ejs"]
   },
   "monorepo": true,
