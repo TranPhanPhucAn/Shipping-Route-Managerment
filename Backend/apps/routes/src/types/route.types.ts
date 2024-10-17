@@ -49,6 +49,6 @@ export class PaginationRouteResponse {
   totalCount?: number;
 
   @Field(() => [Route], { nullable: true })
-  schedules?: Route[];
+  route?: Route[];
 
 }
