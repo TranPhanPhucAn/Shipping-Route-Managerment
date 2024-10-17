@@ -239,6 +239,38 @@ export const GET_SCHEDULE_PAGINATION = gql`
     }
   }
 `;
+export const GET_SCHEDULE_PAGINATION_BY_ID = gql`
+  query paginationScheduleById(
+    $paginationSchedule: PaginationScheduleByIdDto!
+  ) {
+    paginationScheduleById(paginationSchedule: $paginationSchedule) {
+      schedules {
+        id
+        status
+        vessel {
+          id
+          name
+        }
+        route {
+          id
+          departurePort {
+            id
+            name
+            country
+          }
+          destinationPort {
+            id
+            name
+            country
+          }
+        }
+        departure_time
+        arrival_time
+      }
+      totalCount
+    }
+  }
+`;
 export const GET_ROUTE_PAGINATION = gql`
   query paginationRoute($paginationRoute: PaginationRoutesDto!) {
     paginationRoute(paginationRoute: $paginationRoute) {
