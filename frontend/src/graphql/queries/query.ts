@@ -271,6 +271,7 @@ export const GET_SCHEDULE_PAGINATION_BY_ID = gql`
     }
   }
 `;
+
 export const GET_ROUTE_PAGINATION = gql`
   query paginationRoute($paginationRoute: PaginationRoutesDto!) {
     paginationRoute(paginationRoute: $paginationRoute) {
