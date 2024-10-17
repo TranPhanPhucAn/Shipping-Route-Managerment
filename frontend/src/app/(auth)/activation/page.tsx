@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { ACTIVATE_ACCOUNT } from "../../../graphql/mutations/Auth";
-import { Input, Button, message, Row, Col, Form } from "antd";
+import { Input, Button, message, Row, Col, Form, Typography } from "antd";
 import { useRouter } from "next/navigation";
 import styles from "../../../styles/Auth.module.css";
 import VacationCodeImage from "./activateCode.jpg";
@@ -13,6 +13,7 @@ const Activate = () => {
   const [activationCode, setActivationCode] = useState("");
   const [activateUser, { loading, error }] = useMutation(ACTIVATE_ACCOUNT);
   const router = useRouter();
+  const { Title } = Typography;
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -68,12 +69,19 @@ const Activate = () => {
               },
             ]}
           >
-            <Input
+            {/* <Input
               placeholder="Activation Code"
               value={activationCode}
               onChange={(e) => setActivationCode(e.target.value)}
               className={styles.input}
               style={{ width: "90%" }}
+            /> */}
+            <Input.OTP
+              value={activationCode}
+              onChange={(value) => setActivationCode(value)}
+              className={styles.input}
+              style={{ width: "75%" }}
+              length={4}
             />
           </Form.Item>
           <Form.Item>

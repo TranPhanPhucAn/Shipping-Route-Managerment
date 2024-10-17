@@ -44,7 +44,7 @@ export class PortsResolver {
   @Mutation(() => Port)
   async removePort(
     @Args('ID', { type: () => String }) id: string,
-  ): Promise<Port> {
+  ):Promise<string> {
     return this.portService.remove(id);
   }
 }

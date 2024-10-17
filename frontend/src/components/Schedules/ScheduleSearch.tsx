@@ -19,16 +19,24 @@ import { TbBuildingBank } from "react-icons/tb";
 import { AiOutlineEnvironment } from "react-icons/ai";
 import { Schedule } from "@/src/graphql/types";
 import { useState, useEffect } from "react";
-import moment from "moment";
+import dayjs from "dayjs";
+import moment, { Moment } from "moment";
 import styles from "@/src/styles/Listpage.module.css";
 import { Dayjs } from "dayjs";
 
 const ScheduleSearch: React.FC = () => {
   const [country, setCountry] = useState("");
   const [portName, setPortName] = useState("");
-  const [date, setDate] = useState<moment.Moment | null>(null);
+  const [date, setDate] = useState<Moment | null>(null);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
 
+  const handleDate = (date: dayjs.Dayjs | null) => {
+    if (date) {
+      setDate(moment(date.toDate()));
+    } else {
+      setDate(null);
+    }
+  };
   const { loading, error, data, refetch } = useQuery(SEARCH_BY_PORT, {
     variables: {
       country: country.trim(),
@@ -186,7 +194,7 @@ const ScheduleSearch: React.FC = () => {
               format="DD/MM/YYYY"
               placeholder="Select Date"
               suffixIcon={<CalendarOutlined />}
-              onChange={(date: any) => setDate(date)}
+              onChange={handleDate}
               className={styles.datePicker}
             />
           </Form.Item>

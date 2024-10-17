@@ -174,10 +174,6 @@ const SchedulesList = () => {
     }
   };
 
-  // const handleReset = (clearFilters: () => void) => {
-  //   clearFilters();
-  // };
-
   const handleRemove = async (id: string) => {
     try {
       await removeSchedule({
@@ -207,8 +203,6 @@ const SchedulesList = () => {
     setSelectedSchedule(null);
   };
 
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error: {error.message}</p>;
 
   const columns = [
     // {
@@ -334,7 +328,7 @@ const SchedulesList = () => {
 
   return (
     <div className={styles.body}>
-      <div style={{ alignItems: "right", margin: "0.5rem" }}>
+      <div className={styles.createButton} >
         {permissionUser?.includes("create:schedule") && <CreateScheduleModal />}
       </div>
 
@@ -348,13 +342,8 @@ const SchedulesList = () => {
             current: paginationTable.current,
             pageSize: paginationTable.pageSize,
             total: total,
-            showTotal: (total, range) => {
-              return (
-                <div>
-                  {range[0]}-{range[1]} on {total} rows
-                </div>
-              );
-            },
+            pageSizeOptions: ["5", "10", "20"],
+            showSizeChanger: true,
           }}
           onChange={handleTableChange}
         />

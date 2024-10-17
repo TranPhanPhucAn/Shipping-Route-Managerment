@@ -66,6 +66,14 @@ const items: MenuItem[] = [
     ],
   },
   {
+    label: <Link href={"/ports"}>Ports</Link>,
+    key: "/ports",
+  },
+  {
+    label: <Link href={"/vessels"}>Vessels</Link>,
+    key: "/vessels",
+  },
+  {
     label: <Link href={"/users"}>Users</Link>,
     key: "/users",
     permission: "get:usersPag",

@@ -153,6 +153,45 @@ export const FORGOT_PASSWORD = gql`
   }
 `;
 
+export const RESET_PASSWORD = gql`
+  mutation resetPassword($resetPasswordDto: ResetPasswordDto!) {
+    resetPassword(resetPasswordDto: $resetPasswordDto) {
+      message
+    }
+  }
+`;
+
+//Port
+export const CREATE_PORT = gql`
+  mutation createPort($createPortInput: CreatePortInput!) {
+    createPort(createPortInput: $createPortInput) {
+      id
+      name
+      latitude
+      longitude
+      country
+    }
+  }
+`;
+
+export const UPDATE_PORT = gql`
+  mutation updatePort($id: String!, $updatePortInput: UpdatePortInput!) {
+    updatePort(id: $id, updatePortInput: $updatePortInput) {
+      id
+      name
+      latitude
+      longitude
+      country
+    }
+  }
+`;
+export const DELETE_PORT = gql`
+  mutation removePort($id: String!) {
+    removePort(id: $id)
+  }
+`;
+
+// Route
 export const CREATE_ROUTE = gql`
   mutation createRoute($createRouteInput: CreateRouteInput!) {
     createRoute(createRouteInput: $createRouteInput) {
@@ -166,13 +205,7 @@ export const CREATE_ROUTE = gql`
         name
       }
       distance
-    }
-  }
-`;
-export const RESET_PASSWORD = gql`
-  mutation resetPassword($resetPasswordDto: ResetPasswordDto!) {
-    resetPassword(resetPasswordDto: $resetPasswordDto) {
-      message
+      estimatedTimeDays
     }
   }
 `;
@@ -189,6 +222,7 @@ export const UPDATE_ROUTE = gql`
         name
       }
       distance
+      estimatedTimeDays
     }
   }
 `;
@@ -198,6 +232,7 @@ export const DELETE_ROUTE = gql`
   }
 `;
 
+// Schedule
 export const CREATE_SCHEDULE = gql`
   mutation CreateSchedule($createScheduleInput: CreateScheduleInput!) {
     createSchedule(createScheduleInput: $createScheduleInput) {
@@ -253,5 +288,41 @@ export const UPDATE_SCHEDULE = gql`
 export const DELETE_SCHEDULE = gql`
   mutation removeSchedule($id: String!) {
     removeSchedule(id: $id)
+  }
+`;
+
+//Vessel
+
+export const CREATE_VESSEL = gql`
+  mutation createVessel($createVesselInput: CreateVesselInput!) {
+    createVessel(createVesselInput: $createVesselInput) {
+      id
+      name
+      type
+      capacity
+      ownerId
+      status
+    }
+  }
+`;
+
+export const UPDATE_VESSEL = gql`
+  mutation updateVessel(
+    $id: String!
+    $updateVesselInput: UpdateVesselInput!
+  ) {
+    updateVessel(id: $id, updateVesselInput: $updateVesselInput) {
+      id
+      name
+      type
+      capacity
+      ownerId
+      status
+    }
+  }
+`;
+export const DELETE_VESSEL = gql`
+  mutation removeVessel($id: String!) {
+    removeVessel(id: $id)
   }
 `;

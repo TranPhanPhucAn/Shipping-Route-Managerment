@@ -36,7 +36,7 @@ export class VesselsResolver {
   @UseGuards(PermissionsGuard)
   @Mutation(() => Vessel)
   updateVessel(
-    @Args('ID') id: string,
+    @Args('id') id: string,
     @Args('updateVesselInput') updateVesselInput: UpdateVesselInput,
   ) {
     return this.vesselService.update(id, updateVesselInput);

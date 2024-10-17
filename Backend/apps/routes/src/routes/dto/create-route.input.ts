@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
@@ -11,8 +11,25 @@ export class CreateRouteInput {
   @IsNotEmpty()
   destinationPortId: string;
 
-  @Field(() => Number)
-  @IsNumber()
-  @IsNotEmpty()
-  distance: number;
+  // @Field(() => Number)
+  // @IsNumber()
+  // @IsNotEmpty()
+  // distance: number;
+}
+
+@InputType()
+export class PaginationRoutesDto {
+  @Field()
+  @IsNotEmpty({ message: 'Limit is required' })
+  limit: number;
+
+  @Field()
+  @IsNotEmpty({ message: 'Offset is required' })
+  offset: number;
+
+  @Field({ nullable: true })
+  sort: string | null;
+
+  @Field({ nullable: true })
+  Portsearch: string | null;
 }

@@ -1,24 +1,32 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
-  PrimaryColumn,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Route } from '../../routes/entities/route.entity';
 
 @ObjectType()
 @Entity('ports')
 export class Port {
-  @Field(() => String)
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  @Field(() => ID)
   id: string;
 
-  @Field(() => String)
   @Column()
+  @Field()
   name: string;
+
+  @Field()
+  @Column({ type: 'decimal', precision: 10, scale: 6 })
+  latitude: number;
+
+  @Field()
+  @Column({ type: 'decimal', precision: 10, scale: 6 })
+  longitude: number;
 
   @Field(() => String)
   @Column()

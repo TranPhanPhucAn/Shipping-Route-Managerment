@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, MoreThanOrEqual, ILike, In } from 'typeorm';
 import { Schedule, ScheduleStatus } from './entities/schedule.entity';
@@ -26,35 +26,78 @@ export class SchedulesService {
     @InjectRepository(Route)
     private routesRepository: Repository<Route>,
   ) {}
-
+  // private parseDateString(dateStr: string): Date {
+  //   try {
+  //     if (dateStr.includes('/')) {
+  //       const [dateComponent, timeComponent] = dateStr.split(', ');
+  //       const [day, month, year] = dateComponent.split('/');
+  //       const [hours, minutes] = timeComponent.split(':');
+        
+  //       return new Date(
+  //         parseInt(year),
+  //         parseInt(month) - 1,
+  //         parseInt(day),
+  //         parseInt(hours),
+  //         parseInt(minutes)
+  //       );
+  //     }
+      
+  //     const date = new Date(dateStr);
+  //     if (isNaN(date.getTime())) {
+  //       throw new Error('Invalid date');
+  //     }
+  //     return date;
+  //   } catch (error) {
+  //     throw new BadRequestException('Invalid date format');
+  //   }
+  // }
+  calculateArrivalTime(departureTime: Date, travelDays: number): Date {
+    const arrivalTime = new Date(departureTime);
+    arrivalTime.setDate(arrivalTime.getDate() + travelDays);
+    return arrivalTime;
+  }
   async create(createScheduleInput: CreateScheduleInput): Promise<Schedule> {
+    const { departure_time, status} = createScheduleInput;
     const vessel = await this.vesselsRepository.findOne({
       where: { id: createScheduleInput.vesselId },
     });
     const route = await this.routesRepository.findOne({
       where: { id: createScheduleInput.routeId },
     });
-
+    
     if (!route) {
       throw new NotFoundException(
         `Route with ID ${createScheduleInput.routeId} not found`,
       );
     }
     if (!vessel || vessel.status !== VesselStatus.AVAILABLE) {
-      throw new NotFoundException(`This vessel not available`);
+      throw new NotFoundException(`This vessel not available. Current status: ${vessel.status}`);
     }
+    const Travel_Time = route.estimatedTimeDays;
+    const departureTime = new Date(createScheduleInput.departure_time);
+      if (isNaN(departureTime.getTime())) {
+    throw new BadRequestException('Invalid departure time');
+   }
+    if (departureTime < new Date()) {
+      throw new BadRequestException('Departure time must be in the future');
+    }
+
+    const arrival_time = this.calculateArrivalTime(
+      departureTime,
+      Travel_Time
+    );
     const schedule = this.schedulesRepository.create({
-      ...createScheduleInput,
       vessel,
       route,
-    });
-
-    const savedSchedule = await this.schedulesRepository.save(schedule);
-
+      status, 
+      departure_time: departure_time.toISOString(),
+      arrival_time: arrival_time.toISOString(),
+    });  
+    const saveschedule = await this.schedulesRepository.save(schedule);
     vessel.status = VesselStatus.IN_TRANSIT;
     await this.vesselsRepository.save(vessel);
 
-    return savedSchedule;
+    return saveschedule;
   }
 
   findAll(): Promise<Schedule[]> {
@@ -92,48 +135,6 @@ export class SchedulesService {
       ...schedule,
     }));
   }
-
-  // async findByPort(
-  //   country: string,
-  //   portName: string,
-  //   date: string,
-  //   page: number = 1,
-  //   limit: number = 10
-  // ): Promise<{ data: any[], total: number, page: number, limit: number }> {
-  //   const dateObject = this.convertDateString(date);
-  //   const skip = (page - 1) * limit;
-
-  //   console.log('Search parameters:', { country, portName, date: dateObject, page, limit });
-
-  //   const [schedules, total] = await this.schedulesRepository.findAndCount({
-  //     where: [
-  //       {
-  //         route: {
-  //           departurePort: {
-  //             country: ILike(`%${country}%`),
-  //             name: ILike(`%${portName}%`),
-  //           },
-  //         },
-  //         departure_time: MoreThanOrEqual(dateObject),
-  //         status: In([ScheduleStatus.IN_TRANSIT, ScheduleStatus.SCHEDULED]),
-  //       },
-  //     ],
-  //     relations: ['vessel', 'route'],
-  //     skip: skip,
-  //     take: limit,
-  //   });
-
-  //   console.log('Schedules found:', schedules.length, 'Total:', total);
-
-  //   return {
-  //     data: schedules.map((schedule) => ({
-  //       ...schedule,
-  //     })),
-  //     total,
-  //     page,
-  //     limit
-  //   };
-  // }
 
   async findOne(id: string): Promise<Schedule> {
     const schedule = await this.schedulesRepository.findOne({
@@ -184,8 +185,20 @@ export class SchedulesService {
   }
 
   async remove(id: string): Promise<string> {
-    await this.schedulesRepository.delete(id);
-    return id;
+    const schedule = await this.schedulesRepository.findOne({
+      where: { id },
+      relations: ['vessel', 'route'],
+    });
+    if (!schedule) {
+      throw new NotFoundException(`Schedule with ID ${id} not found`);
+    }
+    if (schedule.status === ScheduleStatus.SCHEDULED ||
+      schedule.status === ScheduleStatus.IN_TRANSIT){
+        throw new BadRequestException(`This Schedules can not deleted!`)
+      }else{
+        await this.schedulesRepository.delete(id);
+        return id;
+      }
   }
 
   async paginationSchedule(paginationSchedule: PaginationScheduleDto) {

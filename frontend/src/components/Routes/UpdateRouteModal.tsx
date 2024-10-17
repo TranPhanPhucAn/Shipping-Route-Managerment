@@ -24,7 +24,6 @@ const UpdateRouteModal = ({
 }: UpdateRouteModalProps) => {
   const [departurePortId, setDeparturePortId] = useState("");
   const [destinationPortId, setDestinationPortId] = useState("");
-  const [distance, setDistance] = useState("");
   const [updateRoute, { loading, error }] = useMutation(UPDATE_ROUTE);
   const { data } = useQuery<GetPortsData>(GET_PORTS);
   const [form] = Form.useForm();
@@ -36,7 +35,6 @@ const UpdateRouteModal = ({
       form.setFieldsValue({
         departurePortId: route.departurePort.id,
         destinationPortId: route.destinationPort.id,
-        distance: route.distance,
       });
     }
   }, [route, form]);
@@ -44,7 +42,6 @@ const UpdateRouteModal = ({
   const handleUpdateRoute = async (values: {
     departurePortId: string;
     destinationPortId: string;
-    distance: number;
   }) => {
     try {
       await updateRoute({
@@ -53,7 +50,6 @@ const UpdateRouteModal = ({
           updateRouteInput: {
             departurePortId: values.departurePortId,
             destinationPortId: values.destinationPortId,
-            distance: Number(values.distance),
           },
         },
       });
@@ -123,17 +119,6 @@ const UpdateRouteModal = ({
               </Option>
             ))}
           </Select>
-        </Form.Item>
-        <Form.Item
-          label="Distance"
-          name="distance"
-          rules={[{ required: true, message: "Please enter Distance!" }]}
-        >
-          <Input
-            type="number"
-            value={distance}
-            onChange={(e) => setDistance(e.target.value)}
-          />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading}>

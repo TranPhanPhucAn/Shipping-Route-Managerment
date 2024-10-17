@@ -40,3 +40,4 @@ export class GetInforByOwnerResponse {
   @Field({ nullable: true })
   underMaintance: number;
 }
+

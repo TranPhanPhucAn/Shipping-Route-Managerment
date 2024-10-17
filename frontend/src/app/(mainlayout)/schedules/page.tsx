@@ -1,10 +1,8 @@
-
-import {Divider, Tabs} from "antd";
+import { Divider } from "antd";
 import styles from "@/src/styles/Listpage.module.css";
 import ScheduleSearch from "@/src/components/Schedules/ScheduleSearch";
 
 export default function SchedulesPage() {
-
   return (
     <div className={styles.body}>
       <div className={styles.Title}>Schedules</div>

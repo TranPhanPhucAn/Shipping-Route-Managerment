@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -31,9 +31,13 @@ export class Route {
   @JoinColumn({ name: 'destinationPortId' })
   destinationPort: Port;
 
-  @Field(() => Number)
-  @Column()
+  @Field(() => Float)
+  @Column('double precision')
   distance: number;
+
+  @Field()
+  @Column('int', { nullable: true, default: 0 })
+  estimatedTimeDays: number;  
 
   @Field(() => [Schedule])
   @OneToMany(() => Schedule, (schedule) => schedule.route)

@@ -19,11 +19,7 @@ export class CreateScheduleInput {
 
   @Field()
   @IsNotEmpty()
-  departure_time: string;
-
-  @Field()
-  @IsNotEmpty()
-  arrival_time: string;
+  departure_time: Date;
 
   @Field(() => ScheduleStatus, { defaultValue: ScheduleStatus.SCHEDULED })
   @IsEnum(ScheduleStatus)

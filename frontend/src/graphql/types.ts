@@ -63,9 +63,18 @@ export interface Role {
   permissions: Permission[];
   createdAt: string;
 }
+
+export interface createPortInput {
+  id: string;
+  name: string;
+  country: string;
+}
+
 export interface Port {
   id: string;
   name: string;
+  latitude: Number;
+  longitude: Number;
   country: string;
   departureRoutes: Route;
   destinationRoutes: Route;
@@ -81,6 +90,7 @@ export interface Route {
   departurePort: Port;
   destinationPort: Port;
   distance: number;
+  estimatedTimeDays: Number;
   createdAt: string;
   UpdatedAt: string;
 }
@@ -91,13 +101,13 @@ export interface GetRoutesData {
 export interface createRouteInput {
   departurePortId: string;
   destinationPortId: string;
-  distance: number;
+
 }
 
 export interface UpdateRouteInput {
   departurePortId: string;
   destinationPortId: string;
-  distance: number;
+
 }
 
 export interface CreateScheduleInput {
