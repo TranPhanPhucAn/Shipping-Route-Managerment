@@ -31,7 +31,7 @@ registerEnumType(VesselType, {
   description: 'Types of vessels used for different purposes',
 });
 @ObjectType()
-@Entity()
+@Entity('vessels')
 export class Vessel {
   @Field(() => ID)
   @PrimaryGeneratedColumn()

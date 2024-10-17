@@ -3,7 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
+  // UpdateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
@@ -24,7 +24,7 @@ registerEnumType(ScheduleStatus, {
 });
 
 @ObjectType()
-@Entity()
+@Entity('schedules')
 export class Schedule {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
@@ -63,7 +63,7 @@ export class Schedule {
   @CreateDateColumn()
   created_at: Date;
 
-  @Field()
-  @UpdateDateColumn()
-  updated_at: Date;
+  // @Field()
+  // @UpdateDateColumn()
+  // updated_at: Date;
 }

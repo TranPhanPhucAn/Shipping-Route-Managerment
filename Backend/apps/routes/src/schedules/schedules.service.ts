@@ -26,31 +26,6 @@ export class SchedulesService {
     @InjectRepository(Route)
     private routesRepository: Repository<Route>,
   ) {}
-  // private parseDateString(dateStr: string): Date {
-  //   try {
-  //     if (dateStr.includes('/')) {
-  //       const [dateComponent, timeComponent] = dateStr.split(', ');
-  //       const [day, month, year] = dateComponent.split('/');
-  //       const [hours, minutes] = timeComponent.split(':');
-        
-  //       return new Date(
-  //         parseInt(year),
-  //         parseInt(month) - 1,
-  //         parseInt(day),
-  //         parseInt(hours),
-  //         parseInt(minutes)
-  //       );
-  //     }
-      
-  //     const date = new Date(dateStr);
-  //     if (isNaN(date.getTime())) {
-  //       throw new Error('Invalid date');
-  //     }
-  //     return date;
-  //   } catch (error) {
-  //     throw new BadRequestException('Invalid date format');
-  //   }
-  // }
   calculateArrivalTime(departureTime: Date, travelDays: number): Date {
     const arrivalTime = new Date(departureTime);
     arrivalTime.setDate(arrivalTime.getDate() + travelDays);
@@ -96,7 +71,6 @@ export class SchedulesService {
     const saveschedule = await this.schedulesRepository.save(schedule);
     vessel.status = VesselStatus.IN_TRANSIT;
     await this.vesselsRepository.save(vessel);
-
     return saveschedule;
   }
 

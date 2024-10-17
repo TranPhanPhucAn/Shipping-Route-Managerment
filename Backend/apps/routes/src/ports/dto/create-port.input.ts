@@ -6,11 +6,6 @@ export class CreatePortInput {
   @Field()
   @IsNotEmpty()
   @IsString()
-  id: string;
-
-  @Field()
-  @IsNotEmpty()
-  @IsString()
   name: string;
 
   @Field()

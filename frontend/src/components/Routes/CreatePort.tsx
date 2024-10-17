@@ -8,7 +8,6 @@ import styles from "@/src/styles/Auth.module.css";
 
 const CreatePortModal = () => {
   const [visible, setVisible] = useState(false);
-  const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [country, setCountry] = useState("");
   const [createPort, { loading, error }] = useMutation(CREATE_PORT, {
@@ -17,7 +16,7 @@ const CreatePortModal = () => {
   const [form] = Form.useForm();
 
   const handleCreatePort = async (values: any) => {
-    if (!id || !name|| !country) {
+    if ( !name|| !country) {
         message.error("Please fill out all fields.");
         return;
     }
@@ -25,7 +24,6 @@ const CreatePortModal = () => {
       await createPort({
         variables: {
           createPortInput: {
-            id,
             name,
             country,
           },
@@ -57,16 +55,7 @@ const CreatePortModal = () => {
           layout="vertical"
           className={styles.mainBox}
         >
-            <Form.Item
-            label="ID"
-            name="ID"
-            rules={[{ required: true, message: "Please enter port ID!" }]}
-          >
-            <Input 
-            value = {id}
-            onChange = {(e)=>setId(e.target.value)}
-            placeholder="Enter Port ID" />
-          </Form.Item>
+
           <Form.Item
             label="Port Name"
             name="name"

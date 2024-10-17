@@ -203,7 +203,6 @@ const SchedulesList = () => {
     setSelectedSchedule(null);
   };
 
-
   const columns = [
     // {
     //   title: "ID",
@@ -328,7 +327,7 @@ const SchedulesList = () => {
 
   return (
     <div className={styles.body}>
-      <div className={styles.createButton} >
+      <div className={styles.createButton}>
         {permissionUser?.includes("create:schedule") && <CreateScheduleModal />}
       </div>
 
