@@ -106,6 +106,7 @@ export const GET_ROUTE = gql`
         name
       }
       distance
+      estimatedTimeDays
       createdAt
     }
   }

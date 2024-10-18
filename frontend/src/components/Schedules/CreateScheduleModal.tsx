@@ -82,6 +82,7 @@ const CreateScheduleModal = () => {
             rules={[{ required: true, message: "Please select a vessel!" }]}
           >
             <Select
+              className={styles.input}
               value={vesselId}
               showSearch
               onChange={(value) => setVesselId(value)}
@@ -106,6 +107,7 @@ const CreateScheduleModal = () => {
             rules={[{ required: true, message: "Please select a route!" }]}
           >
             <Select
+              className={styles.input}
               value={routeId}
               showSearch
               onChange={(value) => setRouteId(value)}
@@ -136,11 +138,16 @@ const CreateScheduleModal = () => {
               value={departure_time}
               onChange={(value) => setDepartureTime(value)}
               format="DD-MM-YYYY HH:mm"
+              className={styles.input}
             />
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading}>
+            <Button
+              className={styles.mainButton}
+              htmlType="submit"
+              loading={loading}
+            >
               Submit
             </Button>
           </Form.Item>

@@ -94,6 +94,7 @@ const CreateRouteModal = () => {
             ]}
           >
             <Select
+             
               value={destinationPortId}
               showSearch
               onChange={(value) => setDestinationPortId(value)}
@@ -112,7 +113,7 @@ const CreateRouteModal = () => {
             </Select>
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading}>
+            <Button className={styles.mainButton} htmlType="submit" loading={loading}>
               Submit
             </Button>
           </Form.Item>

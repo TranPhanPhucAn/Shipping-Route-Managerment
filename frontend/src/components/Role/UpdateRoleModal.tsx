@@ -4,6 +4,7 @@ import { Button, Form, Modal, message, Select, Input } from "antd";
 import { useMutation } from "@apollo/client";
 import { UPDATE_ROLE } from "../../graphql/mutations/Auth";
 import { Role } from "@/src/graphql/types";
+import styles from "@/src/styles/Auth.module.css";
 
 interface UpdateRoleModalProps {
   role: Role;
@@ -91,7 +92,7 @@ const UpdateRoleModal = ({ role, refetchRole }: UpdateRoleModalProps) => {
         </div>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
+          <Button className={styles.mainButton} htmlType="submit" loading={loading}>
             Update
           </Button>
         </Form.Item>

@@ -92,7 +92,10 @@ const Roles = () => {
         Manage role and permission of roles.
       </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
+      <div className={styles.body}>
+      <div className={styles.createButton}>
       <CreateRoleModal refetchRoles={refetch} />
+      </div>
       <div className={styles.container}>
         <Table
           dataSource={roles ? roles : []}
@@ -101,6 +104,7 @@ const Roles = () => {
           rowKey={"id"}
           pagination={false}
         />
+      </div>
       </div>
     </div>
   );

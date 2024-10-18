@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button, Form, Input, Modal, message } from "antd";
 import { useMutation } from "@apollo/client";
 import { CREATE_PORT } from "@/src/graphql/mutations/Auth";
-import {GET_PORTS} from "@/src/graphql/queries/query";
+import { GET_PORTS } from "@/src/graphql/queries/query";
 import styles from "@/src/styles/Auth.module.css";
 
 const CreatePortModal = () => {
@@ -16,9 +16,9 @@ const CreatePortModal = () => {
   const [form] = Form.useForm();
 
   const handleCreatePort = async (values: any) => {
-    if ( !name|| !country) {
-        message.error("Please fill out all fields.");
-        return;
+    if (!name || !country) {
+      message.error("Please fill out all fields.");
+      return;
     }
     try {
       await createPort({
@@ -45,6 +45,7 @@ const CreatePortModal = () => {
       </Button>
       <Modal
         title="Create New Port"
+        
         open={visible}
         onCancel={() => setVisible(false)}
         footer={null}
@@ -55,16 +56,17 @@ const CreatePortModal = () => {
           layout="vertical"
           className={styles.mainBox}
         >
-
           <Form.Item
             label="Port Name"
             name="name"
             rules={[{ required: true, message: "Please enter port name!" }]}
           >
-            <Input 
-            value = {name}
-            onChange = {(e)=>setName(e.target.value)}
-            placeholder="Enter Port Name" />
+            <Input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter Port Name"
+              className={styles.input}
+            />
           </Form.Item>
 
           <Form.Item
@@ -72,14 +74,20 @@ const CreatePortModal = () => {
             name="country"
             rules={[{ required: true, message: "Please enter Country!" }]}
           >
-            <Input 
-            value = {country}
-            onChange = {(e)=>setCountry(e.target.value)}
-            placeholder="Enter Country" />
+            <Input
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              placeholder="Enter Country"
+              className={styles.input}
+            />
           </Form.Item>
 
           <Form.Item>
-            <Button htmlType="submit" loading={loading}>
+            <Button
+              htmlType="submit"
+              className={styles.mainButton}
+              loading={loading}
+            >
               Submit
             </Button>
           </Form.Item>

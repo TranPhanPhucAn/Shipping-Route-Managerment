@@ -157,7 +157,7 @@ const PortDistanceCalculator: React.FC<PortDistanceCalculatorProps> = ({
       {loading && <p>Loading route...</p>}
       {distance !== null && (
         <p className={styles.infortext}>
-          Approximate distance: {distance.toFixed(1)} km
+          {/* Approximate distance: {distance.toFixed(1)} km */}
         </p>
       )}
       {error && <p className="text-red-500">{error}</p>}

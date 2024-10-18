@@ -49,12 +49,6 @@ const VesselList = () => {
 
   const columns = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      sorter: (a: Vessel, b: Vessel) => a.id.localeCompare(b.id),
-    },
-    {
       title: "Vessel Name",
       dataIndex: "name",
       key: "name",
@@ -71,12 +65,6 @@ const VesselList = () => {
       dataIndex: "capacity",
       key: "capacity",
       sorter: (a: Vessel, b: Vessel) => a.capacity - b.capacity,
-    },
-    {
-      title: "Owner",
-      dataIndex: "ownerId",
-      key: "ownerId",
-      render: (text: string) => <span>{text}</span>,
     },
     {
       title: "Action",
@@ -123,6 +111,7 @@ const VesselList = () => {
         Manage and view information about all available vessels.
       </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
+      <div className={styles.body}>
       <div className={styles.createButton}>
         {permissionUser?.includes("create:vessel") && <CreateVesselModal />}
       </div>
@@ -142,6 +131,7 @@ const VesselList = () => {
             onClose={handleUpdateModalClose}
           />
         )}
+      </div>
       </div>
     </div>
   );

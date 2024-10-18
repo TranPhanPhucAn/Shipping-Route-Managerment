@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button, Form, Modal, message, Select, Input } from "antd";
 import { useMutation } from "@apollo/client";
 import { CREATE_ROLE } from "../../graphql/mutations/Auth";
+import styles from "@/src/styles/Auth.module.css";
 
 interface CreateRoleModalProps {
   refetchRoles: () => void;
@@ -41,7 +42,7 @@ const CreateRoleModal = ({ refetchRoles }: CreateRoleModalProps) => {
 
   return (
     <>
-      <Button type="primary" onClick={() => setVisible(true)}>
+      <Button className={styles.mainButton} onClick={() => setVisible(true)}>
         Add Role
       </Button>
       <Modal
@@ -82,7 +83,7 @@ const CreateRoleModal = ({ refetchRoles }: CreateRoleModalProps) => {
             />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading}>
+            <Button className={styles.mainButton} htmlType="submit" loading={loading}>
               Submit
             </Button>
           </Form.Item>

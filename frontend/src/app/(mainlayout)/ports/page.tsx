@@ -122,6 +122,7 @@ const PortList = () => {
         Manage and view information about all available ports.
       </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
+      <div className={styles.body}>
       <div className={styles.createButton}>
         {permissionUser?.includes("create:port") && <CreatePortModal />}
       </div>
@@ -142,6 +143,7 @@ const PortList = () => {
           />
         )}
       </div>
+    </div>
     </div>
   );
 };

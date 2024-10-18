@@ -6,6 +6,7 @@ import { UPDATE_SCHEDULE } from "../../graphql/mutations/Auth";
 import { Schedule, Vessel, Route } from "../../graphql/types";
 import { GET_VESSELS, GET_ROUTES } from "../../graphql/queries/query";
 import { useQuery } from "@apollo/client";
+import styles from "@/src/styles/Auth.module.css";
 // import moment from "moment";
 
 const { Option } = Select;
@@ -62,7 +63,12 @@ const UpdateScheduleModal = ({
       onCancel={handleCancel}
       footer={null}
     >
-      <Form form={form} onFinish={handleUpdateSchedule} layout="vertical">
+      <Form
+        form={form}
+        onFinish={handleUpdateSchedule}
+        layout="vertical"
+        className={styles.mainBox}
+      >
         <Form.Item
           label="Status"
           name="status"
@@ -79,7 +85,11 @@ const UpdateScheduleModal = ({
           </Select>
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
+          <Button
+            className={styles.mainButton}
+            htmlType="submit"
+            loading={loading}
+          >
             Update
           </Button>
           {error && <p style={{ color: "red" }}>{error.message}</p>}

@@ -51,7 +51,7 @@ const RouteDetail = () => {
           className={styles.card}
         >
           <Col className={styles.infor}>
-            <table style={{ marginBottom: "0.5rem" }}>
+            <table >
               <tr className={styles.infortext}>
                 <td>
                   <b>Route:</b>
@@ -77,6 +77,12 @@ const RouteDetail = () => {
                   <b>Estimated Distance:&nbsp; </b>
                 </td>
                 <td>{route.distance} Km</td>
+              </tr>
+              <tr className={styles.infortext}>
+                <td>
+                  <b>Travel Time:&nbsp; </b>
+                </td>
+                <td>{route.estimatedTimeDays} days</td>
               </tr>
             </table>
           </Col>
