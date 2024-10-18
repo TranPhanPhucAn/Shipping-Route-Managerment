@@ -7,6 +7,7 @@ import {
   Popconfirm,
   TablePaginationConfig,
   Divider,
+  Tag,
 } from "antd";
 import { GET_VESSELS } from "@/src/graphql/queries/query";
 import { DELETE_VESSEL } from "@/src/graphql/mutations/Auth";
@@ -67,6 +68,34 @@ const VesselList = () => {
       sorter: (a: Vessel, b: Vessel) => a.capacity - b.capacity,
     },
     {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      filters: [
+        { text: "Available", value: "Available" },
+        { text: "In Transit", value: "In Transit" },
+        { text: "Under maintenance", value: "Under maintenance" },
+      ],
+      onFilter: (value: any, record: any) => record.status === value,
+      render: (text: string, record: vessel) => {
+        let color = "white";
+
+        if (record.status === "AVAILABLE") {
+          color = "#58D68D";
+        } else if (record.status === "IN_TRANSIT") {
+          color = "#85C1E9";
+        } else if (record.status === "UNDER_MAINTENANCE") {
+          color = "red";
+        } 
+
+        return (
+          <Tag color={color} key={record.id}>
+            {record.status.toUpperCase()}
+          </Tag>
+        );
+      },
+    },
+    {
       title: "Action",
       dataIndex: "id",
       key: "id",
@@ -125,7 +154,7 @@ const VesselList = () => {
         />
         {selectedVessel && (
           <UpdateVesselModal
-            id={selectedVessel.id}
+            // id={selectedVessel.id}
             vessel={selectedVessel}
             visible={isUpdateModalVisible}
             onClose={handleUpdateModalClose}

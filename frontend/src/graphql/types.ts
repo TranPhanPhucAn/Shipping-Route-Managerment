@@ -90,7 +90,7 @@ export interface Route {
   departurePort: Port;
   destinationPort: Port;
   distance: number;
-  estimatedTimeDays: Number;
+  estimatedTimeDays: number;
   createdAt: string;
   UpdatedAt: string;
 }
@@ -101,13 +101,11 @@ export interface GetRoutesData {
 export interface createRouteInput {
   departurePortId: string;
   destinationPortId: string;
-
 }
 
 export interface UpdateRouteInput {
   departurePortId: string;
   destinationPortId: string;
-
 }
 
 export interface CreateScheduleInput {

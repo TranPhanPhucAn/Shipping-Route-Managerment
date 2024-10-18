@@ -50,12 +50,6 @@ const PortList = () => {
 
   const columns = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      sorter: (a: Port, b: Port) => a.id.localeCompare(b.id),
-    },
-    {
       title: "Port Name",
       dataIndex: "name",
       key: "name",
@@ -123,27 +117,27 @@ const PortList = () => {
       </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
       <div className={styles.body}>
-      <div className={styles.createButton}>
-        {permissionUser?.includes("create:port") && <CreatePortModal />}
-      </div>
-      <div className={styles.container}>
-        <Table
-          dataSource={portsData}
-          columns={columns}
-          loading={loading}
-          pagination={{ pageSize: 5 }}
-          className={styles.Table}
-        />
-        {selectedPort && (
-          <UpdatePortModal
-            id={selectedPort.id}
-            port={selectedPort}
-            visible={isUpdateModalVisible}
-            onClose={handleUpdateModalClose}
+        <div className={styles.createButton}>
+          {permissionUser?.includes("create:port") && <CreatePortModal />}
+        </div>
+        <div className={styles.container}>
+          <Table
+            dataSource={portsData}
+            columns={columns}
+            loading={loading}
+            pagination={{ pageSize: 5 }}
+            className={styles.Table}
           />
-        )}
+          {selectedPort && (
+            <UpdatePortModal
+              id={selectedPort.id}
+              port={selectedPort}
+              visible={isUpdateModalVisible}
+              onClose={handleUpdateModalClose}
+            />
+          )}
+        </div>
       </div>
-    </div>
     </div>
   );
 };

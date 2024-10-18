@@ -3,11 +3,11 @@
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
-import { GET_ROUTE } from "../../../../graphql/queries/query";
-import { Route } from "../../../../graphql/types";
+import { GET_ROUTE } from "@/src/graphql/queries/query";
+import { Route } from "@/src/graphql/types";
 import { Button, Divider, message, Row, Col, Card } from "antd";
-import PortDistanceCalculation from "../../../../components/Routes/PortDistanceCalculator";
-import styles from "../../../../styles/Detailpage.module.css";
+import PortDistanceCalculation from "@/src/components/Routes/PortDistanceCalculator";
+import styles from "@/src/styles/Detailpage.module.css";
 
 const RouteDetail = () => {
   const router = useRouter();
@@ -51,15 +51,7 @@ const RouteDetail = () => {
           className={styles.card}
         >
           <Col className={styles.infor}>
-            <table >
-              <tr className={styles.infortext}>
-                <td>
-                  <b>Route:</b>
-                </td>
-                <td>
-                  {route.departurePort.id} - {route.destinationPort.id}
-                </td>
-              </tr>
+            <table>
               <tr className={styles.infortext}>
                 <td>
                   <b> Departure Port: </b>
@@ -76,7 +68,7 @@ const RouteDetail = () => {
                 <td>
                   <b>Estimated Distance:&nbsp; </b>
                 </td>
-                <td>{route.distance} Km</td>
+                <td>{route.distance.toFixed(1)} Km</td>
               </tr>
               <tr className={styles.infortext}>
                 <td>
