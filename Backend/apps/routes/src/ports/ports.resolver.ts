@@ -5,6 +5,8 @@ import { CreatePortInput } from './dto/create-port.input';
 import { UpdatePortInput } from './dto/update-port.input';
 import { SetMetadata, UseGuards } from '@nestjs/common';
 import { PermissionsGuard } from '../guard/permissions.guard';
+import { PaginationPortDto } from './dto/pagination-port';
+import { PaginationPortResponse } from '../types/route.types';
 
 @Resolver(() => Port)
 export class PortsResolver {
@@ -44,7 +46,14 @@ export class PortsResolver {
   @Mutation(() => Port)
   async removePort(
     @Args('ID', { type: () => String }) id: string,
-  ):Promise<string> {
+  ): Promise<string> {
     return this.portService.remove(id);
+  }
+
+  @SetMetadata('permissions', ['get:portPag'])
+  @UseGuards(PermissionsGuard)
+  @Query(() => PaginationPortResponse, { name: 'paginationPort' })
+  paginationPort(@Args('paginationPort') paginationPort: PaginationPortDto) {
+    return this.portService.paginationPort(paginationPort);
   }
 }

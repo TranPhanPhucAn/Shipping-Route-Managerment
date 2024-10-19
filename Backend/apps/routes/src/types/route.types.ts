@@ -1,6 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Schedule } from '../schedules/entities/schedule.entity';
 import { Route } from '../routes/entities/route.entity';
+import { Port } from '../ports/entities/port.entity';
 
 @ObjectType()
 export class RouteUserResponse {
@@ -28,6 +29,15 @@ export class PaginationScheduleResponse {
 }
 
 @ObjectType()
+export class PaginationPortResponse {
+  @Field()
+  totalCount?: number;
+
+  @Field(() => [Port], { nullable: true })
+  ports?: Port[];
+}
+
+@ObjectType()
 export class GetInforByOwnerResponse {
   @Field({ nullable: true })
   vesselTotal: number;
@@ -42,7 +52,6 @@ export class GetInforByOwnerResponse {
   underMaintance: number;
 }
 
-
 @ObjectType()
 export class PaginationRouteResponse {
   @Field()
@@ -50,5 +59,4 @@ export class PaginationRouteResponse {
 
   @Field(() => [Route], { nullable: true })
   route?: Route[];
-
 }

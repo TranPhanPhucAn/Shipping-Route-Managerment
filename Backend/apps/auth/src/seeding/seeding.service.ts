@@ -26,37 +26,37 @@ export class SeedingService {
       const permission = await permissionsRepository.find();
       await permissionsRepository.remove(permission);
       const permissions = [
-        { permission: 'get:users', description: 'Get all users' }, //1
-        { permission: 'get:usersPag', description: 'Get all users pagination' }, //2
-        { permission: 'get:user', description: 'Get a user' }, //3
-        { permission: 'update:user', description: 'Update a user' }, //4
-        { permission: 'delete:user', description: 'Delete a user' }, //5
+        // { permission: 'get:users', description: 'Get all users' }, //1
+        { permission: 'get:usersPag', description: 'Get all users pagination' }, //1
+        { permission: 'get:user', description: 'Get a user' }, //2
+        { permission: 'update:user', description: 'Update a user' }, //3
+        { permission: 'delete:user', description: 'Delete a user' }, //4
         {
           permission: 'create:permission',
           description: 'Create new permission',
-        }, //6
-        { permission: 'get:permissions', description: 'Get all permissions' }, //7
+        }, //5
+        { permission: 'get:permissions', description: 'Get all permissions' }, //6
         {
           permission: 'update:permission',
           description: 'Update permission description',
-        }, //8
-        { permission: 'delete:permission', description: 'Delete a permission' }, //9
-        { permission: 'create:role', description: 'Create new role' }, //10
-        { permission: 'get:roles', description: 'Get all roles' }, //11
-        { permission: 'get:role', description: 'Get a role' }, //12
-        { permission: 'update:role', description: 'Update a role' }, //13
+        }, //7
+        { permission: 'delete:permission', description: 'Delete a permission' }, //8
+        { permission: 'create:role', description: 'Create new role' }, //9
+        { permission: 'get:roles', description: 'Get all roles' }, //10
+        { permission: 'get:role', description: 'Get a role' }, //11
+        { permission: 'update:role', description: 'Update a role' }, //12
         {
           permission: 'assginPer:role',
           description: 'Assign permissions for role',
-        }, //14
-        { permission: 'assignRole:user', description: 'Assign role for user' }, //15
-        { permission: 'delete:role', description: 'Delete a role' }, //16
-        { permission: 'create:schedule', description: 'Create new schedule' }, //17
-        { permission: 'get:schedules', description: 'Get all schedules' }, //18
+        }, //13
+        { permission: 'assignRole:user', description: 'Assign role for user' }, //14
+        { permission: 'delete:role', description: 'Delete a role' }, //15
+        { permission: 'create:schedule', description: 'Create new schedule' }, //16
+        { permission: 'get:schedules', description: 'Get all schedules' }, //17
         {
           permission: 'get:schedulesPag',
           description: 'Get all schedules pagination',
-        }, //19
+        }, //18
         {
           permission: 'get:schedulesPagById',
           description: 'Get all schedules pagination by owner id',
@@ -68,6 +68,7 @@ export class SeedingService {
         { permission: 'search:schedule', description: 'Search a schedule' }, //222
         { permission: 'delete:schedule', description: 'Delete a schedule' }, //23
         { permission: 'create:port', description: 'Create new port' }, //24
+        { permission: 'get:portPag', description: 'Get all ports pagination' }, //24
         { permission: 'update:port', description: 'Update a port' }, //25
         { permission: 'delete:port', description: 'Delete a port' }, //26
         { permission: 'create:route', description: 'Create new route' }, //27

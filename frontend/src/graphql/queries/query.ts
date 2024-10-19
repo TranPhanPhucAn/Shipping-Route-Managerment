@@ -124,6 +124,21 @@ export const GET_PORTS = gql`
   }
 `;
 
+export const GET_PORT_PAGINATION = gql`
+  query paginationPort($paginationPort: PaginationPortDto!) {
+    paginationPort(paginationPort: $paginationPort) {
+      ports {
+        id
+        name
+        country
+        latitude
+        longitude
+      }
+      totalCount
+    }
+  }
+`;
+
 export const GET_SCHEDULES = gql`
   query GetSchedules {
     schedules {
