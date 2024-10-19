@@ -423,13 +423,6 @@ const UserList = () => {
             total: total,
             pageSizeOptions: ["5", "10", "20"],
             showSizeChanger: true,
-            // showTotal: (total, range) => {
-            //   return (
-            //     <div>
-            //       {range[0]}-{range[1]} on {total} rows
-            //     </div>
-            //   );
-            // },
           }}
           onChange={handleTableChange}
         />

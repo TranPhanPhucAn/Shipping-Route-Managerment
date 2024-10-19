@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, MoreThanOrEqual, ILike, In } from 'typeorm';
 import { Schedule, ScheduleStatus } from './entities/schedule.entity';
@@ -9,7 +13,7 @@ import { Route } from '../routes/entities/route.entity';
 import {
   PaginationScheduleByIdDto,
   PaginationScheduleDto,
-} from './dto/pagination-schedules-result';
+} from './dto/pagination-schedules';
 
 @Injectable()
 export class SchedulesService {
@@ -32,42 +36,41 @@ export class SchedulesService {
     return arrivalTime;
   }
   async create(createScheduleInput: CreateScheduleInput): Promise<Schedule> {
-    const { departure_time, status} = createScheduleInput;
+    const { departure_time, status } = createScheduleInput;
     const vessel = await this.vesselsRepository.findOne({
       where: { id: createScheduleInput.vesselId },
     });
     const route = await this.routesRepository.findOne({
       where: { id: createScheduleInput.routeId },
     });
-    
+
     if (!route) {
       throw new NotFoundException(
         `Route with ID ${createScheduleInput.routeId} not found`,
       );
     }
     if (!vessel || vessel.status !== VesselStatus.AVAILABLE) {
-      throw new NotFoundException(`This vessel not available. Current status: ${vessel.status}`);
+      throw new NotFoundException(
+        `This vessel not available. Current status: ${vessel.status}`,
+      );
     }
     const Travel_Time = route.estimatedTimeDays;
     const departureTime = new Date(createScheduleInput.departure_time);
-      if (isNaN(departureTime.getTime())) {
-    throw new BadRequestException('Invalid departure time');
-   }
+    if (isNaN(departureTime.getTime())) {
+      throw new BadRequestException('Invalid departure time');
+    }
     if (departureTime < new Date()) {
       throw new BadRequestException('Departure time must be in the future');
     }
 
-    const arrival_time = this.calculateArrivalTime(
-      departureTime,
-      Travel_Time
-    );
+    const arrival_time = this.calculateArrivalTime(departureTime, Travel_Time);
     const schedule = this.schedulesRepository.create({
       vessel,
       route,
-      status, 
+      status,
       departure_time: departure_time.toISOString(),
       arrival_time: arrival_time.toISOString(),
-    });  
+    });
     const saveschedule = await this.schedulesRepository.save(schedule);
     vessel.status = VesselStatus.IN_TRANSIT;
     await this.vesselsRepository.save(vessel);
@@ -166,13 +169,15 @@ export class SchedulesService {
     if (!schedule) {
       throw new NotFoundException(`Schedule with ID ${id} not found`);
     }
-    if (schedule.status === ScheduleStatus.SCHEDULED ||
-      schedule.status === ScheduleStatus.IN_TRANSIT){
-        throw new BadRequestException(`This Schedules can not deleted!`)
-      }else{
-        await this.schedulesRepository.delete(id);
-        return id;
-      }
+    if (
+      schedule.status === ScheduleStatus.SCHEDULED ||
+      schedule.status === ScheduleStatus.IN_TRANSIT
+    ) {
+      throw new BadRequestException(`This Schedules can not deleted!`);
+    } else {
+      await this.schedulesRepository.delete(id);
+      return id;
+    }
   }
 
   async paginationSchedule(paginationSchedule: PaginationScheduleDto) {

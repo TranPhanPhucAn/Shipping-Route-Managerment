@@ -56,7 +56,6 @@ const PortList = () => {
         search: search,
       },
     },
-    skip: !permissionUser?.includes("get:schedulesPag"),
   });
   const portsData = data?.paginationPort?.ports || [];
   const total = data?.paginationPort?.totalCount;

@@ -5,14 +5,18 @@ import { CreateVesselInput } from './dto/create-vessel.input';
 import { UpdateVesselInput } from './dto/update-vessel.input';
 import { SetMetadata, UseGuards } from '@nestjs/common';
 import { PermissionsGuard } from '../guard/permissions.guard';
-import { GetInforByOwnerResponse } from '../types/route.types';
+import {
+  GetInforByOwnerResponse,
+  PaginationVesselResponse,
+} from '../types/route.types';
+import { PaginationVesselDto } from './dto/pagination-vessels';
 
 @Resolver(() => Vessel)
 export class VesselsResolver {
   constructor(private readonly vesselService: VesselsService) {}
 
-  @SetMetadata('permissions', ['get:vessels'])
-  @UseGuards(PermissionsGuard)
+  // @SetMetadata('permissions', ['get:vessels'])
+  // @UseGuards(PermissionsGuard)
   @Query(() => [Vessel], { name: 'vessels' })
   findAll() {
     return this.vesselService.findAll();
@@ -61,5 +65,14 @@ export class VesselsResolver {
   @Query(() => GetInforByOwnerResponse, { name: 'getInforVesselTotal' })
   getInforVesselTotal() {
     return this.vesselService.getInforVesselTotal();
+  }
+
+  @SetMetadata('permissions', ['get:vesselsPag'])
+  @UseGuards(PermissionsGuard)
+  @Query(() => PaginationVesselResponse, { name: 'paginationVessels' })
+  paginationVessels(
+    @Args('paginationVessels') paginationVessels: PaginationVesselDto,
+  ) {
+    return this.vesselService.paginationVessels(paginationVessels);
   }
 }

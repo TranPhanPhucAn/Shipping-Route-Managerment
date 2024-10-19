@@ -6,7 +6,7 @@ import { UpdateScheduleInput } from './dto/update-schedule.input';
 import {
   PaginationScheduleByIdDto,
   PaginationScheduleDto,
-} from './dto/pagination-schedules-result';
+} from './dto/pagination-schedules';
 import { PaginationScheduleResponse } from '../types/route.types';
 import { SetMetadata, UseGuards } from '@nestjs/common';
 import { PermissionsGuard } from '../guard/permissions.guard';

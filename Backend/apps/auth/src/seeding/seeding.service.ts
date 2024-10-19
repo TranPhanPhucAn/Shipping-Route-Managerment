@@ -76,7 +76,11 @@ export class SeedingService {
         { permission: 'update:route', description: 'Update a route' }, //29
         { permission: 'search:route', description: 'Search a route' }, //30
         { permission: 'delete:route', description: 'Delete a route' }, //31
-        { permission: 'get:vessels', description: 'Get all vessels' }, //32
+        // { permission: 'get:vessels', description: 'Get all vessels' }, //32
+        {
+          permission: 'get:vesselsPag',
+          description: 'Get all vessels pagination',
+        }, //32
         { permission: 'create:vessel', description: 'Create new vessel' }, //33
         { permission: 'update:vessel', description: 'Update a vessel' }, //34
         { permission: 'delete:vessel', description: 'Delete a vessel' }, //35

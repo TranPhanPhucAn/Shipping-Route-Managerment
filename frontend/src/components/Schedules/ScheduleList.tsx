@@ -36,35 +36,18 @@ const SchedulesList = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const limit = 5;
+  const pageSizeString = searchParams?.get("limit");
   const pageString = searchParams?.get("page");
   const sortString = searchParams?.get("sort");
   const statusFilter = searchParams?.get("status");
 
-  // let schedules, total;
   const page = pageString ? +pageString : 1;
-  // if (permissionUser?.includes("get:schedulesPag")) {
-  //   const { loading, error, data, refetch } = useQuery(
-  //     GET_SCHEDULE_PAGINATION,
-  //     {
-  //       variables: {
-  //         paginationSchedule: {
-  //           limit: limit,
-  //           offset: page - 1,
-  //           sort: sortString,
-  //           statusFilter: statusFilter,
-  //         },
-  //       },
-  //     }
-  //   );
-  //   schedules = data?.paginationSchedule?.schedules;
-  //   total = data?.paginationSchedule?.totalCount;
-  // }
+  const pageSize = pageSizeString ? +pageSizeString : 5;
 
   const { loading, error, data, refetch } = useQuery(GET_SCHEDULE_PAGINATION, {
     variables: {
       paginationSchedule: {
-        limit: limit,
+        limit: pageSize,
         offset: page - 1,
         sort: sortString,
         statusFilter: statusFilter,
@@ -82,7 +65,7 @@ const SchedulesList = () => {
     variables: {
       paginationSchedule: {
         ownerId: session?.user?.id,
-        limit: limit,
+        limit: pageSize,
         offset: page - 1,
         sort: sortString,
         statusFilter: statusFilter,
@@ -103,27 +86,29 @@ const SchedulesList = () => {
       total = dataById?.paginationScheduleById?.totalCount;
     }
   }
-  // const schedules = data?.paginationSchedule?.schedules;
-  // const total = data?.paginationSchedule?.totalCount;
   const [paginationTable, setPagination] = useState<TablePaginationConfig>({
     current: page,
-    pageSize: limit,
+    pageSize: pageSize,
   });
-
   const handleTableChange = (pagination: any, filters: any, sorter: any) => {
-    console.log("params", filters);
-    console.log("sort", sorter);
+    const params = new URLSearchParams(searchParams ?? "");
 
     if (pagination && pagination.current != paginationTable.current) {
-      const params = new URLSearchParams(searchParams ?? "");
       params.set("page", pagination.current);
-      setPagination({ current: pagination.current });
-      replace(`${pathname}?${params.toString()}`);
-      return;
+      setPagination({
+        current: pagination.current,
+        pageSize: pagination.pageSize,
+      });
     }
+
+    if (pagination && pagination.pageSize != paginationTable.pageSize) {
+      params.set("limit", pagination.pageSize);
+      params.set("page", "1");
+      setPagination({ pageSize: pagination.pageSize, current: 1 });
+    }
+
     if (sorter) {
       let checkSorter: boolean = true;
-      const params = new URLSearchParams(searchParams ?? "");
       let resultUrl = "";
       if (sorter.length) {
         for (let i = 0; i < sorter.length; i++) {
@@ -141,7 +126,6 @@ const SchedulesList = () => {
       } else {
         if (!sorter.order) {
           params.delete("sort");
-          replace(`${pathname}?${params.toString()}`);
           checkSorter = false;
         }
         let order = sorter.order;
@@ -154,11 +138,9 @@ const SchedulesList = () => {
       }
       if (checkSorter === true) {
         params.set("sort", resultUrl);
-        replace(`${pathname}?${params.toString()}`);
       }
     }
     if (filters) {
-      const params = new URLSearchParams(searchParams ?? "");
       if (
         !filters.status ||
         !Array.isArray(filters.status) ||
@@ -169,9 +151,8 @@ const SchedulesList = () => {
         const statusUrl = filters.status.join(",");
         params.set("status", statusUrl);
       }
-
-      replace(`${pathname}?${params.toString()}`);
     }
+    replace(`${pathname}?${params.toString()}`);
   };
 
   const handleRemove = async (id: string) => {

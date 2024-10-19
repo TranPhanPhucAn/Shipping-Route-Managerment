@@ -77,6 +77,13 @@ const Profile = () => {
       underMaintance = dataInforVessel?.getInforByOwner.underMaintance;
     }
   }
+  console.log(
+    "vesselTotal: ",
+    vesselTotal,
+    available,
+    inTransits,
+    underMaintance
+  );
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -194,15 +201,8 @@ const Profile = () => {
             <UpdatePasswordModal />
           </div>
         </div>
-        {vesselTotal && available && (
-          // permissionUser &&
-          // permissionUser.includes("get:inforByOwner") &&
-          // dataInforVessel &&
+        {dataInforVessel?.getInforByOwner && (
           <ListCardVessel
-            // vesselTotal={dataInforVessel?.getInforByOwner.vesselTotal}
-            // available={dataInforVessel?.getInforByOwner.available}
-            // inTransits={dataInforVessel?.getInforByOwner.inTransits}
-            // underMaintance={dataInforVessel?.getInforByOwner.underMaintance}
             vesselTotal={vesselTotal}
             available={available}
             inTransits={inTransits}
