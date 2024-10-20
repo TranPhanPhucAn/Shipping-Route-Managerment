@@ -8,8 +8,25 @@ import styles from "../../styles/Auth.module.css";
 import { GetPortsData, Port } from "../../graphql/types";
 
 const { Option } = Select;
+interface CreateRouteModalProps {
+  limit: number;
+  offset: number;
+  sort: string;
+  refetchSchedule: (variables: {
+    paginationSchedule: {
+      limit: number;
+      offset: number;
+      sort: string;
+    };
+  }) => void;
+}
 
-const CreateRouteModal = () => {
+const CreateRouteModal = ({
+  limit,
+  offset,
+  sort,
+  refetchSchedule,
+}: CreateRouteModalProps) => {
   const [visible, setVisible] = useState(false);
   const [departurePortId, setDeparturePortId] = useState("");
   const [destinationPortId, setDestinationPortId] = useState("");
@@ -94,7 +111,6 @@ const CreateRouteModal = () => {
             ]}
           >
             <Select
-             
               value={destinationPortId}
               showSearch
               onChange={(value) => setDestinationPortId(value)}
@@ -113,7 +129,11 @@ const CreateRouteModal = () => {
             </Select>
           </Form.Item>
           <Form.Item>
-            <Button className={styles.mainButton} htmlType="submit" loading={loading}>
+            <Button
+              className={styles.mainButton}
+              htmlType="submit"
+              loading={loading}
+            >
               Submit
             </Button>
           </Form.Item>

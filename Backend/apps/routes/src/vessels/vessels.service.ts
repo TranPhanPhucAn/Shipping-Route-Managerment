@@ -136,6 +136,8 @@ export class VesselsService {
       });
     }
 
+    order['id'] = 'DESC';
+
     const queryOptions: any = {
       take: limit,
       skip: skips,

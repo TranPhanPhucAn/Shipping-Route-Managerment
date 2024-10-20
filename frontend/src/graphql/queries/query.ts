@@ -317,6 +317,7 @@ export const GET_ROUTE_PAGINATION = gql`
           name
         }
         distance
+        estimatedTimeDays
         createdAt
       }
       totalCount

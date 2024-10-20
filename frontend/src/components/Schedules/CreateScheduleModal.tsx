@@ -7,6 +7,7 @@ import {
   GET_VESSELS,
   GET_ROUTES,
   GET_SCHEDULES,
+  GET_SCHEDULE_PAGINATION,
 } from "../../graphql/queries/query";
 import styles from "../../styles/Auth.module.css";
 import {
@@ -17,15 +18,33 @@ import {
 } from "../../graphql/types";
 
 const { Option } = Select;
+interface CreateScheduleModalProps {
+  limit: number;
+  offset: number;
+  sort: string;
+  statusFilter: string;
+  refetchSchedule: (variables: {
+    paginationSchedule: {
+      limit: number;
+      offset: number;
+      sort: string;
+      statusFilter: string;
+    };
+  }) => void;
+}
 
-const CreateScheduleModal = () => {
+const CreateScheduleModal = ({
+  limit,
+  offset,
+  sort,
+  statusFilter,
+  refetchSchedule,
+}: CreateScheduleModalProps) => {
   const [visible, setVisible] = useState(false);
   const [vesselId, setVesselId] = useState("");
   const [routeId, setRouteId] = useState("");
   const [departure_time, setDepartureTime] = useState(null);
-  const [createSchedule, { loading, error }] = useMutation(CREATE_SCHEDULE, {
-    refetchQueries: [{ query: GET_SCHEDULES }],
-  });
+  const [createSchedule, { loading, error }] = useMutation(CREATE_SCHEDULE);
   const { data: vesselsData } = useQuery<GetVesselsData>(GET_VESSELS);
   const { data: routesData } = useQuery<GetRoutesData>(GET_ROUTES);
   const [form] = Form.useForm();
@@ -48,6 +67,14 @@ const CreateScheduleModal = () => {
             departure_time,
             status: "SCHEDULED",
           },
+        },
+      });
+      await refetchSchedule({
+        paginationSchedule: {
+          limit: limit,
+          offset: offset, // assuming pagination is 0-based
+          sort: sort,
+          statusFilter: statusFilter,
         },
       });
       form.resetFields();

@@ -191,6 +191,7 @@ export class SchedulesService {
         order[field] = direction.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
       });
     }
+    order['id'] = 'DESC';
 
     const queryOptions: any = {
       take: limit,

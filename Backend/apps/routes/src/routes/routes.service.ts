@@ -7,7 +7,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { Route } from './entities/route.entity';
-import { CreateRouteInput, PaginationRoutesDto } from './dto/create-route.input';
+import {
+  CreateRouteInput,
+  PaginationRoutesDto,
+} from './dto/create-route.input';
 import { UpdateRouteInput } from './dto/update-route.input';
 import { ClientGrpc } from '@nestjs/microservices';
 import { UserServiceClient } from '../proto/user';
@@ -26,9 +29,11 @@ export class RoutesService {
     private readonly portRepository: Repository<Port>,
   ) {}
 
-  async createWithCalculatedDistance(createRouteInput: CreateRouteInput): Promise<Route> {
+  async createWithCalculatedDistance(
+    createRouteInput: CreateRouteInput,
+  ): Promise<Route> {
     const { departurePortId, destinationPortId } = createRouteInput;
-    
+
     const departurePort = await this.portRepository.findOne({
       where: { id: createRouteInput.departurePortId },
     });
@@ -39,24 +44,29 @@ export class RoutesService {
       throw new Error('Invalid port id(s)');
     }
     if (departurePortId === destinationPortId) {
-     throw new BadRequestException(
-     'Departure port and destination port cannot be the same',
-     );
-     }
-     try {
+      throw new BadRequestException(
+        'Departure port and destination port cannot be the same',
+      );
+    }
+    try {
       const distance = this.calculateMaritimeDistance(
         departurePort.latitude,
         departurePort.longitude,
         destinationPort.latitude,
-        destinationPort.longitude
+        destinationPort.longitude,
       );
 
       if (distance === null || distance <= 0) {
-        throw new BadRequestException('Unable to calculate distance between ports');
+        throw new BadRequestException(
+          'Unable to calculate distance between ports',
+        );
       }
-      const estimatedTimeInHours = this.calculateEstimatedTime(distance, this.VESSEL_SPEED);
+      const estimatedTimeInHours = this.calculateEstimatedTime(
+        distance,
+        this.VESSEL_SPEED,
+      );
       const { days } = this.convertTimeToDaysAndHours(estimatedTimeInHours);
-      
+
       const route = this.routeRepository.create({
         departurePort,
         destinationPort,
@@ -65,7 +75,6 @@ export class RoutesService {
       });
 
       return await this.routeRepository.save(route);
-
     } catch (error) {
       console.error('Error creating route:', error);
       throw new BadRequestException('Failed to create route');
@@ -90,12 +99,12 @@ export class RoutesService {
       const dLat = lat2 - lat1;
       const dLon = lon2 - lon1;
 
-      const a = Math.sin(dLat / 2) ** 2 +
-                Math.cos(lat1) * Math.cos(lat2) *
-                Math.sin(dLon / 2) ** 2;
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
 
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      
+
       // Calculate basic distance
       let distance = this.EARTH_RADIUS_KM * c;
 
@@ -103,16 +112,15 @@ export class RoutesService {
       const lonDiff = Math.abs(lon2 - lon1);
       const latDiff = Math.abs(lat2 - lat1);
 
-      if (lonDiff > Math.PI / 6) { 
-        distance *= 1.2; 
-      } else if (lonDiff > Math.PI / 12) { 
-        distance *= 1.1; 
+      if (lonDiff > Math.PI / 6) {
+        distance *= 1.2;
+      } else if (lonDiff > Math.PI / 12) {
+        distance *= 1.1;
       }
-      if (latDiff > Math.PI / 6) { 
-        distance *= 1.1; 
+      if (latDiff > Math.PI / 6) {
+        distance *= 1.1;
       }
       return parseFloat(distance.toFixed(2));
-
     } catch (error) {
       console.error('Error in maritime distance calculation:', error);
       throw new Error('Failed to calculate maritime distance');
@@ -120,16 +128,18 @@ export class RoutesService {
   }
   //calculate Estimated Time
   private calculateEstimatedTime(distance: number, speed: number): number {
-    return distance / speed; 
+    return distance / speed;
   }
   //cover estimated time
-  private convertTimeToDaysAndHours(estimatedTimeInHours: number): { days: number} {
+  private convertTimeToDaysAndHours(estimatedTimeInHours: number): {
+    days: number;
+  } {
     let days = Math.floor(estimatedTimeInHours / 24);
     const hours = Math.round(estimatedTimeInHours % 24);
-    if(hours >1){
-      days +=1;
+    if (hours > 1) {
+      days += 1;
     }
-   
+
     return { days };
   }
 
@@ -181,9 +191,12 @@ export class RoutesService {
       departurePort.latitude,
       departurePort.longitude,
       destinationPort.latitude,
-      destinationPort.longitude
+      destinationPort.longitude,
     );
-    const estimatedTimeInHours = this.calculateEstimatedTime(route.distance, this.VESSEL_SPEED);
+    const estimatedTimeInHours = this.calculateEstimatedTime(
+      route.distance,
+      this.VESSEL_SPEED,
+    );
     const { days } = this.convertTimeToDaysAndHours(estimatedTimeInHours);
     route.estimatedTimeDays = days;
 
@@ -195,8 +208,7 @@ export class RoutesService {
     return id;
   }
   async paginationRoute(paginationRoute: PaginationRoutesDto) {
-    const { limit, offset, sort, Portsearch } =
-    paginationRoute;
+    const { limit, offset, sort, Portsearch } = paginationRoute;
     const skip = limit * offset;
     const order: Record<string, 'ASC' | 'DESC'> = {};
     if (sort) {
@@ -205,12 +217,15 @@ export class RoutesService {
         order[field] = direction.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
       });
     }
+    order['id'] = 'DESC';
+
     const queryOptions: any = {
       take: limit,
       skip: skip,
-      relations: { role: true },
+      relations: ['departurePort', 'destinationPort'],
       order,
     };
+
     const whereCondition: any = {};
     if (Portsearch) {
       whereCondition.departurePort = ILike(`%${Portsearch}%`);
@@ -225,7 +240,7 @@ export class RoutesService {
     const totalCount = total;
 
     return {
-      users: result,
+      routes: result,
       totalCount: totalCount,
     };
   }

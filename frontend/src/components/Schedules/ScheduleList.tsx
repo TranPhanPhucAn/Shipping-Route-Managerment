@@ -309,7 +309,15 @@ const SchedulesList = () => {
   return (
     <div className={styles.body}>
       <div className={styles.createButton}>
-        {permissionUser?.includes("create:schedule") && <CreateScheduleModal />}
+        {permissionUser?.includes("create:schedule") && (
+          <CreateScheduleModal
+            limit={pageSize}
+            offset={page - 1}
+            sort={sortString ? sortString : ""}
+            statusFilter={statusFilter ? statusFilter : ""}
+            refetchSchedule={refetch}
+          />
+        )}
       </div>
 
       <div className={styles.container}>

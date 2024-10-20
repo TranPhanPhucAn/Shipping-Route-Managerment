@@ -239,12 +239,15 @@ export class UsersService {
       paginationUser;
     const skip = limit * offset;
     const order: Record<string, 'ASC' | 'DESC'> = {};
+
     if (sort) {
       sort.split(',').forEach((sortParam: string) => {
         const [field, direction] = sortParam.split(' ');
         order[field] = direction.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
       });
     }
+    order['id'] = 'DESC';
+
     const genderArray = genderFilter?.split(',');
     const roleArray = roleFilter?.split(',');
 
