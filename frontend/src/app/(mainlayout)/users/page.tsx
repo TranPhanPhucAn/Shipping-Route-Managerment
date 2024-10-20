@@ -46,6 +46,19 @@ const UserList = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const page = pageString ? +pageString : 1;
   const pageSize = pageSizeString ? +pageSizeString : 5;
+
+  const parseSortString = (sortString: string) => {
+    const sortOrders: { [key: string]: "ascend" | "descend" } = {};
+    if (sortString) {
+      sortString.split(",").forEach((sortPart) => {
+        const [field, order] = sortPart.split(" ");
+        sortOrders[field] = order === "asc" ? "ascend" : "descend";
+      });
+    }
+    return sortOrders;
+  };
+  const sortOrders = parseSortString(sortString ? sortString : "");
+
   const [removeUser, { loading: deleteLoading }] = useMutation(DELETE_USER);
   const { loading, error, data, refetch } = useQuery(GET_USER_PAGINATION, {
     variables: {
@@ -177,7 +190,7 @@ const UserList = () => {
     clearFilters();
   };
 
-  const getColumnSearchProps = (dataIndex: any) => ({
+  const getColumnSearchProps = (dataIndex: any, searchTerm: string | null) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -231,6 +244,7 @@ const UserList = () => {
     filterIcon: (filtered: boolean) => (
       <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
     ),
+    defaultFilteredValue: searchTerm ? [searchTerm] : null,
   });
 
   const handleEdit = async (record: any) => {
@@ -256,18 +270,13 @@ const UserList = () => {
   };
 
   const columns = [
-    // {
-    //   title: "Id",
-    //   dataIndex: "id",
-    //   key: "id",
-    //   sorter: { multiple: 2 },
-    // },
     {
       title: "Full Name",
       dataIndex: "username",
       key: "username",
       sorter: { multiple: 1 },
-      ...getColumnSearchProps("username"),
+      defaultSortOrder: sortOrders["username"],
+      ...getColumnSearchProps("username", search ? search : ""),
       render: (text: string, record: any) => {
         if (record.image_url) {
           return (
@@ -322,10 +331,13 @@ const UserList = () => {
         }
         return "";
       },
-      filters: roles?.map((role: any) => ({
-        text: role.name,
-        value: role.name,
-      })),
+      filters: roles
+        ? roles.map((role: any) => ({
+            text: role.name,
+            value: role.name,
+          }))
+        : [],
+      defaultFilteredValue: roleFilter?.split(","),
     },
     {
       title: "Gender",
@@ -363,6 +375,7 @@ const UserList = () => {
           value: "Other",
         },
       ],
+      defaultFilteredValue: genderFilter?.split(","),
     },
     ...(permissionUser?.includes("assignRole:user") ||
     permissionUser?.includes("delete:user")

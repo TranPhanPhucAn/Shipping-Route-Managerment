@@ -72,7 +72,7 @@ const CreateScheduleModal = ({
       await refetchSchedule({
         paginationSchedule: {
           limit: limit,
-          offset: offset, // assuming pagination is 0-based
+          offset: offset,
           sort: sort,
           statusFilter: statusFilter,
         },

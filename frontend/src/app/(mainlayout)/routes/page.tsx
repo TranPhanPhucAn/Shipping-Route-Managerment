@@ -22,16 +22,10 @@ import UpdateRouteModal from "@/src/components/Routes/UpdateRouteModal";
 import { DELETE_ROUTE } from "@/src/graphql/mutations/Auth";
 import { useState, useEffect } from "react";
 import styles from "@/src/styles/Listpage.module.css";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
-const getUniqueValues = (data: any[], key: string) => {
-  return Array.from(
-    new Set(data.map((item) => key.split(".").reduce((o, i) => o[i], item)))
-  );
-};
-const { Option } = Select;
 const RoutesList = () => {
   const { data: session, status, update } = useSession();
   const permissionUser = session?.user?.permissionNames;
@@ -47,6 +41,18 @@ const RoutesList = () => {
   const sortString = searchParams?.get("sort");
   const page = pageString ? +pageString : 1;
   const pageSize = pageSizeString ? +pageSizeString : 5;
+  const parseSortString = (sortString: string) => {
+    const sortOrders: { [key: string]: "ascend" | "descend" } = {};
+    if (sortString) {
+      sortString.split(",").forEach((sortPart) => {
+        const [field, order] = sortPart.split(" ");
+        sortOrders[field] = order === "asc" ? "ascend" : "descend";
+      });
+    }
+    return sortOrders;
+  };
+  const sortOrders = parseSortString(sortString ? sortString : "");
+
   const { loading, error, data, refetch } = useQuery(GET_ROUTE_PAGINATION, {
     variables: {
       paginationRoute: {
@@ -185,6 +191,7 @@ const RoutesList = () => {
       dataIndex: "distance",
       key: "distance",
       sorter: { multiple: 1 },
+      defaultSortOrder: sortOrders["distance"],
       render: (text: string, record: any) => {
         return record.distance.toFixed(2);
       },
@@ -258,7 +265,7 @@ const RoutesList = () => {
               limit={pageSize}
               offset={page - 1}
               sort={sortString ? sortString : ""}
-              refetchSchedule={refetch}
+              refetchRoute={refetch}
             />
           )}
         </div>

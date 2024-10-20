@@ -12,8 +12,8 @@ interface CreateRouteModalProps {
   limit: number;
   offset: number;
   sort: string;
-  refetchSchedule: (variables: {
-    paginationSchedule: {
+  refetchRoute: (variables: {
+    paginationRoute: {
       limit: number;
       offset: number;
       sort: string;
@@ -25,7 +25,7 @@ const CreateRouteModal = ({
   limit,
   offset,
   sort,
-  refetchSchedule,
+  refetchRoute,
 }: CreateRouteModalProps) => {
   const [visible, setVisible] = useState(false);
   const [departurePortId, setDeparturePortId] = useState("");
@@ -50,6 +50,13 @@ const CreateRouteModal = ({
             departurePortId,
             destinationPortId,
           },
+        },
+      });
+      await refetchRoute({
+        paginationRoute: {
+          limit: limit,
+          offset: offset,
+          sort: sort,
         },
       });
       form.resetFields();

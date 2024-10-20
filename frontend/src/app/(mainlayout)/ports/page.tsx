@@ -43,6 +43,18 @@ const PortList = () => {
   const search = searchParams?.get("search");
   const page = pageString ? +pageString : 1;
   const pageSize = pageSizeString ? +pageSizeString : 5;
+  const parseSortString = (sortString: string) => {
+    const sortOrders: { [key: string]: "ascend" | "descend" } = {};
+    if (sortString) {
+      sortString.split(",").forEach((sortPart) => {
+        const [field, order] = sortPart.split(" ");
+        sortOrders[field] = order === "asc" ? "ascend" : "descend";
+      });
+    }
+    return sortOrders;
+  };
+  const sortOrders = parseSortString(sortString ? sortString : "");
+
   const [paginationTable, setPagination] = useState<TablePaginationConfig>({
     current: page,
     pageSize: pageSize,
@@ -137,7 +149,7 @@ const PortList = () => {
     replace(`${pathname}?${params.toString()}`);
   };
 
-  const getColumnSearchProps = (dataIndex: any) => ({
+  const getColumnSearchProps = (dataIndex: any, searchTerm: string | null) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -191,6 +203,7 @@ const PortList = () => {
     filterIcon: (filtered: boolean) => (
       <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
     ),
+    defaultFilteredValue: searchTerm ? [searchTerm] : null,
   });
 
   const handleReset = (clearFilters: () => void) => {
@@ -213,13 +226,15 @@ const PortList = () => {
       dataIndex: "name",
       key: "name",
       sorter: { multiple: 2 },
+      defaultSortOrder: sortOrders["name"],
     },
     {
       title: "Country",
       dataIndex: "country",
       key: "country",
       sorter: { multiple: 1 },
-      ...getColumnSearchProps("country"),
+      defaultSortOrder: sortOrders["country"],
+      ...getColumnSearchProps("country", search ? search : ""),
     },
     {
       title: "Latitude",
@@ -278,7 +293,15 @@ const PortList = () => {
       <Divider style={{ borderColor: "#334155" }}></Divider>
       <div className={styles.body}>
         <div className={styles.createButton}>
-          {permissionUser?.includes("create:port") && <CreatePortModal />}
+          {permissionUser?.includes("create:port") && (
+            <CreatePortModal
+              limit={pageSize}
+              offset={page - 1}
+              sort={sortString ? sortString : ""}
+              search={search ? search : ""}
+              refetchPorts={refetch}
+            />
+          )}
         </div>
         <div className={styles.container}>
           <Table

@@ -6,7 +6,27 @@ import { CREATE_PORT } from "@/src/graphql/mutations/Auth";
 import { GET_PORTS } from "@/src/graphql/queries/query";
 import styles from "@/src/styles/Auth.module.css";
 
-const CreatePortModal = () => {
+interface CreatePortModalProps {
+  limit: number;
+  offset: number;
+  sort: string;
+  search: string;
+  refetchPorts: (variables: {
+    paginationPort: {
+      limit: number;
+      offset: number;
+      sort: string;
+      search: string;
+    };
+  }) => void;
+}
+const CreatePortModal = ({
+  limit,
+  offset,
+  sort,
+  search,
+  refetchPorts,
+}: CreatePortModalProps) => {
   const [visible, setVisible] = useState(false);
   const [name, setName] = useState("");
   const [country, setCountry] = useState("");
@@ -29,6 +49,14 @@ const CreatePortModal = () => {
           },
         },
       });
+      await refetchPorts({
+        paginationPort: {
+          limit: limit,
+          offset: offset,
+          sort: sort,
+          search: search,
+        },
+      });
       form.resetFields();
       setVisible(false);
       message.success("Port created successfully!");
@@ -45,7 +73,6 @@ const CreatePortModal = () => {
       </Button>
       <Modal
         title="Create New Port"
-        
         open={visible}
         onCancel={() => setVisible(false)}
         footer={null}

@@ -6,7 +6,40 @@ import { CREATE_VESSEL } from "@/src/graphql/mutations/Auth";
 import { GET_VESSELS } from "@/src/graphql/queries/query";
 import styles from "@/src/styles/Auth.module.css";
 
-const CreateVesselModal = () => {
+//     limit: pageSize,
+// offset: page - 1,
+// sort: sortString,
+// search: search,
+// statusFilter: statusFilter,
+// typeFilter: typeFilter,
+interface CreateVesselModalProps {
+  limit: number;
+  offset: number;
+  sort: string;
+  statusFilter: string;
+  typeFilter: string;
+  search: string;
+
+  refetchVessel: (variables: {
+    paginationVessels: {
+      limit: number;
+      offset: number;
+      sort: string;
+      statusFilter: string;
+      typeFilter: string;
+      search: string;
+    };
+  }) => void;
+}
+const CreateVesselModal = ({
+  limit,
+  offset,
+  sort,
+  statusFilter,
+  typeFilter,
+  search,
+  refetchVessel,
+}: CreateVesselModalProps) => {
   const [visible, setVisible] = useState(false);
   const [name, setName] = useState("");
   const [type, setType] = useState("");
@@ -32,6 +65,16 @@ const CreateVesselModal = () => {
             capacity,
             ownerId,
           },
+        },
+      });
+      await refetchVessel({
+        paginationVessels: {
+          limit: limit,
+          offset: offset,
+          sort: sort,
+          statusFilter: statusFilter,
+          typeFilter: typeFilter,
+          search: search,
         },
       });
       form.resetFields();

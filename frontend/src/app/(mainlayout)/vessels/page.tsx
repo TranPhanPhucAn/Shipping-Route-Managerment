@@ -42,6 +42,17 @@ const VesselList = () => {
   const search = searchParams?.get("search");
   const statusFilter = searchParams?.get("status");
   const typeFilter = searchParams?.get("type");
+  const parseSortString = (sortString: string) => {
+    const sortOrders: { [key: string]: "ascend" | "descend" } = {};
+    if (sortString) {
+      sortString.split(",").forEach((sortPart) => {
+        const [field, order] = sortPart.split(" ");
+        sortOrders[field] = order === "asc" ? "ascend" : "descend";
+      });
+    }
+    return sortOrders;
+  };
+  const sortOrders = parseSortString(sortString ? sortString : "");
 
   const page = pageString ? +pageString : 1;
   const pageSize = pageSizeString ? +pageSizeString : 5;
@@ -101,7 +112,7 @@ const VesselList = () => {
     clearFilters();
   };
 
-  const getColumnSearchProps = (dataIndex: any) => ({
+  const getColumnSearchProps = (dataIndex: any, searchTerm: string | null) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -155,6 +166,7 @@ const VesselList = () => {
     filterIcon: (filtered: boolean) => (
       <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
     ),
+    defaultFilteredValue: searchTerm ? [searchTerm] : null,
   });
   const handleUpdateModalClose = () => {
     setIsUpdateModalVisible(false);
@@ -238,7 +250,8 @@ const VesselList = () => {
       dataIndex: "name",
       key: "name",
       sorter: { multiple: 2 },
-      ...getColumnSearchProps("name"),
+      ...getColumnSearchProps("name", search ? search : ""),
+      defaultSortOrder: sortOrders["name"],
     },
     {
       title: "Type",
@@ -251,12 +264,14 @@ const VesselList = () => {
         { text: "RO_RO_SHIP", value: "RO_RO_SHIP" },
         { text: "PASSENGER_SHIP", value: "PASSENGER_SHIP" },
       ],
+      defaultFilteredValue: typeFilter?.split(","),
     },
     {
       title: "Capacity",
       dataIndex: "capacity",
       key: "capacity",
       sorter: { multiple: 1 },
+      defaultSortOrder: sortOrders["capacity"],
     },
     {
       title: "Status",
@@ -267,6 +282,8 @@ const VesselList = () => {
         { text: "In Transit", value: "IN_TRANSIT" },
         { text: "Under maintenance", value: "UNDER_MAINTENANCE" },
       ],
+      defaultFilteredValue: statusFilter?.split(","),
+
       render: (text: string, record: Vessel) => {
         let color = "white";
 
@@ -332,7 +349,17 @@ const VesselList = () => {
       <Divider style={{ borderColor: "#334155" }}></Divider>
       <div className={styles.body}>
         <div className={styles.createButton}>
-          {permissionUser?.includes("create:vessel") && <CreateVesselModal />}
+          {permissionUser?.includes("create:vessel") && (
+            <CreateVesselModal
+              limit={pageSize}
+              offset={page - 1}
+              sort={sortString ? sortString : ""}
+              statusFilter={statusFilter ? statusFilter : ""}
+              typeFilter={typeFilter ? typeFilter : ""}
+              search={search ? search : ""}
+              refetchVessel={refetch}
+            />
+          )}
         </div>
         <div className={styles.container}>
           <Table

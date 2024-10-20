@@ -128,6 +128,7 @@ export class PortsService {
         order[field] = direction.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
       });
     }
+    order['id'] = 'DESC';
 
     const queryOptions: any = {
       take: limit,

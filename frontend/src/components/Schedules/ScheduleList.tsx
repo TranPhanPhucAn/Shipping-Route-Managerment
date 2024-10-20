@@ -218,7 +218,7 @@ const SchedulesList = () => {
         { text: "Completed", value: "Completed" },
         { text: "Cancelled", value: "Cancelled" },
       ],
-      // onFilter: (value: any, record: any) => record.status === value,
+      defaultFilteredValue: statusFilter?.split(","),
       render: (text: string, record: Schedule) => {
         let color = "white";
 
