@@ -20,6 +20,7 @@ const UpdateVesselModal = ({
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [capacity, setCapacity] = useState("");
+  const [ownerId, setOwnerId] = useState("");
   const [status, setStatus] = useState("");
   const [updateVessel, { loading, error }] = useMutation(UPDATE_VESSEL);
   const [form] = Form.useForm();
@@ -29,15 +30,18 @@ const UpdateVesselModal = ({
       form.setFieldsValue({
         name: vessel.name,
         type: vessel.type,
+        ownerId:vessel.ownerId,
         capacity: vessel.capacity,
         status: vessel.status,
       });
     }
   }, [vessel, form]);
+  console.log("ownerID: ", vessel.ownerId )
 
   const handleUpdateVessel = async (values: {
     name: string;
     type: string;
+    ownerId : string;
     capacity: number;
     status: string;
   }) => {
@@ -48,6 +52,7 @@ const UpdateVesselModal = ({
           updateVesselInput: {
             name: values.name,
             type: values.type,
+            ownerId: vessel.ownerId,
             capacity: values.capacity,
             status: values.status,
           },

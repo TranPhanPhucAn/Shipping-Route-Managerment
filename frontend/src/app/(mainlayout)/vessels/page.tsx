@@ -22,7 +22,8 @@ import { useSession } from "next-auth/react";
 const VesselList = () => {
   const { data: session } = useSession();
   const permissionUser = session?.user?.permissionNames;
-  const { loading, error, data, refetch } = useQuery<GetVesselsData>(GET_VESSELS);
+  const { loading, error, data, refetch } =
+    useQuery<GetVesselsData>(GET_VESSELS);
   const vesselsData = data?.vessels || [];
   const [removeVessel, { loading: deleteLoading }] = useMutation(DELETE_VESSEL);
   const [selectedVessel, setSelectedVessel] = useState<Vessel | null>(null);
@@ -77,7 +78,7 @@ const VesselList = () => {
         { text: "Under maintenance", value: "Under maintenance" },
       ],
       onFilter: (value: any, record: any) => record.status === value,
-      render: (text: string, record: vessel) => {
+      render: (text: string, record: Vessel) => {
         let color = "white";
 
         if (record.status === "AVAILABLE") {
@@ -86,7 +87,7 @@ const VesselList = () => {
           color = "#85C1E9";
         } else if (record.status === "UNDER_MAINTENANCE") {
           color = "red";
-        } 
+        }
 
         return (
           <Tag color={color} key={record.id}>
@@ -141,26 +142,26 @@ const VesselList = () => {
       </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
       <div className={styles.body}>
-      <div className={styles.createButton}>
-        {permissionUser?.includes("create:vessel") && <CreateVesselModal />}
-      </div>
-      <div className={styles.container}>
-        <Table
-          dataSource={vesselsData}
-          columns={columns}
-          loading={loading}
-          pagination={{ pageSize: 5 }}
-          className={styles.Table}
-        />
-        {selectedVessel && (
-          <UpdateVesselModal
-            // id={selectedVessel.id}
-            vessel={selectedVessel}
-            visible={isUpdateModalVisible}
-            onClose={handleUpdateModalClose}
+        <div className={styles.createButton}>
+          {permissionUser?.includes("create:vessel") && <CreateVesselModal />}
+        </div>
+        <div className={styles.container}>
+          <Table
+            dataSource={vesselsData}
+            columns={columns}
+            loading={loading}
+            pagination={{ pageSize: 5 }}
+            className={styles.Table}
           />
-        )}
-      </div>
+          {selectedVessel && (
+            <UpdateVesselModal
+              // id={selectedVessel.id}
+              vessel={selectedVessel}
+              visible={isUpdateModalVisible}
+              onClose={handleUpdateModalClose}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

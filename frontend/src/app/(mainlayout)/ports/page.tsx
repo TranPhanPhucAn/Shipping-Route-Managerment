@@ -77,7 +77,7 @@ const PortList = () => {
       key: "id",
       render: (text: string, record: Port) => (
         <div>
-          {permissionUser?.includes("update:port") && (
+          {/* {permissionUser?.includes("update:port") && (
             <Button
               type="link"
               onClick={() => handleEdit(record)}
@@ -85,7 +85,7 @@ const PortList = () => {
             >
               Edit
             </Button>
-          )}
+          )} */}
           {permissionUser?.includes("delete:port") && (
             <Popconfirm
               placement="topLeft"

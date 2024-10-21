@@ -82,7 +82,6 @@ const CreateScheduleModal = () => {
             rules={[{ required: true, message: "Please select a vessel!" }]}
           >
             <Select
-              className={styles.input}
               value={vesselId}
               showSearch
               onChange={(value) => setVesselId(value)}
@@ -107,7 +106,6 @@ const CreateScheduleModal = () => {
             rules={[{ required: true, message: "Please select a route!" }]}
           >
             <Select
-              className={styles.input}
               value={routeId}
               showSearch
               onChange={(value) => setRouteId(value)}
