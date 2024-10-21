@@ -17,6 +17,11 @@ export class UpdateVesselInput {
   @Field()
   @IsNotEmpty()
   capacity: number;
+
+  @Field()
+  @IsNotEmpty()
+  @IsString()
+  ownerId: string;
     
   @Field(() => VesselStatus, { defaultValue: VesselStatus.AVAILABLE })
   @IsEnum(VesselStatus)
