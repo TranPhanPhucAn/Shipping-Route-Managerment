@@ -60,38 +60,46 @@ export class SeedingService {
         {
           permission: 'get:schedulesPagById',
           description: 'Get all schedules pagination by owner id',
-        }, //20
+        }, //19
         {
           permission: 'update:schedule',
           description: 'Update status of schedule',
-        }, //21
-        { permission: 'search:schedule', description: 'Search a schedule' }, //222
-        { permission: 'delete:schedule', description: 'Delete a schedule' }, //23
-        { permission: 'create:port', description: 'Create new port' }, //24
-        { permission: 'get:portPag', description: 'Get all ports pagination' }, //24
+        }, //20
+        { permission: 'search:schedule', description: 'Search a schedule' }, //21
+        { permission: 'delete:schedule', description: 'Delete a schedule' }, //22
+        { permission: 'create:port', description: 'Create new port' }, //23
+        { permission: 'get:portsPag', description: 'Get all ports pagination' }, //24
         { permission: 'update:port', description: 'Update a port' }, //25
         { permission: 'delete:port', description: 'Delete a port' }, //26
         { permission: 'create:route', description: 'Create new route' }, //27
-        { permission: 'get:routes', description: 'Get all routes' }, //28
+        // { permission: 'get:routes', description: 'Get all routes' }, //28
+        {
+          permission: 'get:routesPag',
+          description: 'Get all routes pagination',
+        }, //28
         { permission: 'update:route', description: 'Update a route' }, //29
         { permission: 'search:route', description: 'Search a route' }, //30
         { permission: 'delete:route', description: 'Delete a route' }, //31
-        // { permission: 'get:vessels', description: 'Get all vessels' }, //32
+        { permission: 'get:vessels', description: 'Get all vessels' }, //32
         {
           permission: 'get:vesselsPag',
           description: 'Get all vessels pagination',
-        }, //32
-        { permission: 'create:vessel', description: 'Create new vessel' }, //33
-        { permission: 'update:vessel', description: 'Update a vessel' }, //34
-        { permission: 'delete:vessel', description: 'Delete a vessel' }, //35
+        }, //33
+        {
+          permission: 'get:vesselsPagById',
+          description: 'Get all vessels pagination by owner',
+        }, //34
+        { permission: 'create:vessel', description: 'Create new vessel' }, //35
+        { permission: 'update:vessel', description: 'Update a vessel' }, //36
+        { permission: 'delete:vessel', description: 'Delete a vessel' }, //37
         {
           permission: 'get:inforByOwner',
           description: 'Get vessel information by ownerId',
-        }, //36
+        }, //38
         {
           permission: 'get:inforVesselTotal',
           description: 'Get total vessel information',
-        }, //37
+        }, //39
       ];
       const permissionsEntities = permissionsRepository.create(permissions);
       await permissionsRepository.save(permissionsEntities);
@@ -104,30 +112,29 @@ export class SeedingService {
         name: 'supplier',
         description: 'Supplier manage route',
         permissions: [
-          permissionsEntities[0],
           permissionsEntities[1],
           permissionsEntities[2],
-          permissionsEntities[3],
-          permissionsEntities[17],
+          permissionsEntities[16],
           permissionsEntities[18],
           permissionsEntities[19],
           permissionsEntities[20],
+          permissionsEntities[23],
+          permissionsEntities[27],
           permissionsEntities[29],
           permissionsEntities[31],
-          permissionsEntities[32],
           permissionsEntities[33],
-          permissionsEntities[34],
           permissionsEntities[35],
+          permissionsEntities[37],
         ],
       });
       const role3 = rolesRepository.create({
         name: 'user',
         description: 'User is basic role',
         permissions: [
+          permissionsEntities[1],
           permissionsEntities[2],
-          permissionsEntities[3],
           permissionsEntities[20],
-          permissionsEntities[28],
+          permissionsEntities[29],
         ],
       });
       await rolesRepository.save([role1, role2, role3]);

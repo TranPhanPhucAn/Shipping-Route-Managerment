@@ -2,7 +2,10 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { RoutesService } from './routes.service';
 import { Route } from './entities/route.entity';
 import { Port } from '../ports/entities/port.entity';
-import { CreateRouteInput, PaginationRoutesDto } from './dto/create-route.input';
+import {
+  CreateRouteInput,
+  PaginationRoutesDto,
+} from './dto/create-route.input';
 import { UpdateRouteInput } from './dto/update-route.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -52,8 +55,11 @@ export class RoutesResolver {
   async removeRoute(@Args('id') id: string): Promise<string> {
     return this.routeService.remove(id);
   }
+
+  @SetMetadata('permissions', ['get:routesPag'])
+  @UseGuards(PermissionsGuard)
   @Query(() => PaginationRouteResponse, { name: 'paginationRoute' })
-  paginationSchedule(
+  paginationRoute(
     @Args('paginationRoute') paginationRoute: PaginationRoutesDto,
   ) {
     return this.routeService.paginationRoute(paginationRoute);

@@ -64,6 +64,7 @@ const Profile = () => {
   } = useQuery(QUERY_INFOR_VESSEL_TOTAL, {
     skip: !permissionUser?.includes("get:inforVesselTotal") || !id, // Skip query if permission or id is not present
   });
+
   if (permissionUser?.includes("get:inforVesselTotal")) {
     vesselTotal = dataInforVesselTotal?.getInforVesselTotal.vesselTotal;
     available = dataInforVesselTotal?.getInforVesselTotal.available;
@@ -201,7 +202,8 @@ const Profile = () => {
             <UpdatePasswordModal />
           </div>
         </div>
-        {dataInforVessel?.getInforByOwner && (
+        {(dataInforVessel?.getInforByOwner ||
+          dataInforVesselTotal?.getInforVesselTotal) && (
           <ListCardVessel
             vesselTotal={vesselTotal}
             available={available}

@@ -50,7 +50,7 @@ export class PortsResolver {
     return this.portService.remove(id);
   }
 
-  @SetMetadata('permissions', ['get:portPag'])
+  @SetMetadata('permissions', ['get:portsPag'])
   @UseGuards(PermissionsGuard)
   @Query(() => PaginationPortResponse, { name: 'paginationPort' })
   paginationPort(@Args('paginationPort') paginationPort: PaginationPortDto) {

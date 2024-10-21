@@ -44,7 +44,7 @@ const items: MenuItem[] = [
       {
         key: "/routes",
         label: <Link href={"/routes"}>Routes List</Link>,
-        permission: "get:routes",
+        permission: "get:routesPag",
       },
     ],
   },
@@ -68,10 +68,12 @@ const items: MenuItem[] = [
   {
     label: <Link href={"/ports"}>Ports</Link>,
     key: "/ports",
+    permission: "get:portsPag",
   },
   {
     label: <Link href={"/vessels"}>Vessels</Link>,
     key: "/vessels",
+    permission: "get:vessels",
   },
   {
     label: <Link href={"/users"}>Users</Link>,

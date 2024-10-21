@@ -246,42 +246,47 @@ const PortList = () => {
       dataIndex: "longitude",
       key: "longitude",
     },
-    {
-      title: "Action",
-      dataIndex: "id",
-      key: "id",
-      render: (text: string, record: Port) => (
-        <div>
-          {permissionUser?.includes("update:port") && (
-            <Button
-              type="link"
-              onClick={() => handleEdit(record)}
-              icon={<EditOutlined />}
-            >
-              Edit
-            </Button>
-          )}
-          {permissionUser?.includes("delete:port") && (
-            <Popconfirm
-              placement="topLeft"
-              title={"Are you sure to delete this port?"}
-              okText="Yes"
-              cancelText="No"
-              onConfirm={() => handleRemove(record.id)}
-            >
-              <Button
-                type="link"
-                danger
-                loading={deleteLoading}
-                icon={<DeleteOutlined />}
-              >
-                Delete
-              </Button>
-            </Popconfirm>
-          )}
-        </div>
-      ),
-    },
+    ...(permissionUser?.includes("update:port") ||
+    permissionUser?.includes("delete:port")
+      ? [
+          {
+            title: "Action",
+            dataIndex: "id",
+            key: "id",
+            render: (text: string, record: Port) => (
+              <div>
+                {permissionUser?.includes("update:port") && (
+                  <Button
+                    type="link"
+                    onClick={() => handleEdit(record)}
+                    icon={<EditOutlined />}
+                  >
+                    Edit
+                  </Button>
+                )}
+                {permissionUser?.includes("delete:port") && (
+                  <Popconfirm
+                    placement="topLeft"
+                    title={"Are you sure to delete this port?"}
+                    okText="Yes"
+                    cancelText="No"
+                    onConfirm={() => handleRemove(record.id)}
+                  >
+                    <Button
+                      type="link"
+                      danger
+                      loading={deleteLoading}
+                      icon={<DeleteOutlined />}
+                    >
+                      Delete
+                    </Button>
+                  </Popconfirm>
+                )}
+              </div>
+            ),
+          },
+        ]
+      : []),
   ];
 
   return (

@@ -11,6 +11,8 @@ const privatePaths = [
   "/maps",
   "/routes",
   "/schedules",
+  "/vessels",
+  "/ports",
 ];
 
 const authPaths = ["/login", "/register"];
@@ -134,6 +136,21 @@ export async function middleware(request: NextRequest) {
     }
     if (pathname === "/roles") {
       if (!token.permissionNames.includes("get:roles")) {
+        return NextResponse.redirect(new URL("/", request.url));
+      }
+    }
+    if (pathname === "/vessels") {
+      if (!token.permissionNames.includes("get:vessels")) {
+        return NextResponse.redirect(new URL("/", request.url));
+      }
+    }
+    if (pathname === "/ports") {
+      if (!token.permissionNames.includes("get:portsPag")) {
+        return NextResponse.redirect(new URL("/", request.url));
+      }
+    }
+    if (pathname === "/routes") {
+      if (!token.permissionNames.includes("get:routesPag")) {
         return NextResponse.redirect(new URL("/", request.url));
       }
     }

@@ -9,7 +9,10 @@ import {
   GetInforByOwnerResponse,
   PaginationVesselResponse,
 } from '../types/route.types';
-import { PaginationVesselDto } from './dto/pagination-vessels';
+import {
+  PaginationVesselByIdDto,
+  PaginationVesselDto,
+} from './dto/pagination-vessels';
 
 @Resolver(() => Vessel)
 export class VesselsResolver {
@@ -74,5 +77,14 @@ export class VesselsResolver {
     @Args('paginationVessels') paginationVessels: PaginationVesselDto,
   ) {
     return this.vesselService.paginationVessels(paginationVessels);
+  }
+
+  @SetMetadata('permissions', ['get:vesselsPagById'])
+  @UseGuards(PermissionsGuard)
+  @Query(() => PaginationVesselResponse, { name: 'paginationVesselById' })
+  paginationVesselById(
+    @Args('paginationVessels') paginationVessels: PaginationVesselByIdDto,
+  ) {
+    return this.vesselService.paginationVesselById(paginationVessels);
   }
 }

@@ -8,7 +8,10 @@ import { ILike, In, Repository } from 'typeorm';
 import { Vessel, VesselStatus, VesselType } from './entities/vessel.entity';
 import { CreateVesselInput } from './dto/create-vessel.input';
 import { UpdateVesselInput } from './dto/update-vessel.input';
-import { PaginationVesselDto } from './dto/pagination-vessels';
+import {
+  PaginationVesselByIdDto,
+  PaginationVesselDto,
+} from './dto/pagination-vessels';
 
 @Injectable()
 export class VesselsService {
@@ -145,6 +148,58 @@ export class VesselsService {
     };
 
     const whereCondition: any = {};
+    if (search) {
+      whereCondition.name = ILike(`%${search}%`);
+    }
+    if (statusFilter) {
+      const statusArray = statusFilter.split(',') as VesselStatus[];
+      if (statusArray.length > 0) {
+        whereCondition.status = In(statusArray);
+      }
+    }
+    if (typeFilter) {
+      const typeArray = typeFilter.split(',') as VesselType[];
+      if (typeArray.length > 0) {
+        whereCondition.type = In(typeArray);
+      }
+    }
+
+    if (Object.keys(whereCondition).length > 0) {
+      queryOptions.where = whereCondition;
+    }
+
+    const [result, total] =
+      await this.vesselRepository.findAndCount(queryOptions);
+    const totalCount = total;
+
+    return {
+      vessels: result,
+      totalCount: totalCount,
+    };
+  }
+
+  async paginationVesselById(paginationVessel: PaginationVesselByIdDto) {
+    const { ownerId, limit, offset, sort, search, statusFilter, typeFilter } =
+      paginationVessel;
+    const skips = limit * offset;
+    const order: Record<string, 'ASC' | 'DESC'> = {};
+    if (sort) {
+      sort.split(',').forEach((sortParam: string) => {
+        const [field, direction] = sortParam.split(' ');
+        order[field] = direction.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+      });
+    }
+
+    order['id'] = 'DESC';
+
+    const queryOptions: any = {
+      take: limit,
+      skip: skips,
+      order,
+    };
+
+    const whereCondition: any = {};
+    whereCondition.ownerId = ownerId;
     if (search) {
       whereCondition.name = ILike(`%${search}%`);
     }

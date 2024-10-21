@@ -185,11 +185,6 @@ const SchedulesList = () => {
   };
 
   const columns = [
-    // {
-    //   title: "ID",
-    //   dataIndex: "id",
-    //   key: "id",
-    // },
     {
       title: "Vessel",
       dataIndex: ["vessel", "name"],
@@ -337,7 +332,6 @@ const SchedulesList = () => {
         />
         {selectedSchedule && (
           <UpdateScheduleModal
-            // id={selectedSchedule.id}
             schedule={selectedSchedule}
             visible={isUpdateModalVisible}
             onClose={handleUpdateModalClose}

@@ -192,6 +192,21 @@ export const GET_VESSELS_PAGINATION = gql`
   }
 `;
 
+export const GET_VESSELS_PAGINATION_BY_ID = gql`
+  query paginationVesselById($paginationVessels: PaginationVesselByIdDto!) {
+    paginationVesselById(paginationVessels: $paginationVessels) {
+      vessels {
+        id
+        name
+        type
+        capacity
+        status
+      }
+      totalCount
+    }
+  }
+`;
+
 export const QUERY_INFOR_BY_OWNER = gql`
   query getInforByOwner($id: String!) {
     getInforByOwner(id: $id) {

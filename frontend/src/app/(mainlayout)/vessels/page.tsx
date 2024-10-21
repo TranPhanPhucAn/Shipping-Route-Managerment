@@ -14,6 +14,7 @@ import {
 import {
   GET_VESSELS,
   GET_VESSELS_PAGINATION,
+  GET_VESSELS_PAGINATION_BY_ID,
 } from "@/src/graphql/queries/query";
 import { DELETE_VESSEL } from "@/src/graphql/mutations/Auth";
 import { GetVesselsData, Vessel } from "@/src/graphql/types";
@@ -60,6 +61,7 @@ const VesselList = () => {
     current: page,
     pageSize: pageSize,
   });
+
   const { loading, error, data, refetch } = useQuery(GET_VESSELS_PAGINATION, {
     variables: {
       paginationVessels: {
@@ -71,9 +73,43 @@ const VesselList = () => {
         typeFilter: typeFilter,
       },
     },
+    skip: !permissionUser?.includes("get:vesselsPag"),
   });
-  const vesselsData = data?.paginationVessels?.vessels || [];
-  const total = data?.paginationVessels?.totalCount;
+
+  const {
+    loading: loadingById,
+    error: errorById,
+    data: dataById,
+    refetch: refetchById,
+  } = useQuery(GET_VESSELS_PAGINATION_BY_ID, {
+    variables: {
+      paginationVessels: {
+        ownerId: session?.user?.id,
+        limit: pageSize,
+        offset: page - 1,
+        sort: sortString,
+        search: search,
+        statusFilter: statusFilter,
+        typeFilter: typeFilter,
+      },
+    },
+    skip:
+      !permissionUser?.includes("get:vesselsPagById") ||
+      permissionUser?.includes("get:vesselsPag"),
+  });
+  let vesselsData, total;
+  if (permissionUser?.includes("get:vesselsPag")) {
+    vesselsData = data?.paginationVessels?.vessels;
+    total = data?.paginationVessels?.totalCount;
+  } else {
+    if (permissionUser?.includes("get:vesselsPagById")) {
+      vesselsData = dataById?.paginationVesselById?.vessels;
+      total = dataById?.paginationVesselById?.totalCount;
+    }
+  }
+
+  // const vesselsData = data?.paginationVessels?.vessels || [];
+  // const total = data?.paginationVessels?.totalCount;
   const [removeVessel, { loading: deleteLoading }] = useMutation(DELETE_VESSEL);
   const [selectedVessel, setSelectedVessel] = useState<Vessel | null>(null);
   const [isUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
