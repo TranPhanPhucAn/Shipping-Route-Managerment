@@ -119,6 +119,7 @@ export interface Vessel {
   id: string;
   name: string;
   type: string;
+  ownerId: string;
   capacity: number;
   status: string;
 }

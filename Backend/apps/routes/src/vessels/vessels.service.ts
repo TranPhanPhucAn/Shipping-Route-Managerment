@@ -52,6 +52,7 @@ export class VesselsService {
     const vessel = await this.vesselRepository.findOne({
       where: { id },
     });
+    updateVesselInput.ownerId = vessel.ownerId;
     const updateVessel = updateVesselInput;
 
     if (!vessel) {
