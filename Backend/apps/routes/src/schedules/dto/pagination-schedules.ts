@@ -16,6 +16,9 @@ export class PaginationScheduleDto {
 
   @Field({ nullable: true })
   statusFilter: string | null;
+
+  @Field({ nullable: true })
+  search: string | null;
 }
 
 @InputType()
@@ -37,4 +40,7 @@ export class PaginationScheduleByIdDto {
 
   @Field({ nullable: true })
   statusFilter: string | null;
+
+  @Field({ nullable: true })
+  search: string | null;
 }

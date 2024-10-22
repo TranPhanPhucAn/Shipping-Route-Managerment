@@ -9,6 +9,7 @@ import {
   Divider,
   Input,
   Select,
+  Space,
 } from "antd";
 import {
   GET_ROUTES,
@@ -16,7 +17,12 @@ import {
   GET_ROUTE_PAGINATION,
 } from "@/src/graphql/queries/query";
 import { GetRoutesData, Route, GetPortsData, Port } from "@/src/graphql/types";
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import CreateRouteModal from "@/src/components/Routes/CreateRouteModal";
 import UpdateRouteModal from "@/src/components/Routes/UpdateRouteModal";
 import { DELETE_ROUTE } from "@/src/graphql/mutations/Auth";
@@ -25,6 +31,7 @@ import styles from "@/src/styles/Listpage.module.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { FilterDropdownProps } from "antd/es/table/interface";
 
 const RoutesList = () => {
   const { data: session, status, update } = useSession();
@@ -39,6 +46,9 @@ const RoutesList = () => {
   const pageSizeString = searchParams?.get("limit");
   const pageString = searchParams?.get("page");
   const sortString = searchParams?.get("sort");
+  const searchDep = searchParams?.get("searchDep");
+  const searchDes = searchParams?.get("searchDes");
+
   const page = pageString ? +pageString : 1;
   const pageSize = pageSizeString ? +pageSizeString : 5;
   const parseSortString = (sortString: string) => {
@@ -59,6 +69,8 @@ const RoutesList = () => {
         limit: pageSize,
         offset: page - 1,
         sort: sortString,
+        searchDep: searchDep,
+        searchDes: searchDes,
       },
     },
   });
@@ -140,51 +152,101 @@ const RoutesList = () => {
         params.set("sort", resultUrl);
       }
     }
-    //  if (filters) {
-    //    if (
-    //      !filters.status ||
-    //      !Array.isArray(filters.status) ||
-    //      filters.status.length === 0
-    //    ) {
-    //      params.delete("status");
-    //    } else {
-    //      const statusUrl = filters.status.join(",");
-    //      params.set("status", statusUrl);
-    //    }
-    //  }
     replace(`${pathname}?${params.toString()}`);
   };
+
+  const handleSearch = (
+    selectedKeys: string[],
+    confirm: FilterDropdownProps["confirm"],
+    dataIndex: any
+  ) => {
+    confirm();
+    const params = new URLSearchParams(searchParams ?? "");
+    if (selectedKeys.length === 0) {
+      if (dataIndex === "departurePort") params.delete("searchDep");
+      else if (dataIndex === "destinationPort") params.delete("searchDes");
+    } else {
+      if (dataIndex === "departurePort")
+        params.set("searchDep", selectedKeys[0]);
+      else if (dataIndex === "destinationPort")
+        params.set("searchDes", selectedKeys[0]);
+    }
+    replace(`${pathname}?${params.toString()}`);
+  };
+
+  const handleReset = (clearFilters: () => void) => {
+    clearFilters();
+  };
+
+  const getColumnSearchProps = (dataIndex: any, searchTerm: string | null) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }: any) => (
+      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+        <Input
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            handleSearch(selectedKeys as string[], confirm, dataIndex)
+          }
+          style={{ marginBottom: 8, display: "block" }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() =>
+              handleSearch(selectedKeys as string[], confirm, dataIndex)
+            }
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
+    ),
+    defaultFilteredValue: searchTerm ? [searchTerm] : null,
+  });
 
   const columns = [
     {
       title: "Departure Port",
       dataIndex: ["departurePort", "name"],
       key: "departurePort",
-      // sorter: (a: any, b: any) =>
-      //   a.departurePort.name.localeCompare(b.departurePort.name),
-      // filters: getUniqueValues(routesData, "departurePort.name").map(
-      //   (name) => ({
-      //     text: name,
-      //     value: name,
-      //   })
-      // ),
-      // onFilter: (value: any, record: any) =>
-      //   record.departurePort.name === value,
+      ...getColumnSearchProps("departurePort", searchDep ? searchDep : ""),
     },
     {
       title: "Destination Port",
       dataIndex: ["destinationPort", "name"],
       key: "destinationPort",
-      // sorter: (a: any, b: any) =>
-      //   a.destinationPort.name.localeCompare(b.destinationPort.name),
-      // filters: getUniqueValues(routesData, "destinationPort.name").map(
-      //   (name) => ({
-      //     text: name,
-      //     value: name,
-      //   })
-      // ),
-      // onFilter: (value: any, record: any) =>
-      //   record.destinationPort.name === value,
+      ...getColumnSearchProps("destinationPort", searchDes ? searchDes : ""),
     },
     {
       title: "Distance (Km)",

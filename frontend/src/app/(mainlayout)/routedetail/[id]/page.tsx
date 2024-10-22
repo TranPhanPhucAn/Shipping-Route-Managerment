@@ -49,6 +49,7 @@ const RouteDetail = () => {
           }
           bordered={true}
           className={styles.card}
+          style={{ width: "35%" }}
         >
           <Col className={styles.infor}>
             <table>
@@ -82,7 +83,7 @@ const RouteDetail = () => {
             Back to Routes
           </Button>
         </Card>
-        <Card style={{ width: 850 }}>
+        <Card style={{ width: "60%" }}>
           <Col className={styles.maps}>
             <PortDistanceCalculation
               departurePort={route.departurePort.name}

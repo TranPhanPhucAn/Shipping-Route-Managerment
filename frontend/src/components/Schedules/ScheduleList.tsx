@@ -7,13 +7,19 @@ import {
   Popconfirm,
   TablePaginationConfig,
   Tag,
+  Space,
+  Input,
 } from "antd";
 import {
   GET_SCHEDULE_PAGINATION,
   GET_SCHEDULE_PAGINATION_BY_ID,
 } from "@/src/graphql/queries/query";
 import { Schedule } from "@/src/graphql/types";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import CreateScheduleModal from "@/src/components/Schedules/CreateScheduleModal";
 import UpdateScheduleModal from "@/src/components/Schedules/UpdateScheduleModal";
 import { DELETE_SCHEDULE } from "@/src/graphql/mutations/Auth";
@@ -22,6 +28,7 @@ import styles from "@/src/styles/Listpage.module.css";
 import { usePathname, useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { FilterDropdownProps } from "antd/es/table/interface";
 
 const SchedulesList = () => {
   const { data: session, status, update } = useSession();
@@ -40,6 +47,7 @@ const SchedulesList = () => {
   const pageString = searchParams?.get("page");
   const sortString = searchParams?.get("sort");
   const statusFilter = searchParams?.get("status");
+  const search = searchParams?.get("search");
 
   const page = pageString ? +pageString : 1;
   const pageSize = pageSizeString ? +pageSizeString : 5;
@@ -51,6 +59,7 @@ const SchedulesList = () => {
         offset: page - 1,
         sort: sortString,
         statusFilter: statusFilter,
+        search: search,
       },
     },
     skip: !permissionUser?.includes("get:schedulesPag"),
@@ -155,6 +164,82 @@ const SchedulesList = () => {
     replace(`${pathname}?${params.toString()}`);
   };
 
+  const handleSearch = (
+    selectedKeys: string[],
+    confirm: FilterDropdownProps["confirm"],
+    dataIndex: any
+  ) => {
+    confirm();
+    const params = new URLSearchParams(searchParams ?? "");
+    if (selectedKeys.length === 0) {
+      params.delete("search");
+    } else {
+      params.set("search", selectedKeys[0]);
+    }
+    replace(`${pathname}?${params.toString()}`);
+  };
+
+  const handleReset = (clearFilters: () => void) => {
+    clearFilters();
+  };
+
+  const getColumnSearchProps = (dataIndex: any, searchTerm: string | null) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }: any) => (
+      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+        <Input
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            handleSearch(selectedKeys as string[], confirm, dataIndex)
+          }
+          style={{ marginBottom: 8, display: "block" }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() =>
+              handleSearch(selectedKeys as string[], confirm, dataIndex)
+            }
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
+    ),
+    defaultFilteredValue: searchTerm ? [searchTerm] : null,
+  });
+
   const handleRemove = async (id: string) => {
     try {
       await removeSchedule({
@@ -168,7 +253,6 @@ const SchedulesList = () => {
           refetchById();
         }
       }
-      // refetch();
     } catch (error) {
       message.error("Failed to remove schedule");
     }
@@ -189,6 +273,7 @@ const SchedulesList = () => {
       title: "Vessel",
       dataIndex: ["vessel", "name"],
       key: "vessel",
+      ...getColumnSearchProps("vessel", search ? search : ""),
       render: (text: string, record: any) => {
         return record.vessel.name;
       },

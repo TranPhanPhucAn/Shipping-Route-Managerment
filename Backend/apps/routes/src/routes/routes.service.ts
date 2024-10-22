@@ -207,8 +207,9 @@ export class RoutesService {
     await this.routeRepository.delete(id);
     return id;
   }
+
   async paginationRoute(paginationRoute: PaginationRoutesDto) {
-    const { limit, offset, sort, Portsearch } = paginationRoute;
+    const { limit, offset, sort, searchDep, searchDes } = paginationRoute;
     const skip = limit * offset;
     const order: Record<string, 'ASC' | 'DESC'> = {};
     if (sort) {
@@ -227,9 +228,15 @@ export class RoutesService {
     };
 
     const whereCondition: any = {};
-    if (Portsearch) {
-      whereCondition.departurePort = ILike(`%${Portsearch}%`);
-      whereCondition.destinationPort = ILike(`%${Portsearch}%`);
+    if (searchDep) {
+      whereCondition.departurePort = {
+        name: ILike(`%${searchDep}%`),
+      };
+    }
+    if (searchDes) {
+      whereCondition.destinationPort = {
+        name: ILike(`%${searchDes}%`),
+      };
     }
 
     if (Object.keys(whereCondition).length > 0) {

@@ -9,7 +9,6 @@ import { UserGrpcServiceController } from './users.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
-// import { Role } from '../roles/entities/role.entity';
 import { Role } from '../roles/entities/role.entity';
 import { Permission } from '../permissions/entities/permission.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';

@@ -23,7 +23,11 @@ export class PermissionsService {
   }
 
   async findAll() {
-    return await this.permissionsRepository.find();
+    return await this.permissionsRepository.find({
+      order: {
+        id: 'ASC',
+      },
+    });
   }
 
   async findOne(id: string) {

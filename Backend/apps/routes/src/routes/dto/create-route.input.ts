@@ -31,5 +31,8 @@ export class PaginationRoutesDto {
   sort: string | null;
 
   @Field({ nullable: true })
-  Portsearch: string | null;
+  searchDep: string | null;
+
+  @Field({ nullable: true })
+  searchDes: string | null;
 }

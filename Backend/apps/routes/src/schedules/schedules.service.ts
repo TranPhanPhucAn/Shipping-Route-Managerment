@@ -181,7 +181,7 @@ export class SchedulesService {
   }
 
   async paginationSchedule(paginationSchedule: PaginationScheduleDto) {
-    const { limit, offset, sort, statusFilter } = paginationSchedule;
+    const { limit, offset, sort, statusFilter, search } = paginationSchedule;
 
     const skips = limit * offset;
     const order: Record<string, 'ASC' | 'DESC'> = {};
@@ -208,6 +208,12 @@ export class SchedulesService {
       }
     }
 
+    if (search) {
+      whereCondition.vessel = {
+        name: ILike(`%${search}%`),
+      };
+    }
+
     if (Object.keys(whereCondition).length > 0) {
       queryOptions.where = whereCondition;
     }
@@ -222,7 +228,8 @@ export class SchedulesService {
     };
   }
   async paginationScheduleById(paginationSchedule: PaginationScheduleByIdDto) {
-    const { ownerId, limit, offset, sort, statusFilter } = paginationSchedule;
+    const { ownerId, limit, offset, sort, statusFilter, search } =
+      paginationSchedule;
     const vesselIds = (
       await this.vesselsRepository.find({
         select: ['id'],
@@ -255,6 +262,12 @@ export class SchedulesService {
 
     if (vesselIds && vesselIds.length > 0) {
       whereCondition.vessel = { id: In(vesselIds) }; // Add vesselId filtering
+    }
+
+    if (search) {
+      whereCondition.vessel = {
+        name: ILike(`%${search}%`),
+      };
     }
 
     if (Object.keys(whereCondition).length > 0) {
