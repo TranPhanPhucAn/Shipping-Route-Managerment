@@ -51,8 +51,8 @@ export class VesselsResolver {
 
   @SetMetadata('permissions', ['delete:vessel'])
   @UseGuards(PermissionsGuard)
-  @Mutation(() => Vessel)
-  removeVessel(@Args('id', { type: () => String }) id: string) {
+  @Mutation(() => String)
+  removeVessel(@Args('id') id: string): Promise<string> {
     return this.vesselService.remove(id);
   }
 
