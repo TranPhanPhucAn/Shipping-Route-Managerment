@@ -173,7 +173,7 @@ const CreateVesselModal = ({
             <Select
               value={ownerId}
               onChange={(value) => setOwnerId(value)}
-              placeholder="Select Role"
+              placeholder="Select Owner"
             >
               {suppliers &&
                 suppliers.length > 0 &&

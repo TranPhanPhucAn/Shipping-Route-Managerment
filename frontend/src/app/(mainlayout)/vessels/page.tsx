@@ -346,33 +346,35 @@ const VesselList = () => {
       key: "id",
       render: (text: string, record: Vessel) => (
         <div>
-          {permissionUser?.includes("update:vessel") && (
-            <Button
-              type="link"
-              onClick={() => handleEdit(record)}
-              icon={<EditOutlined />}
-            >
-              Edit
-            </Button>
-          )}
-          {permissionUser?.includes("delete:vessel") && (
-            <Popconfirm
-              placement="topLeft"
-              title={"Are you sure to delete this vessel?"}
-              okText="Yes"
-              cancelText="No"
-              onConfirm={() => handleRemove(record.id)}
-            >
+          {permissionUser?.includes("update:vessel") &&
+            record.status !== "IN_TRANSIT" && (
               <Button
                 type="link"
-                danger
-                loading={deleteLoading}
-                icon={<DeleteOutlined />}
+                onClick={() => handleEdit(record)}
+                icon={<EditOutlined />}
               >
-                Delete
+                Edit
               </Button>
-            </Popconfirm>
-          )}
+            )}
+          {permissionUser?.includes("delete:vessel") &&
+            record.status !== "IN_TRANSIT" && (
+              <Popconfirm
+                placement="topLeft"
+                title={"Are you sure to delete this vessel?"}
+                okText="Yes"
+                cancelText="No"
+                onConfirm={() => handleRemove(record.id)}
+              >
+                <Button
+                  type="link"
+                  danger
+                  loading={deleteLoading}
+                  icon={<DeleteOutlined />}
+                >
+                  Delete
+                </Button>
+              </Popconfirm>
+            )}
         </div>
       ),
     },
@@ -387,19 +389,19 @@ const VesselList = () => {
       <Divider style={{ borderColor: "#334155" }}></Divider>
       <Row>
         <Col span={24}>
-        <div className={styles.createButton}>
-          {permissionUser?.includes("create:vessel") && (
-            <CreateVesselModal
-              limit={pageSize}
-              offset={page - 1}
-              sort={sortString ? sortString : ""}
-              statusFilter={statusFilter ? statusFilter : ""}
-              typeFilter={typeFilter ? typeFilter : ""}
-              search={search ? search : ""}
-              refetchVessel={refetch}
-            />
-          )}
-        </div>
+          <div className={styles.createButton}>
+            {permissionUser?.includes("create:vessel") && (
+              <CreateVesselModal
+                limit={pageSize}
+                offset={page - 1}
+                sort={sortString ? sortString : ""}
+                statusFilter={statusFilter ? statusFilter : ""}
+                typeFilter={typeFilter ? typeFilter : ""}
+                search={search ? search : ""}
+                refetchVessel={refetch}
+              />
+            )}
+          </div>
           <Table
             dataSource={vesselsData}
             columns={columns}
@@ -422,7 +424,7 @@ const VesselList = () => {
               onClose={handleUpdateModalClose}
             />
           )}
-          </Col>
+        </Col>
       </Row>
     </div>
   );

@@ -9,7 +9,7 @@ import {
   Tag,
   Space,
   Input,
-  Row, 
+  Row,
   Col,
 } from "antd";
 import {
@@ -354,33 +354,39 @@ const SchedulesList = () => {
             key: "id",
             render: (text: string, record: Schedule) => (
               <div>
-                <Button
-                  type="link"
-                  onClick={() => handleEdit(record)}
-                  icon={<EditOutlined />}
-                >
-                  Edit
-                </Button>
-                {permissionUser?.includes("delete:schedule") && (
-                  <Popconfirm
-                    placement="topLeft"
-                    title={"Are you sure to delete this schedule?"}
-                    description={"Delete the schedule"}
-                    okText="Yes"
-                    cancelText="No"
-                    onConfirm={() => handleRemove(record.id)}
-                    onCancel={() => console.log("Delete canceled")}
-                  >
+                {permissionUser?.includes("update:schedule") &&
+                  record.status !== "COMPLETED" &&
+                  record.status !== "CANCELLED" && (
                     <Button
                       type="link"
-                      danger
-                      loading={deleteLoading}
-                      icon={<DeleteOutlined />}
+                      onClick={() => handleEdit(record)}
+                      icon={<EditOutlined />}
                     >
-                      Delete
+                      Edit
                     </Button>
-                  </Popconfirm>
-                )}
+                  )}
+                {permissionUser?.includes("delete:schedule") &&
+                  record.status !== "SCHEDULED" &&
+                  record.status !== "IN_TRANSIT" && (
+                    <Popconfirm
+                      placement="topLeft"
+                      title={"Are you sure to delete this schedule?"}
+                      description={"Delete the schedule"}
+                      okText="Yes"
+                      cancelText="No"
+                      onConfirm={() => handleRemove(record.id)}
+                      onCancel={() => console.log("Delete canceled")}
+                    >
+                      <Button
+                        type="link"
+                        danger
+                        loading={deleteLoading}
+                        icon={<DeleteOutlined />}
+                      >
+                        Delete
+                      </Button>
+                    </Popconfirm>
+                  )}
               </div>
             ),
           },
@@ -388,46 +394,46 @@ const SchedulesList = () => {
       : []),
   ];
 
-  return (  
+  return (
     <Row>
       <Col span={24}>
-      <div className={styles.createButton}>
-        {permissionUser?.includes("create:schedule") && (
-          <CreateScheduleModal
-            limit={pageSize}
-            offset={page - 1}
-            sort={sortString ? sortString : ""}
-            statusFilter={statusFilter ? statusFilter : ""}
-            refetchSchedule={refetch}
-          />
-        )}
-      </div>
-
-      <div >
-          <Table
-          dataSource={schedules ? schedules : []}
-          columns={columns}
-          className={styles.Table}
-          rowKey={"id"}
-          pagination={{
-            current: paginationTable.current,
-            pageSize: paginationTable.pageSize,
-            total: total,
-            pageSizeOptions: ["5", "10", "20"],
-            showSizeChanger: true,
-          }}
-          onChange={handleTableChange}
-        />
-        {selectedSchedule && (
-          <UpdateScheduleModal
-            schedule={selectedSchedule}
-            visible={isUpdateModalVisible}
-            onClose={handleUpdateModalClose}
-          />
-        )}
+        <div className={styles.createButton}>
+          {permissionUser?.includes("create:schedule") && (
+            <CreateScheduleModal
+              limit={pageSize}
+              offset={page - 1}
+              sort={sortString ? sortString : ""}
+              statusFilter={statusFilter ? statusFilter : ""}
+              refetchSchedule={refetch}
+            />
+          )}
         </div>
-          </Col>
-        </Row>     
+
+        <div>
+          <Table
+            dataSource={schedules ? schedules : []}
+            columns={columns}
+            className={styles.Table}
+            rowKey={"id"}
+            pagination={{
+              current: paginationTable.current,
+              pageSize: paginationTable.pageSize,
+              total: total,
+              pageSizeOptions: ["5", "10", "20"],
+              showSizeChanger: true,
+            }}
+            onChange={handleTableChange}
+          />
+          {selectedSchedule && (
+            <UpdateScheduleModal
+              schedule={selectedSchedule}
+              visible={isUpdateModalVisible}
+              onClose={handleUpdateModalClose}
+            />
+          )}
+        </div>
+      </Col>
+    </Row>
   );
 };
 
