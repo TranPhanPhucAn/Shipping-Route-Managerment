@@ -9,6 +9,8 @@ import {
   Divider,
   Input,
   Space,
+  Row,
+  Col,
 } from "antd";
 import { GET_PORT_PAGINATION, GET_PORTS } from "@/src/graphql/queries/query";
 import { DELETE_PORT } from "@/src/graphql/mutations/Auth";
@@ -296,7 +298,8 @@ const PortList = () => {
         Manage and view information about all available ports.
       </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
-      <div className={styles.body}>
+      <Row >
+        <Col span={24}>
         <div className={styles.createButton}>
           {permissionUser?.includes("create:port") && (
             <CreatePortModal
@@ -308,7 +311,7 @@ const PortList = () => {
             />
           )}
         </div>
-        <div className={styles.container}>
+        
           <Table
             dataSource={portsData}
             columns={columns}
@@ -331,8 +334,8 @@ const PortList = () => {
               onClose={handleUpdateModalClose}
             />
           )}
-        </div>
-      </div>
+          </Col>
+      </Row>
     </div>
   );
 };

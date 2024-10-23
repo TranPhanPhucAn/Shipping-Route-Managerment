@@ -8,6 +8,8 @@ import {
   Button,
   Card,
   Form,
+  Row, 
+  Col,
   Space,
   message,
   Table,
@@ -121,13 +123,13 @@ const ScheduleSearch: React.FC = () => {
     {
       title: "",
       dataIndex: "departure_time",
-      key: "arrival",
+      key: "departure",
       render: (text: string) => {
         const date = moment(text);
         return (
           <Space direction="vertical">
             <span>
-              <AiOutlineEnvironment /> Arrival
+              <AiOutlineEnvironment /> Departure timeline
             </span>
             <span>
               {date.format("DD MMM YYYY")} {date.format("HH:mm")}
@@ -139,13 +141,13 @@ const ScheduleSearch: React.FC = () => {
     {
       title: "",
       dataIndex: "arrival_time",
-      key: "departure",
+      key: "arrival",
       render: (text: string) => {
         const date = moment(text);
         return (
           <Space direction="vertical">
             <span>
-              <AiOutlineEnvironment /> Departure
+              <AiOutlineEnvironment /> Arrival timeline
             </span>
             <span>
               {date.format("DD MMM YYYY")} {date.format("HH:mm")}
@@ -154,11 +156,13 @@ const ScheduleSearch: React.FC = () => {
         );
       },
     },
+    
   ];
 
   return (
-    <Space direction="horizontal" align="start" size="large">
-      <Card style={{ width: 350 }}>
+    <Row >
+      <Col span={6}>
+      <Card >
         <Form layout="vertical" className={styles.inputForm}>
           <Form.Item
             label="Country/Region"
@@ -177,7 +181,7 @@ const ScheduleSearch: React.FC = () => {
             />
           </Form.Item>
           <Form.Item
-            label="Port Name"
+            label="City Name"
             name="portName"
             rules={[{ message: "Port Name cannot be left blank" }]}
           >
@@ -202,14 +206,16 @@ const ScheduleSearch: React.FC = () => {
           <Form.Item>
             <Button
               className={styles.searchButton}
+              style={{marginTop:"0.6rem"}}
               onClick={handleSearch}
-              loading={loading}
             >
               Search
             </Button>
           </Form.Item>
         </Form>
       </Card>
+      </Col>
+      <Col span={17} offset={1}>
       <Card>
         <Table
           className={styles.dataTable}
@@ -217,10 +223,10 @@ const ScheduleSearch: React.FC = () => {
           columns={columns}
           rowKey="id"
           pagination={false}
-          style={{ minWidth: "800px" }}
         />
       </Card>
-    </Space>
+      </Col>
+    </Row>
   );
 };
 

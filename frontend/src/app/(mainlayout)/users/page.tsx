@@ -11,6 +11,8 @@ import {
   Input,
   Space,
   message,
+  Row, 
+  Col,
 } from "antd";
 import {
   DeleteOutlined,
@@ -424,7 +426,8 @@ const UserList = () => {
         Search our users to find the connection.
       </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
-      <div className={styles.container}>
+      <Row>
+        <Col span={24}>
         <Table
           dataSource={users ? users : []}
           columns={columns}
@@ -446,7 +449,8 @@ const UserList = () => {
             onClose={handleUpdateModalClose}
           />
         )}
-      </div>
+        </Col>
+      </Row>
     </div>
   );
 };

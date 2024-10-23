@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
 import { GET_ROUTE } from "@/src/graphql/queries/query";
 import { Route } from "@/src/graphql/types";
-import { Button, Divider, message, Row, Col, Card } from "antd";
+import { Button, message, Row, Col, Card } from "antd";
 import PortDistanceCalculation from "@/src/components/Routes/PortDistanceCalculator";
 import styles from "@/src/styles/Detailpage.module.css";
 
@@ -41,55 +41,40 @@ const RouteDetail = () => {
   return (
     <div className={styles.body}>
       <Row className={styles.container}>
-        <Card
-          title={
-            <div className={styles.Title} style={{ textAlign: "center" }}>
-              Route Detail
+        <Col span={8}>
+          <Card
+            title={
+              <div className={styles.Title} style={{ textAlign: "center" }}>
+                Route Detail
+              </div>
+            }
+            bordered={true}
+            className={styles.card}
+          >
+            <div className={styles.infortext}>
+              <div style={{paddingBottom:"0.4rem"}}> <b>Departure Port:&nbsp;&nbsp;</b> {route.departurePort.name} </div>
+              <div style={{paddingBottom:"0.4rem"}}> <b>Destination Port:&nbsp;&nbsp;</b> {route.destinationPort.name}</div>
+              <div style={{paddingBottom:"0.4rem"}}>
+                <b>Estimated Distance:&nbsp;&nbsp;</b> {route.distance.toFixed(1)} Km
+              </div>
+              <div style={{paddingBottom:"0.4rem"}}><b>Travel Time:&nbsp;&nbsp;</b> {route.estimatedTimeDays} days</div>
             </div>
-          }
-          bordered={true}
-          className={styles.card}
-        >
-          <Col className={styles.infor}>
-            <table>
-              <tr className={styles.infortext}>
-                <td>
-                  <b> Departure Port: </b>
-                </td>
-                <td>{route.departurePort.name}</td>
-              </tr>
-              <tr className={styles.infortext}>
-                <td>
-                  <b> Destination Port:&nbsp; </b>
-                </td>
-                <td>{route.destinationPort.name}</td>
-              </tr>
-              <tr className={styles.infortext}>
-                <td>
-                  <b>Estimated Distance:&nbsp; </b>
-                </td>
-                <td>{route.distance.toFixed(1)} Km</td>
-              </tr>
-              <tr className={styles.infortext}>
-                <td>
-                  <b>Travel Time:&nbsp; </b>
-                </td>
-                <td>{route.estimatedTimeDays} days</td>
-              </tr>
-            </table>
-          </Col>
-          <Button onClick={() => router.back()} className={styles.backButton}>
-            Back to Routes
-          </Button>
-        </Card>
-        <Card style={{ width: 850 }}>
-          <Col className={styles.maps}>
+
+            <div>
+            <Button onClick={() => router.back()} className={styles.backButton}>
+              Back to Routes
+            </Button>
+            </div>
+          </Card>
+        </Col>
+        <Col span={14} offset={2}>
+          <Card className={styles.maps}>
             <PortDistanceCalculation
               departurePort={route.departurePort.name}
               destinationPort={route.destinationPort.name}
             />
-          </Col>
-        </Card>
+          </Card>
+        </Col>
       </Row>
     </div>
   );

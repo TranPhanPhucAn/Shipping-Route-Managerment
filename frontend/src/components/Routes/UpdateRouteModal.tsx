@@ -2,10 +2,10 @@
 import { useState, useEffect } from "react";
 import { Button, Form, Input, Modal, message, Select } from "antd";
 import { useMutation, useQuery } from "@apollo/client";
-import { UPDATE_ROUTE } from "../../graphql/mutations/Auth";
-import { Route } from "../../graphql/types";
-import styles from "../../styles/Auth.module.css";
-import { GetPortsData, Port } from "../../graphql/types";
+import { UPDATE_ROUTE } from "@/src/graphql/mutations/Auth";
+import { Route } from "@/src/graphql/types";
+import styles from "@/src/styles/Modal.module.css";
+import { GetPortsData, Port } from "@/src/graphql/types";
 import { GET_PORTS } from "@/src/graphql/queries/query";
 
 const { Option } = Select;
@@ -75,7 +75,7 @@ const UpdateRouteModal = ({
         form={form}
         onFinish={handleUpdateRoute}
         layout="vertical"
-        className={styles.mainBox}
+        className={styles.modal}
       >
         <Form.Item
           label="Departure Port"
@@ -127,7 +127,7 @@ const UpdateRouteModal = ({
           </Select>
         </Form.Item>
         <Form.Item>
-          <Button className={styles.mainButton} htmlType="submit" loading={loading}>
+          <Button className={styles.submitButton} htmlType="submit" loading={loading}>
             Update
           </Button>
           {error && <p style={{ color: "red" }}>{error.message}</p>}
