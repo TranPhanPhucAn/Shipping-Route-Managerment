@@ -52,22 +52,25 @@ export class VesselsService {
     const vessel = await this.vesselRepository.findOne({
       where: { id },
     });
-    updateVesselInput.ownerId = vessel.ownerId;
-    const updateVessel = updateVesselInput;
-
     if (!vessel) {
       throw new NotFoundException(`Vessel with Name "${id}" not found`);
     }
-    return this.vesselRepository.save(updateVessel);
+    vessel.name = updateVesselInput.name;
+    vessel.type = updateVesselInput.type;
+    vessel.capacity = updateVesselInput.capacity;
+    vessel.status = updateVesselInput.status;
+    return this.vesselRepository.save(vessel);
   }
 
-  async remove(id: string): Promise<Vessel> {
-    const vessel = await this.findOne(id);
+  async remove(id: string): Promise<string> {
+    const vessel = await this.vesselRepository.findOne({
+      where: { id },
+    });
     if (!vessel) {
       throw new NotFoundException(`Vessel with ID ${id} not found`);
     }
-    await this.vesselRepository.remove(vessel);
-    return vessel;
+    await this.vesselRepository.delete(id);
+    return id;
   }
 
   async getInforByOwner(id: string) {

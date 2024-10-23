@@ -98,6 +98,7 @@ const About: React.FC = () => {
                   Overview:
                   <div className={style.mainfeature}>
                     <ul>
+                      {" "}
                       Manage routes, transports, locations, schedules in the
                       sea.
                     </ul>
@@ -120,10 +121,42 @@ const About: React.FC = () => {
           </Row>
         </div>
         <div className="content-right">
-          <div className={style.subTitle}>Group member</div>
+          <Row>
+            <Col span={24}>
+              <Card
+                title={
+                  <div
+                    className={style.subTitle}
+                    style={{ textAlign: "center" }}
+                  >
+                    Architechture diagram
+                  </div>
+                }
+                className={style.card}
+                style={{ minHeight: "620px" }}
+              >
+                <Image
+                  src={"/AD.png"}
+                  alt="avatar image"
+                  width={500}
+                  height={450}
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                  }}
+                ></Image>
+              </Card>
+            </Col>
+          </Row>
+        </div>
+      </div>
+      <br />
+      <div className="content-about">
+        <div className="content-left">
+          <div className={style.Title}>Group member</div>
           <br />
           <Row>
-            <Col span={11}>
+            <Col span={24}>
               <Card
                 title={
                   <div
@@ -191,7 +224,6 @@ const About: React.FC = () => {
           </Row>
         </div>
       </div>
-      <br />
     </>
   );
 };
