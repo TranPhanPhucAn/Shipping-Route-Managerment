@@ -9,7 +9,7 @@ import {
   GET_SCHEDULES,
   GET_SCHEDULE_PAGINATION,
 } from "../../graphql/queries/query";
-import styles from "../../styles/Auth.module.css";
+import styles from "@/src/styles/Modal.module.css";
 import {
   GetVesselsData,
   GetRoutesData,
@@ -88,7 +88,7 @@ const CreateScheduleModal = ({
 
   return (
     <div>
-      <Button className={styles.mainButton} onClick={() => setVisible(true)}>
+      <Button className={styles.submitButton} onClick={() => setVisible(true)}>
         Add Schedule
       </Button>
       <Modal
@@ -101,7 +101,7 @@ const CreateScheduleModal = ({
           form={form}
           onFinish={handleCreateSchedule}
           layout="vertical"
-          className={styles.mainBox}
+          className={styles.modal}
         >
           <Form.Item
             label="Vessel"
@@ -169,7 +169,7 @@ const CreateScheduleModal = ({
 
           <Form.Item>
             <Button
-              className={styles.mainButton}
+              className={styles.submitButton}
               htmlType="submit"
               loading={loading}
             >

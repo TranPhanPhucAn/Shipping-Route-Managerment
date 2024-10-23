@@ -1,6 +1,6 @@
 "use client";
 import { useMutation, useQuery } from "@apollo/client";
-import { Table, Button, Popconfirm, Divider, message } from "antd";
+import { Table, Button, Popconfirm, Divider, message, Col, Row} from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import styles from "@/src/styles/Listpage.module.css";
 import { QUERY_ROLES } from "@/src/graphql/queries/query";
@@ -92,7 +92,8 @@ const Roles = () => {
         Manage role and permission of roles.
       </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
-      <div className={styles.body}>
+      <Row >
+        <Col span={24}>
       <div className={styles.createButton}>
       <CreateRoleModal refetchRoles={refetch} />
       </div>
@@ -105,7 +106,8 @@ const Roles = () => {
           pagination={false}
         />
       </div>
-      </div>
+      </Col>
+      </Row>
     </div>
   );
 };

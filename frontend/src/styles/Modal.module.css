@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
+.modal {
+  font-family: Playfair Dislay !important;
+  margin: 0 auto;
+  width: 400px;
+  max-width: 400px;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+.submitButton {
+    padding: 0.6rem 12px;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    background-color: #334155 !important;
+    color: white !important;
+    border: none;
+    cursor: pointer;
+  }
+.input {
+    width: 100%;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    padding: 0.6rem 12px !important;
+  }
+
+.centerButton{
+    display: flex;
+    justify-content: center;
+}

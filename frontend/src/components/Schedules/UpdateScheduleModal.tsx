@@ -2,11 +2,11 @@
 import { useState, useEffect } from "react";
 import { Button, Form, Modal, message, Select, DatePicker } from "antd";
 import { useMutation } from "@apollo/client";
-import { UPDATE_SCHEDULE } from "../../graphql/mutations/Auth";
-import { Schedule, Vessel, Route } from "../../graphql/types";
-import { GET_VESSELS, GET_ROUTES } from "../../graphql/queries/query";
+import { UPDATE_SCHEDULE } from "@/src/graphql/mutations/Auth";
+import { Schedule, Vessel, Route } from "@/src/graphql/types";
+import { GET_VESSELS, GET_ROUTES } from "@/src/graphql/queries/query";
 import { useQuery } from "@apollo/client";
-import styles from "@/src/styles/Auth.module.css";
+import styles from "@/src/styles/Modal.module.css";
 // import moment from "moment";
 
 const { Option } = Select;
@@ -67,7 +67,7 @@ const UpdateScheduleModal = ({
         form={form}
         onFinish={handleUpdateSchedule}
         layout="vertical"
-        className={styles.mainBox}
+        className={styles.modal}
       >
         <Form.Item
           label="Status"
@@ -86,7 +86,7 @@ const UpdateScheduleModal = ({
         </Form.Item>
         <Form.Item>
           <Button
-            className={styles.mainButton}
+            className={styles.submitButton}
             htmlType="submit"
             loading={loading}
           >

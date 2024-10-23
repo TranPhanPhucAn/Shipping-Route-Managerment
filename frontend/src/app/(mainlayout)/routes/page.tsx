@@ -9,6 +9,8 @@ import {
   Divider,
   Input,
   Select,
+  Row, 
+  Col,
   Space,
 } from "antd";
 import {
@@ -315,11 +317,12 @@ const RoutesList = () => {
     <div className={styles.body}>
       <div className={styles.Title}>Routes</div>
       <div className={styles.subtitle}>
-        Search our extensive routes to find the schedule which fits your supply
-        chain.
+      <div className={styles.subtitle}>Manage and view information about all available routes.
+      </div>
       </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
-      <div className={styles.body}>
+        <Row >
+          <Col span={24}>
         <div className={styles.createButton}>
           {" "}
           {permissionUser?.includes("create:route") && (
@@ -331,7 +334,6 @@ const RoutesList = () => {
             />
           )}
         </div>
-        <div className={styles.container}>
           <Table
             dataSource={routesData}
             columns={columns}
@@ -353,8 +355,8 @@ const RoutesList = () => {
               onClose={handleUpdateModalClose}
             />
           )}
-        </div>
-      </div>
+          </Col>
+        </Row>
     </div>
   );
 };

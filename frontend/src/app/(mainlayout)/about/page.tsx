@@ -1,6 +1,9 @@
+'use client';
+import {Row, Col, Card } from "antd";
 import Image from "next/image";
 import React from "react";
 import "./about.scss";
+import style from "@/src/styles/Detailpage.module.css";
 const About: React.FC = () => {
   return (
     <>
@@ -26,7 +29,7 @@ const About: React.FC = () => {
       </div>
       <div className="content-about">
         <div className="content-left">
-          <div className="title">Our organisation</div>
+          <div className={style.Title}>Our organisation</div>
           <hr />
           <p>We are CyberLogitec Vietnam</p>
           <p>
@@ -75,6 +78,82 @@ const About: React.FC = () => {
           </div>
         </div>
       </div>
+      <div className="content-about">
+        <div className="content-left">
+            <div className={style.Title}>About system</div>
+            <hr />
+            <Row>
+              <Col span={24}>
+              <Card title={
+              <div className={style.subTitle} style={{ textAlign: "center" }}>
+                  Shipping Route Management System
+              </div>}>
+                <div className={style.subTitle}>Main feature:
+                  <ul> 
+                  <li className={style.mainfeature}>Manage permissions</li>
+                  <li className={style.mainfeature}>Manage roles</li>
+                  <li className={style.mainfeature}>Manage users</li>
+                  <li className={style.mainfeature}>Manage locations</li>
+                  <li className={style.mainfeature}>Manage transport</li>
+                  <li className={style.mainfeature}>Manage routes</li>
+                  <li className={style.mainfeature}>Manage schedules</li>
+                  </ul>
+                </div>
+                </Card>
+                </Col>
+
+            </Row>
+           
+          </div>
+          <div className="content-right">
+          <div className={style.subTitle}>Group member</div>
+          <br/>
+          <Row>
+              <Col span={11}>
+                <Card  title={
+              <div className={style.subTitle} style={{ textAlign: "center" }}>
+                 Thu Hoa
+              </div>
+            } className={style.card}>
+              
+              <Image src={"/avatar1.jpg"}
+               alt="avatar image"
+               width={270}
+              height={200}
+              style={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+              }}
+              ></Image>
+             
+             <div className={style.infortext}><b>Role:</b> fullstack</div>
+
+                </Card>
+              </Col>
+              <Col span={11} offset={2}>
+              <Card  title={
+              <div className={style.subTitle} style={{ textAlign: "center" }}>
+                 Phuc An
+              </div>
+            }
+            className={style.card}
+            >
+              <Image src={"/avatar2.jpg"}
+               alt="avatar image"
+               width={270}
+              height={200}
+              style={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+              }}
+              ></Image>
+              <div className={style.infortext}><b>Role:</b> fullstack</div>
+                </Card>
+              </Col>
+            </Row>
+          </div>
+        </div>
+        <br/>
     </>
   );
 };

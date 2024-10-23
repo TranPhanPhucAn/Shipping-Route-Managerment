@@ -2,10 +2,10 @@
 import { useState } from "react";
 import { Button, Form, Input, Modal, message, Select } from "antd";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_ROUTE } from "../../graphql/mutations/Auth";
-import { GET_PORTS, GET_ROUTES } from "../../graphql/queries/query";
-import styles from "../../styles/Auth.module.css";
-import { GetPortsData, Port } from "../../graphql/types";
+import { CREATE_ROUTE } from "@/src/graphql/mutations/Auth";
+import { GET_PORTS, GET_ROUTES } from "@/src/graphql/queries/query";
+import styles from "@/src/styles/Modal.module.css";
+import { GetPortsData, Port } from "@/src/graphql/types";
 
 const { Option } = Select;
 interface CreateRouteModalProps {
@@ -70,7 +70,7 @@ const CreateRouteModal = ({
 
   return (
     <>
-      <Button className={styles.mainButton} onClick={() => setVisible(true)}>
+      <Button className={styles.submitButton} onClick={() => setVisible(true)}>
         Add Route
       </Button>
       <Modal
@@ -83,7 +83,7 @@ const CreateRouteModal = ({
           form={form}
           onFinish={handleCreateRoute}
           layout="vertical"
-          className={styles.mainBox}
+          className={styles.modal}
         >
           <Form.Item
             label="Departure Port"
@@ -96,7 +96,7 @@ const CreateRouteModal = ({
               value={departurePortId}
               showSearch
               onChange={(value) => setDeparturePortId(value)}
-              placeholder="Enter Departure Port"
+              placeholder="Enter Departure City"
               filterOption={(input, option) =>
                 String(option?.children)
                   .toLowerCase()
@@ -121,7 +121,7 @@ const CreateRouteModal = ({
               value={destinationPortId}
               showSearch
               onChange={(value) => setDestinationPortId(value)}
-              placeholder="Enter Destination Port"
+              placeholder="Enter Destination City"
               filterOption={(input, option) =>
                 String(option?.children)
                   .toLowerCase()
@@ -135,9 +135,9 @@ const CreateRouteModal = ({
               ))}
             </Select>
           </Form.Item>
-          <Form.Item>
+          <Form.Item className={styles.centerButton}>
             <Button
-              className={styles.mainButton}
+              className={styles.submitButton}
               htmlType="submit"
               loading={loading}
             >

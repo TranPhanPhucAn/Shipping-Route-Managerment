@@ -10,6 +10,8 @@ import {
   Tag,
   Input,
   Space,
+  Row,
+  Col,
 } from "antd";
 import {
   GET_VESSELS,
@@ -383,7 +385,8 @@ const VesselList = () => {
         Manage and view information about all available vessels.
       </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
-      <div className={styles.body}>
+      <Row>
+        <Col span={24}>
         <div className={styles.createButton}>
           {permissionUser?.includes("create:vessel") && (
             <CreateVesselModal
@@ -397,7 +400,6 @@ const VesselList = () => {
             />
           )}
         </div>
-        <div className={styles.container}>
           <Table
             dataSource={vesselsData}
             columns={columns}
@@ -420,8 +422,8 @@ const VesselList = () => {
               onClose={handleUpdateModalClose}
             />
           )}
-        </div>
-      </div>
+          </Col>
+      </Row>
     </div>
   );
 };

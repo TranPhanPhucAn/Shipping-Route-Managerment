@@ -9,6 +9,8 @@ import {
   Tag,
   Space,
   Input,
+  Row, 
+  Col,
 } from "antd";
 import {
   GET_SCHEDULE_PAGINATION,
@@ -386,8 +388,9 @@ const SchedulesList = () => {
       : []),
   ];
 
-  return (
-    <div className={styles.body}>
+  return (  
+    <Row>
+      <Col span={24}>
       <div className={styles.createButton}>
         {permissionUser?.includes("create:schedule") && (
           <CreateScheduleModal
@@ -400,8 +403,8 @@ const SchedulesList = () => {
         )}
       </div>
 
-      <div className={styles.container}>
-        <Table
+      <div >
+          <Table
           dataSource={schedules ? schedules : []}
           columns={columns}
           className={styles.Table}
@@ -422,8 +425,9 @@ const SchedulesList = () => {
             onClose={handleUpdateModalClose}
           />
         )}
-      </div>
-    </div>
+        </div>
+          </Col>
+        </Row>     
   );
 };
 
