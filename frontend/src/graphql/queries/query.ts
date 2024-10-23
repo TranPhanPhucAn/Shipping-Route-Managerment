@@ -20,6 +20,15 @@ export const QUERY_USER = gql`
   }
 `;
 
+export const QUERY_SUPPLIERS = gql`
+  query {
+    getSuppliers {
+      id
+      username
+    }
+  }
+`;
+
 export const GET_USER_PAGINATION = gql`
   query paginationUser($paginationUser: PaginationUserDto!) {
     paginationUser(paginationUser: $paginationUser) {

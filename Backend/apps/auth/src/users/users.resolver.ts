@@ -56,8 +56,12 @@ export class UsersResolver {
   @UseGuards(PermissionsGuard)
   @Query(() => [User], { name: 'users' })
   findAll() {
-    console.log('???');
     return this.usersService.findAll();
+  }
+
+  @Query(() => [User], { name: 'getSuppliers' })
+  getSuppliers() {
+    return this.usersService.getSuppliers();
   }
 
   @SetMetadata('permissions', ['get:user'])

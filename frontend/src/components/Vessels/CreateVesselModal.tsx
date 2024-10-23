@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import { Button, Form, Input, InputNumber, Modal, Select, message } from "antd";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_VESSEL } from "@/src/graphql/mutations/Auth";
-import { GET_VESSELS } from "@/src/graphql/queries/query";
+import { GET_VESSELS, QUERY_SUPPLIERS } from "@/src/graphql/queries/query";
 import styles from "@/src/styles/Auth.module.css";
 
 //     limit: pageSize,
@@ -12,6 +12,9 @@ import styles from "@/src/styles/Auth.module.css";
 // search: search,
 // statusFilter: statusFilter,
 // typeFilter: typeFilter,
+
+const { Option } = Select;
+
 interface CreateVesselModalProps {
   limit: number;
   offset: number;
@@ -49,6 +52,15 @@ const CreateVesselModal = ({
   const [createVessel, { loading, error }] = useMutation(CREATE_VESSEL, {
     refetchQueries: [{ query: GET_VESSELS }],
   });
+
+  const {
+    loading: loadingSupplier,
+    error: errorSuplier,
+    data: dataSupplier,
+    refetch: refetchSupplier,
+  } = useQuery(QUERY_SUPPLIERS);
+  const suppliers = dataSupplier ? dataSupplier.getSuppliers : [];
+
   const [form] = Form.useForm();
 
   const handleCreateVessel = async () => {
@@ -56,6 +68,7 @@ const CreateVesselModal = ({
       message.error("Please fill out all fields.");
       return;
     }
+
     try {
       await createVessel({
         variables: {
@@ -155,13 +168,23 @@ const CreateVesselModal = ({
           <Form.Item
             label="Owner ID"
             name="ownerId"
-            rules={[{ required: true, message: "Please enter owner ID!" }]}
+            rules={[{ required: true, message: "Please select owner!" }]}
           >
-            <Input
+            <Select
               value={ownerId}
-              onChange={(e) => setOwnerId(e.target.value)}
-              placeholder="Enter Owner ID"
-            />
+              onChange={(value) => setOwnerId(value)}
+              placeholder="Select Role"
+            >
+              {suppliers &&
+                suppliers.length > 0 &&
+                suppliers.map((item: any, index: any) => {
+                  return (
+                    <Option value={item.id} key={item.id}>
+                      {item.username}
+                    </Option>
+                  );
+                })}
+            </Select>
           </Form.Item>
 
           <Form.Item>

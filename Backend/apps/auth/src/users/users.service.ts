@@ -113,6 +113,19 @@ export class UsersService {
     return await this.usersRepository.find();
   }
 
+  async getSuppliers(): Promise<User[]> {
+    return await this.usersRepository.find({
+      where: {
+        role: {
+          id: '2',
+        },
+      },
+      order: {
+        id: 'DESC',
+      },
+    });
+  }
+
   async findOneById(id: string): Promise<User> {
     return await this.usersRepository.findOne({
       where: { id: id },
