@@ -1,5 +1,5 @@
 "use client";
-import { Row, Col, Card } from "antd";
+import { Row, Col, Card, Divider } from "antd";
 import Image from "next/image";
 import React from "react";
 import "./about.scss";
@@ -78,12 +78,98 @@ const About: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="content-about">
-        <div className="content-left">
-          <div className={style.Title}>About system</div>
-          <hr />
+
+      {/* section information */}
+      <div className={style.body}>
+      <div className={style.Title}>Group member</div>
+      <Divider></Divider>
+      <br />
           <Row>
-            <Col span={24}>
+            <Col span={11}>
+              <Card
+                title={
+                  <div
+                    className={style.subTitle}
+                    style={{ textAlign: "center" }}
+                  >
+                    Thu Hoa
+                  </div>
+                }
+                className={style.card}
+              >
+                <Row>
+                  <Col span={11}>
+                  <Image
+                  src={"/avatar1.jpg"}
+                  alt="avatar image"
+                  width={270}
+                  height={300}
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                  }}
+                ></Image>
+
+                  </Col>
+                  <Col span={12} offset={1}>
+                  <div className={style.infortext}>
+                  <b>Backend:</b> Route Service
+                </div>
+                <div className={style.infortext}>
+                  <b>Frontend:</b> Manage routes, schedules, vessels, ports, search and
+                  handle business logic.
+                </div>
+                  </Col>
+                </Row>
+              </Card>
+            </Col>
+            <Col span={11} offset={2}>
+              <Card
+                title={
+                  <div
+                    className={style.subTitle}
+                    style={{ textAlign: "center" }}
+                  >
+                    Phuc An
+                  </div>
+                }
+                className={style.card}
+              >
+                <Row>
+                  <Col span={11}>
+                  <Image
+                  src={"/avatar2.jpg"}
+                  alt="avatar image"
+                  width={270}
+                  height={300}
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                  }}
+                ></Image>
+                  </Col>
+                  <Col span={12} offset={1}>
+                  <div className={style.infortext}>
+                  <b>Backend:</b> Auth Service, Notification Service.
+                </div>
+                <div className={style.infortext}>
+                  <b>Frontend:</b> authentication and authorization, manage
+                  user, role, permissions, homepage, about us, contact us.
+                </div>
+                  </Col>
+                </Row>
+              </Card>
+            </Col>
+          </Row>
+          <br/>
+          <br/>
+          {/* section project information */}
+          <div className={style.Title}>About our project</div>
+          <br/> 
+          <Divider></Divider>
+          <br/>
+          <Row>
+            <Col span={11}>
               <Card
                 title={
                   <div
@@ -114,11 +200,8 @@ const About: React.FC = () => {
                 </div>
               </Card>
             </Col>
-          </Row>
-        </div>
-        <div className="content-right">
-          <Row>
-            <Col span={24}>
+            {/* Architechture diagram */}
+            <Col span={12} offset={1}>
               <Card
                 title={
                   <div
@@ -134,93 +217,18 @@ const About: React.FC = () => {
                 <Image
                   src={"/AD.png"}
                   alt="avatar image"
-                  width={500}
-                  height={450}
+                  width={650}
+                  height={400}
                   style={{
                     maxWidth: "100%",
                     maxHeight: "100%",
                   }}
                 ></Image>
-
-        
-              </Card>
-            </Col>
-            </Row>
-        </div>
-      </div>
-      <br />
-      <div className="content-about">
-      <div className="content-left">
-      <div className={style.Title}>Group member</div>
-      <br />
-          <Row>
-            <Col span={24}>
-              <Card
-                title={
-                  <div
-                    className={style.subTitle}
-                    style={{ textAlign: "center" }}
-                  >
-                    Thu Hoa
-                  </div>
-                }
-                className={style.card}
-              >
-                <Image
-                  src={"/avatar1.jpg"}
-                  alt="avatar image"
-                  width={270}
-                  height={200}
-                  style={{
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                  }}
-                ></Image>
-
-                <div className={style.infortext}>
-                  <b>Backend:</b> Route Service
-                </div>
-                <div className={style.infortext}>
-                  <b>Frontend:</b>manage route, schedule, vessels, ports, and
-                  handle business logic.
-                </div>
-              </Card>
-            </Col>
-            <Col span={11} offset={2}>
-              <Card
-                title={
-                  <div
-                    className={style.subTitle}
-                    style={{ textAlign: "center" }}
-                  >
-                    Phuc An
-                  </div>
-                }
-                className={style.card}
-                style={{minHeight:"620px"}}
-              >
-                <Image
-                  src={"/avatar2.jpg"}
-                  alt="avatar image"
-                  width={270}
-                  height={200}
-                  style={{
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                  }}
-                ></Image>
-                <div className={style.infortext}>
-                  <b>Backend:</b> Auth Service, Notification Service.
-                </div>
-                <div className={style.infortext}>
-                  <b>Frontend:</b> authentication and authorization, manage
-                  user, role, permissions, homepage, about us, contact us.
-                </div>
               </Card>
             </Col>
           </Row>
         </div>
-      </div>
+      <br />
     </>
   );
 };
