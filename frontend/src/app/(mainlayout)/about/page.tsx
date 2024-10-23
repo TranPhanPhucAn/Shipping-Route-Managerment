@@ -97,7 +97,10 @@ const About: React.FC = () => {
                 <div className={style.subTitle}>
                   Overview:
                   <div className={style.mainfeature}>
-                   <> Manage routes, transports, locations, schedules in the sea.</ul>
+                    <ul>
+                      Manage routes, transports, locations, schedules in the
+                      sea.
+                    </ul>
                   </div>
                 </div>
                 <div className={style.subTitle}>
@@ -131,7 +134,7 @@ const About: React.FC = () => {
                   </div>
                 }
                 className={style.card}
-                style={{minHeight:"620px"}}
+                style={{ minHeight: "680px" }}
               >
                 <Image
                   src={"/avatar1.jpg"}
@@ -164,7 +167,7 @@ const About: React.FC = () => {
                   </div>
                 }
                 className={style.card}
-                style={{minHeight:"620px"}}
+                style={{ minHeight: "680px" }}
               >
                 <Image
                   src={"/avatar2.jpg"}
