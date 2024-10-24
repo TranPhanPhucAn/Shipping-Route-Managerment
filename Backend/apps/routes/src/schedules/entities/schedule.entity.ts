@@ -31,12 +31,9 @@ export class Schedule {
   id: string;
 
   @Field(() => Vessel, { nullable: true })
-  @ManyToOne(() => Vessel, (vessel) => vessel.schedules, {
-    onDelete: 'SET NULL',
-    nullable: true,
-  })
+  @ManyToOne(() => Vessel, (vessel) => vessel.schedules, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'vesselId' })
-  vessel: Vessel | null;
+  vessel: Vessel;
 
   @Field(() => Route)
   @ManyToOne(() => Route, (route) => route.schedules, { onDelete: 'CASCADE' })

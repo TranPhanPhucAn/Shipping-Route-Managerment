@@ -4,7 +4,7 @@ import { Button, Form, Modal, message, Select, Input } from "antd";
 import { useMutation } from "@apollo/client";
 import { UPDATE_ROLE } from "../../graphql/mutations/Auth";
 import { Role } from "@/src/graphql/types";
-import styles from "@/src/styles/Auth.module.css";
+import styles from "@/src/styles/Modal.module.css";
 
 interface UpdateRoleModalProps {
   role: Role;
@@ -51,7 +51,7 @@ const UpdateRoleModal = ({ role, refetchRole }: UpdateRoleModalProps) => {
   }, [role, form]);
   return (
     <>
-      <Form form={form} onFinish={handleUpdateRole} layout="vertical">
+      <Form form={form} onFinish={handleUpdateRole} layout="vertical" >
         <div style={{ display: "flex" }}>
           <Form.Item
             name="name"
@@ -92,7 +92,7 @@ const UpdateRoleModal = ({ role, refetchRole }: UpdateRoleModalProps) => {
         </div>
 
         <Form.Item>
-          <Button className={styles.mainButton} htmlType="submit" loading={loading}>
+          <Button className={styles.submitButton} htmlType="submit" loading={loading}>
             Update
           </Button>
         </Form.Item>

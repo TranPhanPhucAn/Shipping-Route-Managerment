@@ -7,6 +7,7 @@ import Image from "next/image";
 import GridListView from "../components/GridListView/GridListView";
 import GridCardList from "../components/GridCardList/GridCardList";
 import { QUERY_USER } from "../graphql/queries/query";
+import styles from "@/src/styles/Detailpage.module.css";
 
 const HomePage: React.FC = async () => {
   const imageTech: string[] = [
@@ -51,9 +52,9 @@ const HomePage: React.FC = async () => {
             className="background-image"
           />
           <div className="content-home">
-            <div className="title">See how truly integrated</div>
-            <div className="title">logistics delivers</div>
-            <p>
+            <div className={styles.mainTitle}>See how truly integrated</div>
+            <div className={styles.mainTitle}>logistics delivers</div>
+            <p className={styles.subTitle}>
               With truly integrated logistics there’s always a new way to keep
               your goods moving and your business growing.
             </p>
@@ -61,8 +62,8 @@ const HomePage: React.FC = async () => {
         </div>
         <div className="content">
           <div className="logistics-home-heading">
-            <div className="header-content">Logistics solutions</div>
-            <p className="sub-header-logistics">
+            <div className={styles.Title}>Logistics solutions</div>
+            <p className="sub-header-logistics" className={styles.infortext}>
               From the farm to your fridge, or the warehouse to your wardrobe,
               CLV is developing solutions that meet customer needs from one end
               of the supply chain to the other.
@@ -71,14 +72,14 @@ const HomePage: React.FC = async () => {
           <div className="page-section" style={{ marginBottom: 35 }}>
             <GridListView />
           </div>
-          <div className="header-content">Technologies</div>
+          <div className={styles.Title}>Technologies</div><br/>
           <div
             className="page-section"
             style={{ marginBottom: 35, marginTop: 15 }}
           >
             <GridCardList images={imageTech} refs={refsTech} />
           </div>
-          <div className="header-content">Global Customers</div>
+          <div className={styles.Title}>Global Customers</div><br/>
           <div
             className="page-section"
             style={{ marginBottom: 35, marginTop: 15 }}

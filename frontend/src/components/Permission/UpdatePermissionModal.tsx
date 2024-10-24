@@ -5,6 +5,8 @@ import { useMutation } from "@apollo/client";
 import { UPDATE_PERMISSION } from "../../graphql/mutations/Auth";
 import { QUERY_PERMISSIONS } from "@/src/graphql/queries/query";
 import { Permission } from "@/src/graphql/types";
+import styles from "@/src/styles/Modal.module.css";
+
 
 interface UpdateSPermissionModalProps {
   permission: Permission;
@@ -63,7 +65,7 @@ const UpdatePermissionModal = ({
       onCancel={handleCancel}
       footer={null}
     >
-      <Form form={form} onFinish={handleUpdateRoleUser} layout="vertical">
+      <Form form={form} onFinish={handleUpdateRoleUser} layout="vertical" className={styles.modal}>
         <Form.Item
           name="description"
           rules={[
@@ -80,7 +82,7 @@ const UpdatePermissionModal = ({
           />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
+          <Button className={styles.submitButton} htmlType="submit" loading={loading}>
             Update
           </Button>
           {error && <p style={{ color: "red" }}>{error.message}</p>}

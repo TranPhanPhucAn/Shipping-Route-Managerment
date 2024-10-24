@@ -93,7 +93,7 @@ const PortDistanceMap: React.FC = () => {
           <Col span={6} >
             <Card>
               <Form className={style.inputForm} layout="vertical">
-                <Form.Item label="Departure Port:" name="Departure Port">
+                <Form.Item label="Departure City:" name="Departure Port">
                   <Input
                     type="text"
                     value={port1}
@@ -102,7 +102,7 @@ const PortDistanceMap: React.FC = () => {
                     className={style.input}
                   />
                 </Form.Item>
-                <Form.Item label="Destination Port: " name="Destination Port">
+                <Form.Item label="Destination City: " name="Destination Port">
                   <Input
                     type="text"
                     value={port2}

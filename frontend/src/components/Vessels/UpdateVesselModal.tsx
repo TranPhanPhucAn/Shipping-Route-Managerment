@@ -4,7 +4,7 @@ import { Button, Form, Input, InputNumber, Modal, Select, message } from "antd";
 import { useMutation } from "@apollo/client";
 import { UPDATE_VESSEL } from "@/src/graphql/mutations/Auth";
 import { Vessel } from "@/src/graphql/types";
-import styles from "@/src/styles/Listpage.module.css";
+import styles from "@/src/styles/Modal.module.css";
 
 interface UpdateVesselModalProps {
   vessel: Vessel;
@@ -76,7 +76,7 @@ const UpdateVesselModal = ({
       onCancel={handleCancel}
       footer={null}
     >
-      <Form form={form} onFinish={handleUpdateVessel} layout="vertical">
+      <Form form={form} onFinish={handleUpdateVessel} layout="vertical" className={styles.modal}>
         <Form.Item
           label="Vessel Name"
           name="name"
@@ -133,7 +133,7 @@ const UpdateVesselModal = ({
         </Form.Item>
 
         <Form.Item>
-          <Button htmlType="submit" loading={loading}>
+          <Button className={styles.submitButton} htmlType="submit" loading={loading}>
             Update
           </Button>
           {error && <p style={{ color: "red" }}>{error.message}</p>}

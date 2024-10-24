@@ -9,6 +9,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
 import { LOGOUT_USER } from "@/src/graphql/mutations/Auth";
 import { LogoutOutlined, ProfileFilled, UserOutlined } from "@ant-design/icons";
+import styles from "@/src/styles/Detailpage.module.css";
 
 const ProfileDropUser: React.FC = () => {
   const handleMenuClick: MenuProps["onClick"] = async (e) => {
@@ -104,8 +105,7 @@ const ProfileDropUser: React.FC = () => {
           </>
         )}
       </div>
-
-      <div style={{ paddingLeft: "5px" }} className="responsive-username">
+      <div style={{ paddingLeft: "5px" }} className={styles.username}>
         {session?.user?.username}
       </div>
     </div>

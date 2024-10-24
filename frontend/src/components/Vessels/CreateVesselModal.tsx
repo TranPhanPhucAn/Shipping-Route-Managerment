@@ -4,7 +4,7 @@ import { Button, Form, Input, InputNumber, Modal, Select, message } from "antd";
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_VESSEL } from "@/src/graphql/mutations/Auth";
 import { GET_VESSELS, QUERY_SUPPLIERS } from "@/src/graphql/queries/query";
-import styles from "@/src/styles/Auth.module.css";
+import styles from "@/src/styles/Modal.module.css";
 
 //     limit: pageSize,
 // offset: page - 1,
@@ -101,7 +101,7 @@ const CreateVesselModal = ({
 
   return (
     <>
-      <Button className={styles.mainButton} onClick={() => setVisible(true)}>
+      <Button className={styles.submitButton} onClick={() => setVisible(true)}>
         Add Vessel
       </Button>
       <Modal
@@ -114,7 +114,7 @@ const CreateVesselModal = ({
           form={form}
           onFinish={handleCreateVessel}
           layout="vertical"
-          className={styles.mainBox}
+          className={styles.modal}
         >
           <Form.Item
             label="Name"
@@ -157,11 +157,10 @@ const CreateVesselModal = ({
               { required: true, message: "Please enter vessel capacity!" },
             ]}
           >
-            <InputNumber
+            <Input
               value={capacity}
-              onChange={(value) => setCapacity(value)}
+              onChange={(e) => setCapacity(e.target.value)}
               placeholder="Enter Capacity"
-              min={1}
             />
           </Form.Item>
 
@@ -188,7 +187,7 @@ const CreateVesselModal = ({
           </Form.Item>
 
           <Form.Item>
-            <Button htmlType="submit" loading={loading}>
+            <Button className={styles.submitButton} htmlType="submit" loading={loading}>
               Submit
             </Button>
           </Form.Item>

@@ -7,7 +7,7 @@ import {
   Button,
   Card,
   Form,
-  Row, 
+  Row,
   Col,
   Space,
   message,
@@ -30,7 +30,7 @@ const ScheduleSearch: React.FC = () => {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const { data: portsData } = useQuery<GetPortsData>(GET_PORTS);
   const ports: Port[] = portsData?.ports || [];
-  const [searchSchedules, { loading } ] = useLazyQuery(SEARCH_BY_PORT, {
+  const [searchSchedules, { loading }] = useLazyQuery(SEARCH_BY_PORT, {
     onCompleted: (data) => {
       if (data?.schedulesByPort) {
         setSchedules(data.schedulesByPort);
@@ -47,7 +47,7 @@ const ScheduleSearch: React.FC = () => {
 
   // Get unique countries
   const uniqueCountries = useMemo(() => {
-    const countrySet = new Set(ports.map(port => port.country));
+    const countrySet = new Set(ports.map((port) => port.country));
     return Array.from(countrySet).sort();
   }, [ports]);
 
@@ -55,8 +55,8 @@ const ScheduleSearch: React.FC = () => {
   const filteredPorts = useMemo(() => {
     if (!country) return [];
     return ports
-      .filter(port => port.country === country)
-      .map(port => port.name)
+      .filter((port) => port.country === country)
+      .map((port) => port.name)
       .sort();
   }, [ports, country]);
 
@@ -171,15 +171,15 @@ const ScheduleSearch: React.FC = () => {
                 value={country}
                 showSearch
                 onChange={(value) => setCountry(value)}
-                 placeholder="Select Country"
+                placeholder="Select Country"
                 filterOption={(input, option) =>
                   (option?.label as string)
                     .toLowerCase()
                     .indexOf(input.toLowerCase()) >= 0
                 }
-                options={uniqueCountries.map(country => ({
+                options={uniqueCountries.map((country) => ({
                   value: country,
-                  label: country
+                  label: country,
                 }))}
               />
             </Form.Item>
@@ -200,9 +200,9 @@ const ScheduleSearch: React.FC = () => {
                     .toLowerCase()
                     .indexOf(input.toLowerCase()) >= 0
                 }
-                options={filteredPorts.map(port => ({
+                options={filteredPorts.map((port) => ({
                   value: port,
-                  label: port
+                  label: port,
                 }))}
               />
             </Form.Item>

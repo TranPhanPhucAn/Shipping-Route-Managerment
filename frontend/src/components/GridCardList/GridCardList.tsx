@@ -2,6 +2,7 @@ import { Col, Row } from "antd";
 import React from "react";
 import CardImage from "./CardImage";
 
+
 interface Props {
   images: string[];
   refs: string[];

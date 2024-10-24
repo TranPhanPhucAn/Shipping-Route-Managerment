@@ -192,7 +192,7 @@ const RolePermission = () => {
           paddingTop: "50px",
         }}
       >
-        <Button type="primary" onClick={() => handleUpdatePerRole()}>
+        <Button className={styles.submitButton} onClick={() => handleUpdatePerRole()}>
           Update
         </Button>
       </div>

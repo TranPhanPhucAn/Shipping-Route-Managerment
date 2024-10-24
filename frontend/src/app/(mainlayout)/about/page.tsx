@@ -1,5 +1,5 @@
 "use client";
-import { Row, Col, Card, Divider } from "antd";
+import { Row, Col, Card } from "antd";
 import Image from "next/image";
 import React from "react";
 import "./about.scss";
@@ -17,10 +17,14 @@ const About: React.FC = () => {
           className="background-image"
         />
         <div className="content-home">
-          <div className="title">
-            Improving life for all by integrating the world
+          <div className={style.mainTitle}>
+            Improving life for all 
           </div>
-          <p>
+          <div className={style.mainTitle}>
+          by integrating the world
+          </div>
+          
+          <p className={style.subTitle}>
             There’s a reason we strive to go all the way, every day, to deliver
             a more connected, agile and sustainable future for global logistics.
             It is our purpose. See why it gets us up in the morning.
@@ -31,8 +35,8 @@ const About: React.FC = () => {
         <div className="content-left">
           <div className={style.Title}>Our organisation</div>
           <hr />
-          <p>We are CyberLogitec Vietnam</p>
-          <p>
+          <p className={style.infortext}>We are CyberLogitec Vietnam</p>
+          <p className={style.infortext}>
             As an Off-shore Development Center in Vietnam, CyberLogitec
             specializes in providing cutting-edge IT solutions for various
             industries. With expertise in shipping, terminal, forwarding, and
@@ -41,11 +45,11 @@ const About: React.FC = () => {
             outsourcing services for over 13 years to our global customers
             across 10+ countries.
           </p>
-          <p>
+          <p className={style.infortext}>
             Spark brilliance through the synergy of visionary thinking & clever
             tech
           </p>
-          <p>
+          <p className={style.infortext}>
             CyberLogitec Vietnam is an established Off-shore Development Center
             (ODC) that provides a comprehensive range of IT outsourcing
             services, including Software Development, Quality Assurance, and
@@ -59,9 +63,9 @@ const About: React.FC = () => {
           </p>
         </div>
         <div className="content-right">
-          <div className="title">About CLV</div>
+          <div className={style.subTitle}>About CLV</div>
           <div className="content-about-right">
-            <ul>
+            <ul className={style.infortext}>
               <li>
                 CLV was created in 2010 on the occasion of the first European
                 Council held in Maastricht.
@@ -82,7 +86,8 @@ const About: React.FC = () => {
       {/* section information */}
       <div className={style.body}>
       <div className={style.Title}>Group member</div>
-      <Divider></Divider>
+      <hr/>
+
       <br />
           <Row>
             <Col span={11}>
@@ -163,10 +168,11 @@ const About: React.FC = () => {
           </Row>
           <br/>
           <br/>
+          <br/>
+          <br/>
           {/* section project information */}
           <div className={style.Title}>About our project</div>
-          <br/> 
-          <Divider></Divider>
+          <hr/>
           <br/>
           <Row>
             <Col span={11}>

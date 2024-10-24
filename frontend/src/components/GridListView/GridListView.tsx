@@ -1,6 +1,7 @@
 import { Col, Row } from "antd";
 import React from "react";
 import GridCard from "./GridCard";
+import styles from "@/src/styles/Detailpage.module.css";
 const GridListView: React.FC = () => {
   return (
     <>
@@ -16,8 +17,8 @@ const GridListView: React.FC = () => {
         >
           <GridCard
             image="/logishome/transport.jpg"
-            title="Transportation Services"
-            description="Learn how CLV offers small and large businesses the opportunity to grow."
+            title={<div className={styles.subTitle}>Transportation Services</div>}
+            description={<div className={styles.infortext}>Learn how CLV offers small and large businesses the opportunity to grow.</div>}
           />
         </Col>
         <Col
@@ -31,8 +32,8 @@ const GridListView: React.FC = () => {
         >
           <GridCard
             image="/logishome/supplychain.jpg"
-            title="Supply Chain and Logistics"
-            description="We focus on solving your supply chain needs from end to end, taking the complexity out of container shipping for you."
+            title={<div className={styles.subTitle}>Supply Chain and Logistics</div>}
+            description={<div className={styles.infortext}>We focus on solving your supply chain needs from end to end, taking the complexity out of container shipping for you.</div>}
           />
         </Col>
         <Col
@@ -46,8 +47,8 @@ const GridListView: React.FC = () => {
         >
           <GridCard
             image="/logishome/digital.jpg"
-            title="Digital Solutions"
-            description="Our tailored online services take the complexity out of shipping by letting you instantly book, manage and track shipments, submit Verified Gross Mass information and much more."
+            title={<div className={styles.subTitle}>Digital Solutions</div>}
+            description={<div className={styles.infortext}>Our tailored online services take the complexity out of shipping by letting you instantly book, manage and track shipments, submit Verified Gross Mass information and much more.</div>}
           />
         </Col>
       </Row>
