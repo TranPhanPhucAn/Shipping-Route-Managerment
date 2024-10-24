@@ -8,4 +8,4 @@
 ![authServiceDB](https://github.com/user-attachments/assets/1fa267d6-3618-425c-b659-9ccd4323a7dd)
 
 #### RoutesService
-![routesServiceDB](https://github.com/user-attachments/assets/8edc7eb9-4b50-4964-a751-23d9a8dad6f1)
+![RoutesService](https://github.com/user-attachments/assets/e181cf4a-0265-4080-be5a-e630f689fb6b)
