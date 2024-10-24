@@ -27,7 +27,7 @@ export class PortsResolver {
   }
 
   @Query(() => Port, { name: 'port' })
-  async findOne(@Args('ID', { type: () => String }) id: string): Promise<Port> {
+  async findOne(@Args('id', { type: () => String }) id: string): Promise<Port> {
     return this.portService.findOne(id);
   }
 
@@ -35,7 +35,7 @@ export class PortsResolver {
   @UseGuards(PermissionsGuard)
   @Mutation(() => Port)
   async updatePort(
-    @Args('ID', { type: () => String }) id: string,
+    @Args('id', { type: () => String }) id: string,
     @Args('updatePortInput') updatePortInput: UpdatePortInput,
   ): Promise<Port> {
     return this.portService.update(id, updatePortInput);
@@ -43,9 +43,9 @@ export class PortsResolver {
 
   @SetMetadata('permissions', ['delete:port'])
   @UseGuards(PermissionsGuard)
-  @Mutation(() => Port)
+  @Mutation(() => String)
   async removePort(
-    @Args('ID', { type: () => String }) id: string,
+    @Args('id', { type: () => String }) id: string,
   ): Promise<string> {
     return this.portService.remove(id);
   }

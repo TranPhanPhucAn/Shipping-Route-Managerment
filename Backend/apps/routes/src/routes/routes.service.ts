@@ -204,6 +204,10 @@ export class RoutesService {
   }
 
   async remove(id: string): Promise<string> {
+    const route = this.routeRepository.findOne({where: {id}, relations:['departurePort', 'destinationPort']})
+    if(!route) {
+      throw new NotFoundException(`The route with ID ${id} is not found.`);
+    }
     await this.routeRepository.delete(id);
     return id;
   }

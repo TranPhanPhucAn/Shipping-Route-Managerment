@@ -3,7 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  // UpdateDateColumn,
+  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
@@ -63,7 +63,7 @@ export class Schedule {
   @CreateDateColumn()
   created_at: Date;
 
-  // @Field()
-  // @UpdateDateColumn()
-  // updated_at: Date;
+  @Field()
+  @UpdateDateColumn()
+  updated_at: Date;
 }

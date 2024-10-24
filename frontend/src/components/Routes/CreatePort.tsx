@@ -4,7 +4,7 @@ import { Button, Form, Input, Modal, message } from "antd";
 import { useMutation } from "@apollo/client";
 import { CREATE_PORT } from "@/src/graphql/mutations/Auth";
 import { GET_PORTS } from "@/src/graphql/queries/query";
-import styles from "@/src/styles/Auth.module.css";
+import styles from "@/src/styles/Modal.module.css";
 
 interface CreatePortModalProps {
   limit: number;
@@ -68,7 +68,7 @@ const CreatePortModal = ({
 
   return (
     <>
-      <Button className={styles.mainButton} onClick={() => setVisible(true)}>
+      <Button className={styles.submitButton} onClick={() => setVisible(true)}>
         Add Port
       </Button>
       <Modal
@@ -81,21 +81,8 @@ const CreatePortModal = ({
           form={form}
           onFinish={handleCreatePort}
           layout="vertical"
-          className={styles.mainBox}
+          className={styles.modal}
         >
-          <Form.Item
-            label="Port Name"
-            name="name"
-            rules={[{ required: true, message: "Please enter port name!" }]}
-          >
-            <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter Port Name"
-              className={styles.input}
-            />
-          </Form.Item>
-
           <Form.Item
             label="Country"
             name="country"
@@ -108,11 +95,23 @@ const CreatePortModal = ({
               className={styles.input}
             />
           </Form.Item>
+          <Form.Item
+            label="City Name"
+            name="name"
+            rules={[{ required: true, message: "Please enter port name!" }]}
+          >
+            <Input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter Port Name"
+              className={styles.input}
+            />
+          </Form.Item>
 
           <Form.Item>
             <Button
               htmlType="submit"
-              className={styles.mainButton}
+              className={styles.submitButton}
               loading={loading}
             >
               Submit

@@ -125,7 +125,7 @@ const UpdateVesselModal = ({
             placeholder="Select Vessel Status"
           >
             <Select.Option value="AVAILABLE">Available</Select.Option>
-            <Select.Option value="IN_TRANSIT">In Transit</Select.Option>
+            {/* <Select.Option value="IN_TRANSIT">In Transit</Select.Option> */}
             <Select.Option value="UNDER_MAINTENANCE">
               Under Maintenance
             </Select.Option>

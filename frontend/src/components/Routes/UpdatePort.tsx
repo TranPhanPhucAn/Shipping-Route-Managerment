@@ -4,7 +4,7 @@ import { Button, Form, Input, Modal, message } from "antd";
 import { useMutation } from "@apollo/client";
 import { UPDATE_PORT } from "../../graphql/mutations/Auth";
 import { Port } from "@/src/graphql/types";
-import styles from "@/src/styles/Listpage.module.css";
+import style from "@/src/styles/Modal.module.css";
 
 interface UpdatePortModalProps {
   id: string;
@@ -63,23 +63,23 @@ const UpdatePortModal = ({ port, visible, onClose }: UpdatePortModalProps) => {
       onCancel={handleCancel}
       footer={null}
     >
-      <Form form={form} onFinish={handleUpdatePort} layout="vertical">
-        <Form.Item
-          label="Port Name"
-          name="name"
-          rules={[{ required: true, message: "Please enter Port Name!" }]}
-        >
-          <Input value={name} onChange={(e) => setName(e.target.value)} />
-        </Form.Item>
-        <Form.Item
+      <Form form={form} onFinish={handleUpdatePort} layout="vertical" className={style.modal}>
+      <Form.Item
           label="Country"
           name="country"
           rules={[{ required: true, message: "Please enter Country!" }]}
         >
-          <Input value={country} onChange={(e) => setCountry(e.target.value)} />
+          <Input value={country} onChange={(e) => setCountry(e.target.value)} className={style.input} />
+        </Form.Item>
+        <Form.Item
+          label="City Name"
+          name="name"
+          rules={[{ required: true, message: "Please enter Port Name!" }]}
+        >
+          <Input value={name} onChange={(e) => setName(e.target.value)} className={style.input} />
         </Form.Item>
         <Form.Item>
-          <Button htmlType="submit" loading={loading}>
+          <Button className={style.submitButton} htmlType="submit" loading={loading}>
             Update
           </Button>
           {error && <p style={{ color: "red" }}>{error.message}</p>}

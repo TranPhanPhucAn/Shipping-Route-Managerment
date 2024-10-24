@@ -5,7 +5,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   CreateDateColumn,
-  UpdateDateColumn,
+  // UpdateDateColumn,
   Unique,
   JoinColumn,
   OneToMany,
@@ -22,12 +22,12 @@ export class Route {
   id: string;
 
   @Field(() => Port)
-  @ManyToOne(() => Port, (port) => port.departureRoutes, { eager: true })
+  @ManyToOne(() => Port, (port) => port.departureRoutes, { eager: true , onDelete: 'CASCADE' })
   @JoinColumn({ name: 'departurePortId' })
   departurePort: Port;
 
   @Field(() => Port)
-  @ManyToOne(() => Port, (port) => port.destinationRoutes, { eager: true })
+  @ManyToOne(() => Port, (port) => port.destinationRoutes, { eager: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'destinationPortId' })
   destinationPort: Port;
 
@@ -48,8 +48,8 @@ export class Route {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Field()
-  @Column()
-  @UpdateDateColumn()
-  updatedAt: Date;
+  // @Field()
+  // @Column()
+  // @UpdateDateColumn()
+  // updatedAt: Date;
 }

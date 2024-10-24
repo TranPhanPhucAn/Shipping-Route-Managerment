@@ -33,11 +33,14 @@ export class Port {
   country: string;
 
   @Field(() => [Route])
-  @OneToMany(() => Route, (route) => route.departurePort)
+  @OneToMany(() => Route, (route) => route.departurePort, 
+  {cascade: true, 
+    onDelete: 'CASCADE'})
   departureRoutes: Route[];
 
   @Field(() => [Route])
-  @OneToMany(() => Route, (route) => route.destinationPort)
+  @OneToMany(() => Route, (route) => route.destinationPort,  {cascade: true, 
+    onDelete: 'CASCADE'})
   destinationRoutes: Route[];
 
   @Field()

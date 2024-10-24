@@ -86,14 +86,15 @@ export class PortsService {
   }
 
   async update(id: string, updatePortInput: UpdatePortInput): Promise<Port> {
-    const port = await this.portRepository.preload({
-      id: id,
-      ...updatePortInput,
-    });
+    const port = await this.portRepository.findOne({
+      where: { id}
+    })
 
     if (!port) {
       throw new NotFoundException(`Port with Name "${id}" not found`);
     }
+    port.country = updatePortInput.country;
+    port.name = updatePortInput.name;
     if (!port.latitude || !port.longitude) {
       const geoData = await this.fetchCoordinatesFromGeocodingAPI(
         port.name,
@@ -108,7 +109,7 @@ export class PortsService {
   async remove(id: string): Promise<string> {
     const port = this.portRepository.findOne({
       where: { id },
-      relations: ['route'],
+      relations: ['departureRoutes', 'destinationRoutes'],
     });
     if (!port) {
       throw new NotFoundException(`The port with ID ${id} is not found.`);

@@ -307,10 +307,7 @@ export const CREATE_VESSEL = gql`
 `;
 
 export const UPDATE_VESSEL = gql`
-  mutation updateVessel(
-    $id: String!
-    $updateVesselInput: UpdateVesselInput!
-  ) {
+  mutation updateVessel($id: String!, $updateVesselInput: UpdateVesselInput!) {
     updateVessel(id: $id, updateVesselInput: $updateVesselInput) {
       id
       name
