@@ -163,7 +163,6 @@ const Header: React.FC = () => {
   };
   const AppMenu = ({ isInline = false }) => {
     return (
-      
       <Menu
         onClick={onClick}
         mode={isInline ? "inline" : "horizontal"}
@@ -173,9 +172,8 @@ const Header: React.FC = () => {
         style={{
           flex: 1,
           minWidth: 0,
-          border:"none",
-          fontSize:"1rem",
-          fontWeght:"600",
+          border: "none",
+          fontSize: "1rem",
         }}
       />
     );
@@ -188,7 +186,7 @@ const Header: React.FC = () => {
             <SvgComponent />
           </div>
 
-          <span className="header-menu" >
+          <span className="header-menu">
             <AppMenu />
           </span>
           {/* <AppMenu /> */}

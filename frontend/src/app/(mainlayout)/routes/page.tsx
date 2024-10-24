@@ -9,16 +9,12 @@ import {
   Divider,
   Input,
   Select,
-  Row, 
+  Row,
   Col,
   Space,
 } from "antd";
-import {
-  GET_ROUTES,
-  GET_PORTS,
-  GET_ROUTE_PAGINATION,
-} from "@/src/graphql/queries/query";
-import { GetRoutesData, Route, GetPortsData, Port } from "@/src/graphql/types";
+import { GET_ROUTE_PAGINATION } from "@/src/graphql/queries/query";
+import { Route } from "@/src/graphql/types";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -317,23 +313,24 @@ const RoutesList = () => {
     <div className={styles.body}>
       <div className={styles.Title}>Routes</div>
       <div className={styles.subtitle}>
-      <div className={styles.subtitle}>Manage and view information about all available routes.
-      </div>
+        <div className={styles.subtitle}>
+          Manage and view information about all available routes.
+        </div>
       </div>
       <Divider style={{ borderColor: "#334155" }}></Divider>
-        <Row >
-          <Col span={24}>
-        <div className={styles.createButton}>
-          {" "}
-          {permissionUser?.includes("create:route") && (
-            <CreateRouteModal
-              limit={pageSize}
-              offset={page - 1}
-              sort={sortString ? sortString : ""}
-              refetchRoute={refetch}
-            />
-          )}
-        </div>
+      <Row>
+        <Col span={24}>
+          <div className={styles.createButton}>
+            {" "}
+            {permissionUser?.includes("create:route") && (
+              <CreateRouteModal
+                limit={pageSize}
+                offset={page - 1}
+                sort={sortString ? sortString : ""}
+                refetchRoute={refetch}
+              />
+            )}
+          </div>
           <Table
             dataSource={routesData}
             columns={columns}
@@ -355,8 +352,8 @@ const RoutesList = () => {
               onClose={handleUpdateModalClose}
             />
           )}
-          </Col>
-        </Row>
+        </Col>
+      </Row>
     </div>
   );
 };

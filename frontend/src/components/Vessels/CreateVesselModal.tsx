@@ -157,10 +157,11 @@ const CreateVesselModal = ({
               { required: true, message: "Please enter vessel capacity!" },
             ]}
           >
-            <Input
+            <InputNumber
               value={capacity}
-              onChange={(e) => setCapacity(e.target.value)}
+              onChange={(value) => setCapacity(value)}
               placeholder="Enter Capacity"
+              min={1}
             />
           </Form.Item>
 
@@ -187,7 +188,11 @@ const CreateVesselModal = ({
           </Form.Item>
 
           <Form.Item>
-            <Button className={styles.submitButton} htmlType="submit" loading={loading}>
+            <Button
+              className={styles.submitButton}
+              htmlType="submit"
+              loading={loading}
+            >
               Submit
             </Button>
           </Form.Item>

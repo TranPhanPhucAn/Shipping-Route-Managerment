@@ -277,7 +277,7 @@ const SchedulesList = () => {
       key: "vessel",
       ...getColumnSearchProps("vessel", search ? search : ""),
       render: (text: string, record: any) => {
-        return record.vessel.name;
+        return record?.vessel?.name;
       },
     },
     {
